@@ -1,0 +1,155 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import SectionTitle from '../common/SectionTitle.astro';
+import Button from '../common/Button.astro';
+import { umkmKategoriLabels } from '../../data/constants';
+
+const allUmkm = await getCollection('umkm');
+
+const sectionData = await getEntry('siteContent', 'section-titles');
+const sectionTitles = sectionData?.data?.sectionTitles;
+
+const categoryLabels = umkmKategoriLabels;
+
+const rotations = ['-rotate-2', 'rotate-0', 'rotate-2'];
+---
+
+<section class="py-16 lg:py-24 bg-white relative overflow-hidden">
+  <div class="absolute inset-0 batik-pattern opacity-5"></div>
+
+  <div class="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionTitle
+      title={sectionTitles?.umkm?.title || 'Produk UMKM Lokal'}
+      subtitle={sectionTitles?.umkm?.subtitle ||
+        'Dukung ekonomi warga dengan membeli produk khas Dusun Bedalo'}
+      center={true}
+    />
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 mt-12">
+      {
+        allUmkm.map((umkm, index) => {
+          const rotation = rotations[index % 3];
+          const category = categoryLabels[umkm.data.kategori] || {
+            label: umkm.data.kategori,
+            color: 'bg-gray-500',
+          };
+
+          return (
+            <div
+              class={`polaroid-card ${rotation} hover:rotate-0 transition-transform duration-300`}
+              data-aos="fade-up"
+              data-aos-delay={index * 150}
+            >
+              <div class="bg-white p-3 pb-16 rounded-sm shadow-xl hover:shadow-2xl transition-shadow relative">
+                <div class="absolute -top-3 -right-3 z-10">
+                  <span
+                    class={`${category.color} text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg transform rotate-12`}
+                  >
+                    {category.label}
+                  </span>
+                </div>
+
+                <div class="aspect-square overflow-hidden bg-gray-100">
+                  <Image
+                    src={umkm.data.thumbnail}
+                    alt={umkm.data.nama}
+                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    width={400}
+                    height={400}
+                  />
+                </div>
+
+                <div class="absolute bottom-0 left-0 right-0 p-4 pt-3">
+                  <h3 class="font-bold text-gray-900 text-lg mb-0.5 font-handwriting">
+                    {umkm.data.nama}
+                  </h3>
+                  <p class="text-gray-500 text-sm">oleh {umkm.data.pemilik}</p>
+                </div>
+
+                <a
+                  href={`https://wa.me/${umkm.data.whatsapp?.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="absolute -bottom-4 right-4 w-12 h-12 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center transition-colors hover:scale-110"
+                  aria-label={`WhatsApp ${umkm.data.nama}`}
+                >
+                  <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                </a>
+              </div>
+
+              <div class="mt-6 text-center">
+                <a
+                  href={`/potensi/umkm/${umkm.slug}`}
+                  class="inline-flex items-center gap-2 text-primary hover:text-primary-dark font-medium text-sm transition-colors"
+                >
+                  Lihat Detail
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <div class="text-center mt-12">
+      <Button
+        href="/potensi#umkm"
+        variant="primary"
+        size="lg"
+        class="gap-2 rounded-xl shadow-lg hover:shadow-xl"
+      >
+        Lihat Semua UMKM
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 8l4 4m0 0l-4 4m4-4H3"
+          >
+          </path>
+        </svg>
+      </Button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .batik-pattern {
+    background-image: radial-gradient(
+      circle at 1px 1px,
+      rgba(30, 64, 175, 0.3) 1px,
+      transparent 0
+    );
+    background-size: 20px 20px;
+  }
+
+  .polaroid-card {
+    transform-origin: center bottom;
+  }
+
+  .font-handwriting {
+    font-family: 'Poppins', cursive;
+    font-weight: 600;
+  }
+</style>

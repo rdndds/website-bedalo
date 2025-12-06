@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import VisiMisi from '../components/profil/VisiMisi.astro';
+import MataPencaharian from '../components/profil/MataPencaharian.astro';
+import DataPenduduk from '../components/profil/DataPenduduk.astro';
+import StrukturPemerintahan from '../components/profil/StrukturPemerintahan.astro';
+import LokasiMap from '../components/profil/LokasiMap.astro';
+import JarakFasilitas from '../components/profil/JarakFasilitas.astro';
+import { siteConfig } from '../data/siteConfig';
+---
+
+<BaseLayout
+  title="Profil Dusun"
+  description="Profil lengkap Dusun Bedalo - data penduduk, potensi ekonomi, budaya, dan informasi wilayah."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Profil <span class="gradient-text">Dusun Bedalo</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+          Padukuhan di pesisir selatan Gunungkidul dengan 4 pantai eksotis,
+          budaya yang kaya, dan keramahan warga yang hangat.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 md:gap-8">
+          <div
+            class="flex items-center gap-2"
+            data-aos="zoom-in"
+            data-aos-delay="100"
+          >
+            <span class="text-2xl">👥</span>
+            <span class="font-bold text-gray-900">
+              {siteConfig.stats.jiwa} Jiwa
+            </span>
+          </div>
+          <div
+            class="flex items-center gap-2"
+            data-aos="zoom-in"
+            data-aos-delay="200"
+          >
+            <span class="text-2xl">🏠</span>
+            <span class="font-bold text-gray-900">
+              {siteConfig.stats.kk} KK
+            </span>
+          </div>
+          <div
+            class="flex items-center gap-2"
+            data-aos="zoom-in"
+            data-aos-delay="300"
+          >
+            <span class="text-2xl">📍</span>
+            <span class="font-bold text-gray-900">
+              {siteConfig.stats.rt} RT
+            </span>
+          </div>
+          <div
+            class="flex items-center gap-2"
+            data-aos="zoom-in"
+            data-aos-delay="400"
+          >
+            <span class="text-2xl">🏖️</span>
+            <span class="font-bold text-gray-900">
+              {siteConfig.stats.pantai} Pantai
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <VisiMisi />
+      <StrukturPemerintahan />
+      <DataPenduduk />
+      <MataPencaharian />
+      <LokasiMap />
+      <JarakFasilitas />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/common/Button.astro';
+import DigitalisasiSection from '../components/tentang/DigitalisasiSection.astro';
+import ProgramKKN from '../components/tentang/ProgramKKN.astro';
+import TechStack from '../components/tentang/TechStack.astro';
+---
+
+<BaseLayout
+  title="Tentang Proyek"
+  description="Tentang proyek Digitalisasi Dusun Bedalo oleh KKN UIN Sunan Kalijaga 2025."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Tentang <span class="gradient-text">Proyek</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Digitalisasi Dusun Bedalo oleh KKN UIN Sunan Kalijaga 2025.
+        </p>
+      </div>
+
+      <DigitalisasiSection />
+      <ProgramKKN />
+      <TechStack />
+
+      <div
+        class="bg-gradient-to-br from-primary to-accent rounded-2xl p-8 md:p-12 text-center text-white"
+        data-aos="fade-up"
+      >
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">
+          Ingin Berkontribusi?
+        </h2>
+        <p class="text-white/90 mb-6 max-w-xl mx-auto">
+          Website ini bersifat open source. Jika Anda adalah developer,
+          mahasiswa KKN, atau pihak yang ingin membantu mengembangkan website
+          ini, silakan hubungi kami.
+        </p>
+        <Button href="/kontak" variant="secondary"> Hubungi Kami → </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

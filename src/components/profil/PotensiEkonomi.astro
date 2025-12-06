@@ -1,0 +1,54 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+
+const data = await getEntry('profil', 'potensi-ekonomi');
+const potensiEkonomi = data?.data?.potensiEkonomi || [];
+---
+
+<div class="mb-12">
+  <SectionTitle title="Potensi Ekonomi" />
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {
+      potensiEkonomi.map((item, index) => (
+        <div
+          class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all"
+          data-aos={
+            index % 3 === 0
+              ? 'fade-right'
+              : index % 3 === 1
+                ? 'fade-up'
+                : 'fade-left'
+          }
+          data-aos-delay={Math.min(index * 100, 200)}
+        >
+          <div class:list={['bg-gradient-to-r', item.color, 'p-6 text-white']}>
+            <span class="text-4xl">{item.icon}</span>
+            <h3 class="text-xl font-bold mt-2">{item.title}</h3>
+            <p class="text-white/80 text-sm">{item.desc}</p>
+          </div>
+          <div class="p-5">
+            <ul class="space-y-2">
+              {item.items.map((listItem) => (
+                <li class="flex items-center gap-2 text-gray-600">
+                  <svg
+                    class="w-4 h-4 text-primary flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                  <span class="text-sm">{listItem}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

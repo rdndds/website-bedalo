@@ -1,0 +1,40 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+
+const data = await getEntry('siteContent', 'tentang-proyek');
+const techStack = data?.data?.techStack || [];
+---
+
+<div class="mb-10">
+  <SectionTitle
+    title="Teknologi"
+    subtitle="Dibangun dengan teknologi modern untuk performa terbaik"
+  />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {
+      techStack.map((tech, index) => (
+        <div
+          class:list={[
+            tech.color,
+            'rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all text-center',
+          ]}
+          data-aos="flip-up"
+          data-aos-delay={Math.min(index * 100, 300)}
+        >
+          <div
+            class:list={[
+              'w-16 h-16',
+              tech.iconBg,
+              'rounded-2xl flex items-center justify-center mx-auto mb-4',
+            ]}
+          >
+            <span class="text-3xl">{tech.icon}</span>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">{tech.name}</h3>
+          <p class="text-sm text-gray-600">{tech.desc}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>

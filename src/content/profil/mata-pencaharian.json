@@ -1,0 +1,40 @@
+{
+  "mataPencaharian": [
+    {
+      "icon": "🌾",
+      "title": "Petani",
+      "desc": "Singkong, jagung, kacang tanah, padi tadah hujan",
+      "color": "bg-green-50"
+    },
+    {
+      "icon": "🐄",
+      "title": "Peternak",
+      "desc": "Sapi, kambing, dan ayam kampung",
+      "color": "bg-amber-50"
+    },
+    {
+      "icon": "🛒",
+      "title": "Pedagang",
+      "desc": "Bakpia, hasil bumi, dan kebutuhan pokok",
+      "color": "bg-orange-50"
+    },
+    {
+      "icon": "✈️",
+      "title": "Perantau",
+      "desc": "Bakwan kawi dan jasa di luar daerah",
+      "color": "bg-sky-50"
+    },
+    {
+      "icon": "🏭",
+      "title": "UMKM",
+      "desc": "Olahan singkong dan kerajinan tangan",
+      "color": "bg-purple-50"
+    },
+    {
+      "icon": "📚",
+      "title": "Pendidikan",
+      "desc": "Guru, tenaga pendidik, dan aparatur",
+      "color": "bg-rose-50"
+    }
+  ]
+}

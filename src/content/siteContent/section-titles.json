@@ -1,0 +1,24 @@
+{
+  "sectionTitles": {
+    "wisata": {
+      "title": "Destinasi Wisata",
+      "subtitle": "Empat pantai eksotis dengan pesona alam yang memukau menanti untuk dijelajahi"
+    },
+    "umkm": {
+      "title": "Produk UMKM Lokal",
+      "subtitle": "Dukung ekonomi warga dengan membeli produk khas Dusun Bedalo"
+    },
+    "berita": {
+      "title": "Berita & Kegiatan",
+      "subtitle": "Kabar terbaru dari Dusun Bedalo"
+    },
+    "galeri": {
+      "title": "Galeri Foto",
+      "subtitle": "Momen-momen indah dari Dusun Bedalo"
+    },
+    "location": {
+      "title": "Kunjungi Kami",
+      "subtitle": "Dusun Bedalo terletak di pesisir selatan Gunungkidul, berbatasan langsung dengan Samudra Hindia."
+    }
+  }
+}

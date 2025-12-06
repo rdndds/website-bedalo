@@ -1,0 +1,29 @@
+{
+  "pemerintahan": [
+    {
+      "jabatan": "Kepala Dusun",
+      "nama": "Bapak Suyanto",
+      "foto": null
+    },
+    {
+      "jabatan": "Ketua RW",
+      "nama": "Bapak Suparno",
+      "foto": null
+    },
+    {
+      "jabatan": "Ketua RT 01",
+      "nama": "Bapak Sugiarto",
+      "foto": null
+    },
+    {
+      "jabatan": "Ketua RT 02",
+      "nama": "Bapak Sutrisno",
+      "foto": null
+    },
+    {
+      "jabatan": "Ketua RT 03",
+      "nama": "Bapak Sugiyono",
+      "foto": null
+    }
+  ]
+}

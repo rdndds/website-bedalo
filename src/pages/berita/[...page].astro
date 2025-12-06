@@ -1,0 +1,627 @@
+---
+import { Image } from 'astro:assets';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+import { kategoriBeritaColors } from '../../data/constants';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const allBerita = await getCollection('berita');
+  const sortedBerita = allBerita.sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime()
+  );
+
+  // Get unique categories
+  const categories = [...new Set(sortedBerita.map((b) => b.data.kategori))];
+
+  // Group by month for archive
+  const groupedByMonth = sortedBerita.reduce(
+    (acc, berita) => {
+      const monthKey = berita.data.date.toLocaleDateString('id-ID', {
+        month: 'long',
+        year: 'numeric',
+      });
+      if (!acc[monthKey]) acc[monthKey] = [];
+      acc[monthKey].push(berita);
+      return acc;
+    },
+    {} as Record<string, typeof sortedBerita>
+  );
+
+  return paginate(sortedBerita, {
+    pageSize: 6,
+    props: { sortedAllBerita: sortedBerita, categories, groupedByMonth },
+  });
+}) satisfies GetStaticPaths;
+
+const { page, sortedAllBerita, categories, groupedByMonth } = Astro.props;
+
+// Category colors for JS
+const categoryColorsJson = JSON.stringify(
+  Object.fromEntries(
+    Object.entries(kategoriBeritaColors).map(([k, v]) => [
+      k,
+      { bg: v.bg, text: v.text, icon: v.icon },
+    ])
+  )
+);
+---
+
+<BaseLayout
+  title={page.currentPage === 1
+    ? 'Berita'
+    : `Berita - Halaman ${page.currentPage}`}
+  description="Berita dan informasi terbaru dari Dusun Bedalo."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          <span class="gradient-text">Berita</span> Dusun Bedalo
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Informasi dan kabar terbaru seputar kegiatan warga Dusun Bedalo.
+        </p>
+      </div>
+
+      <div class="lg:hidden mb-6 space-y-3" data-aos="fade-up">
+        <div class="bg-white rounded-2xl p-4 shadow-lg">
+          <h4 class="font-bold text-gray-900 mb-3 text-sm">Kategori</h4>
+          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+              data-filter="all"
+              class="filter-btn active flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:opacity-80 transition-opacity"
+            >
+              <span>📰</span>
+              <span class="text-xs font-semibold text-gray-700">Semua</span>
+              <span class="text-xs text-gray-500">
+                ({sortedAllBerita.length})
+              </span>
+            </button>
+            {
+              categories.map((cat) => {
+                const catColor = kategoriBeritaColors[cat];
+                const count = sortedAllBerita.filter(
+                  (b) => b.data.kategori === cat
+                ).length;
+                return (
+                  <button
+                    data-filter={cat}
+                    class={`filter-btn flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full ${catColor?.bg || 'bg-gray-100'} hover:opacity-80 transition-opacity`}
+                  >
+                    <span>{catColor?.icon || '📰'}</span>
+                    <span
+                      class={`text-xs font-semibold capitalize ${catColor?.text || 'text-gray-700'}`}
+                    >
+                      {cat}
+                    </span>
+                    <span class="text-xs text-gray-500">({count})</span>
+                  </button>
+                );
+              })
+            }
+          </div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 shadow-lg">
+          <h4 class="font-bold text-gray-900 mb-3 text-sm">Arsip</h4>
+          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            {
+              Object.entries(groupedByMonth)
+                .slice(0, 6)
+                .map(([month, posts]) => (
+                  <button
+                    data-filter-month={month}
+                    class="filter-btn flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 hover:opacity-80 transition-opacity"
+                  >
+                    <span>📅</span>
+                    <span class="text-xs font-semibold text-gray-700">
+                      {month}
+                    </span>
+                    <span class="text-xs text-gray-500">({posts.length})</span>
+                  </button>
+                ))
+            }
+          </div>
+        </div>
+      </div>
+
+      {
+        page.data.length > 0 ? (
+          <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <div class="lg:col-span-3 order-2 lg:order-1">
+              <div
+                class="flex items-center justify-between mb-6"
+                data-aos="fade-up"
+              >
+                <div class="flex items-center gap-3">
+                  <div class="w-1 h-8 bg-primary rounded-full" />
+                  <h3 class="text-xl font-bold text-gray-900">
+                    Berita Terbaru
+                  </h3>
+                </div>
+                <div id="filter-info" class="hidden text-sm text-gray-500">
+                  <span id="filter-count" /> berita
+                  <button
+                    id="clear-filter"
+                    class="ml-2 text-primary hover:underline"
+                  >
+                    × Hapus filter
+                  </button>
+                </div>
+              </div>
+
+              <div id="berita-list-static" class="space-y-5">
+                {page.data.map((berita, index) => {
+                  const catColor = kategoriBeritaColors[berita.data.kategori];
+                  const readTime =
+                    Math.ceil((berita.data.excerpt?.length || 100) / 200) + 2;
+
+                  return (
+                    <a
+                      href={`/berita/${berita.slug}`}
+                      class={`berita-card flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-2xl p-4 sm:p-5 shadow-md hover:shadow-xl transition-all group border-l-4 ${catColor?.bg?.replace('bg-', 'border-').replace('-100', '-500') || 'border-gray-300'} hover:translate-x-0 sm:hover:translate-x-1`}
+                      data-aos="fade-up"
+                      data-aos-delay={Math.min(index * 100, 300)}
+                    >
+                      <div class="w-full sm:w-48 h-48 sm:h-32 flex-shrink-0 rounded-xl overflow-hidden">
+                        <Image
+                          src={berita.data.thumbnail}
+                          alt={berita.data.title}
+                          width={200}
+                          height={140}
+                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                      <div class="flex-1 flex flex-col">
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                          <span
+                            class={`px-3 py-1 text-xs font-semibold rounded-full ${catColor?.bg || 'bg-gray-100'} ${catColor?.text || 'text-gray-700'}`}
+                          >
+                            {catColor?.icon} {berita.data.kategori}
+                          </span>
+                          <span class="text-xs text-gray-500">
+                            {formatDate(berita.data.date)}
+                          </span>
+                          <span class="hidden sm:flex text-xs text-gray-500 items-center gap-1">
+                            <svg
+                              class="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                              />
+                            </svg>
+                            {readTime} min
+                          </span>
+                        </div>
+                        <h4 class="font-bold text-gray-900 text-base sm:text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                          {berita.data.title}
+                        </h4>
+                        <p class="text-sm text-gray-600 line-clamp-2 mb-3 flex-1">
+                          {berita.data.excerpt}
+                        </p>
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs text-gray-400 hidden sm:block">
+                            oleh {berita.data.author || 'Admin Bedalo'}
+                          </span>
+                          <span class="text-primary text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                            Baca Selengkapnya
+                            <svg
+                              class="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                              />
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div id="berita-list-dynamic" class="hidden space-y-5" />
+
+              <div id="loading-state" class="hidden py-12 text-center">
+                <div class="inline-block w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                <p class="mt-4 text-gray-500">Memuat berita...</p>
+              </div>
+
+              <div
+                id="no-results"
+                class="hidden bg-white rounded-2xl p-12 shadow-lg text-center"
+              >
+                <div class="text-5xl mb-4">🔍</div>
+                <p class="text-gray-500 text-lg mb-2">
+                  Tidak ada berita untuk filter ini
+                </p>
+                <button
+                  id="reset-filter"
+                  class="text-primary hover:underline text-sm"
+                >
+                  Tampilkan semua berita
+                </button>
+              </div>
+
+              {page.lastPage > 1 && (
+                <div
+                  id="pagination"
+                  class="flex justify-center items-center gap-2 mt-8"
+                >
+                  {page.url.prev ? (
+                    <a
+                      href={page.url.prev}
+                      class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all shadow-sm text-sm"
+                    >
+                      Sebelumnya
+                    </a>
+                  ) : (
+                    <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed text-sm">
+                      Sebelumnya
+                    </span>
+                  )}
+
+                  {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(
+                    (pageNum) => (
+                      <a
+                        href={pageNum === 1 ? '/berita' : `/berita/${pageNum}`}
+                        class:list={[
+                          'px-4 py-2 rounded-lg font-medium transition-all text-sm',
+                          pageNum === page.currentPage
+                            ? 'bg-primary text-white shadow-md'
+                            : 'bg-white text-gray-700 hover:bg-gray-50 shadow-sm',
+                        ]}
+                      >
+                        {pageNum}
+                      </a>
+                    )
+                  )}
+
+                  {page.url.next ? (
+                    <a
+                      href={page.url.next}
+                      class="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all shadow-sm text-sm"
+                    >
+                      Selanjutnya
+                    </a>
+                  ) : (
+                    <span class="px-4 py-2 bg-gray-100 text-gray-400 rounded-lg cursor-not-allowed text-sm">
+                      Selanjutnya
+                    </span>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div
+              class="hidden lg:block lg:sticky lg:top-24 space-y-6 self-start order-1 lg:order-2"
+              data-aos="fade-left"
+            >
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span class="w-2 h-2 bg-primary rounded-full" />
+                  Kategori
+                </h4>
+                <div class="space-y-1">
+                  <button
+                    data-filter="all"
+                    class="filter-btn active w-full flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                  >
+                    <span class="flex items-center gap-2">
+                      <span class="text-lg">📰</span>
+                      <span class="text-sm text-gray-700">Semua</span>
+                    </span>
+                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                      {sortedAllBerita.length}
+                    </span>
+                  </button>
+                  {categories.map((cat) => {
+                    const count = sortedAllBerita.filter(
+                      (b) => b.data.kategori === cat
+                    ).length;
+                    const catColor = kategoriBeritaColors[cat];
+                    return (
+                      <button
+                        data-filter={cat}
+                        class="filter-btn w-full flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                      >
+                        <span class="flex items-center gap-2">
+                          <span class="text-lg">{catColor?.icon || '📰'}</span>
+                          <span class="text-sm text-gray-700 capitalize">
+                            {cat}
+                          </span>
+                        </span>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h4 class="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <span class="w-2 h-2 bg-primary rounded-full" />
+                  Arsip
+                </h4>
+                <div class="space-y-1">
+                  {Object.entries(groupedByMonth)
+                    .slice(0, 6)
+                    .map(([month, posts]) => (
+                      <button
+                        data-filter-month={month}
+                        class="filter-btn w-full flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-gray-50 transition-colors group"
+                      >
+                        <span class="flex items-center gap-2">
+                          <svg
+                            class="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
+                          </svg>
+                          <span class="text-sm text-gray-700">{month}</span>
+                        </span>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                          {posts.length}
+                        </span>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div class="bg-white rounded-2xl p-12 shadow-lg text-center">
+            <div class="text-6xl mb-4">📰</div>
+            <p class="text-gray-500 text-lg">Belum ada berita.</p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .filter-btn.active {
+    box-shadow: inset 0 0 0 2px #1e40af;
+  }
+  .filter-btn:focus-visible {
+    outline: 2px solid #1e40af;
+    outline-offset: 2px;
+  }
+</style>
+
+<script define:vars={{ categoryColorsJson }}>
+  const categoryColors = JSON.parse(categoryColorsJson);
+  let beritaCache = null;
+
+  function initFilter() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const filterInfo = document.getElementById('filter-info');
+    const filterCount = document.getElementById('filter-count');
+    const clearFilter = document.getElementById('clear-filter');
+    const pagination = document.getElementById('pagination');
+    const noResults = document.getElementById('no-results');
+    const resetFilter = document.getElementById('reset-filter');
+    const staticList = document.getElementById('berita-list-static');
+    const dynamicList = document.getElementById('berita-list-dynamic');
+    const loadingState = document.getElementById('loading-state');
+
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+    }
+
+    function getBorderColor(kategori) {
+      const color = categoryColors[kategori];
+      if (!color?.bg) return 'border-gray-300';
+      return color.bg.replace('bg-', 'border-').replace('-100', '-500');
+    }
+
+    function createCard(berita) {
+      const catColor = categoryColors[berita.kategori] || {};
+      const readTime = Math.ceil((berita.excerpt?.length || 100) / 200) + 2;
+
+      return `
+        <a href="/berita/${berita.slug}" 
+           class="berita-card flex flex-col sm:flex-row gap-4 sm:gap-6 bg-white rounded-2xl p-4 sm:p-5 shadow-md hover:shadow-xl transition-all group border-l-4 ${getBorderColor(berita.kategori)} hover:translate-x-0 sm:hover:translate-x-1">
+          <div class="w-full sm:w-48 h-48 sm:h-32 flex-shrink-0 rounded-xl overflow-hidden">
+            <img src="${berita.thumbnail}" alt="${berita.title}" 
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+          </div>
+          <div class="flex-1 flex flex-col">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+              <span class="px-3 py-1 text-xs font-semibold rounded-full ${catColor.bg || 'bg-gray-100'} ${catColor.text || 'text-gray-700'}">
+                ${catColor.icon || '📰'} ${berita.kategori}
+              </span>
+              <span class="text-xs text-gray-500">${formatDate(berita.date)}</span>
+              <span class="hidden sm:flex text-xs text-gray-500 items-center gap-1">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                ${readTime} min
+              </span>
+            </div>
+            <h4 class="font-bold text-gray-900 text-base sm:text-lg mb-2 group-hover:text-primary transition-colors line-clamp-2">${berita.title}</h4>
+            <p class="text-sm text-gray-600 line-clamp-2 mb-3 flex-1">${berita.excerpt}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-gray-400 hidden sm:block">oleh ${berita.author}</span>
+              <span class="text-primary text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
+                Baca Selengkapnya
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      `;
+    }
+
+    function updateURL(type, value) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('kategori');
+      url.searchParams.delete('arsip');
+
+      if (type === 'kategori' && value !== 'all') {
+        url.searchParams.set('kategori', value);
+      } else if (type === 'month') {
+        url.searchParams.set('arsip', value);
+      }
+
+      if (type !== 'all') {
+        url.pathname = '/berita';
+      }
+
+      history.pushState({}, '', url.toString());
+    }
+
+    function updateActiveButtons(type, value) {
+      filterBtns.forEach((btn) => {
+        const btnKategori = btn.getAttribute('data-filter');
+        const btnMonth = btn.getAttribute('data-filter-month');
+
+        let isActive = false;
+        if (type === 'all' && btnKategori === 'all') isActive = true;
+        else if (type === 'kategori' && btnKategori === value) isActive = true;
+        else if (type === 'month' && btnMonth === value) isActive = true;
+
+        btn.classList.toggle('active', isActive);
+      });
+    }
+
+    async function applyFilter(type, value, updateUrl = true) {
+      // Update button states immediately
+      updateActiveButtons(type, value);
+
+      if (type === 'all') {
+        // Show static list, hide dynamic
+        staticList?.classList.remove('hidden');
+        dynamicList?.classList.add('hidden');
+        loadingState?.classList.add('hidden');
+        noResults?.classList.add('hidden');
+        pagination?.classList.remove('hidden');
+        filterInfo?.classList.add('hidden');
+
+        if (updateUrl) updateURL(type, value);
+        return;
+      }
+
+      // Show loading, hide others
+      staticList?.classList.add('hidden');
+      dynamicList?.classList.add('hidden');
+      loadingState?.classList.remove('hidden');
+      noResults?.classList.add('hidden');
+      pagination?.classList.add('hidden');
+
+      try {
+        // Fetch data if not cached
+        if (!beritaCache) {
+          const res = await fetch('/berita/data.json');
+          beritaCache = await res.json();
+        }
+
+        // Filter results
+        let filtered = beritaCache;
+        if (type === 'kategori') {
+          filtered = beritaCache.filter((b) => b.kategori === value);
+        } else if (type === 'month') {
+          filtered = beritaCache.filter((b) => b.month === value);
+        }
+
+        loadingState?.classList.add('hidden');
+
+        if (filtered.length === 0) {
+          noResults?.classList.remove('hidden');
+        } else {
+          dynamicList.innerHTML = filtered.map(createCard).join('');
+          dynamicList?.classList.remove('hidden');
+        }
+
+        // Update filter info
+        if (filterInfo && filterCount) {
+          filterInfo.classList.remove('hidden');
+          filterCount.textContent = String(filtered.length);
+        }
+      } catch (error) {
+        console.error('Failed to fetch berita:', error);
+        loadingState?.classList.add('hidden');
+        noResults?.classList.remove('hidden');
+      }
+
+      if (updateUrl) updateURL(type, value);
+    }
+
+    // Attach click handlers
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const kategori = btn.getAttribute('data-filter');
+        const month = btn.getAttribute('data-filter-month');
+
+        if (kategori === 'all') applyFilter('all', 'all');
+        else if (kategori) applyFilter('kategori', kategori);
+        else if (month) applyFilter('month', month);
+      });
+    });
+
+    // Clear/Reset filter buttons
+    clearFilter?.addEventListener('click', () => applyFilter('all', 'all'));
+    resetFilter?.addEventListener('click', () => applyFilter('all', 'all'));
+
+    // Handle browser back/forward
+    window.addEventListener('popstate', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const kategori = urlParams.get('kategori');
+      const arsip = urlParams.get('arsip');
+
+      if (kategori) applyFilter('kategori', kategori, false);
+      else if (arsip) applyFilter('month', arsip, false);
+      else applyFilter('all', 'all', false);
+    });
+
+    // Check URL for initial filter
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialKategori = urlParams.get('kategori');
+    const initialMonth = urlParams.get('arsip');
+
+    if (initialKategori) applyFilter('kategori', initialKategori, false);
+    else if (initialMonth) applyFilter('month', initialMonth, false);
+  }
+
+  document.addEventListener('DOMContentLoaded', initFilter);
+  document.addEventListener('astro:page-load', initFilter);
+</script>

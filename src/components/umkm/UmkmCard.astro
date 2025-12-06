@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  nama: string;
+  slug: string;
+  thumbnail: ImageMetadata;
+  kategori: string;
+  deskripsi: string;
+  pemilik: string;
+  aosDelay?: number;
+}
+
+const { nama, slug, thumbnail, kategori, deskripsi, pemilik, aosDelay } =
+  Astro.props;
+---
+
+<a
+  href={`/potensi/umkm/${slug}`}
+  class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all group"
+  data-aos="fade-up"
+  data-aos-delay={aosDelay}
+>
+  <div class="relative h-48 bg-gray-200">
+    <Image
+      src={thumbnail}
+      alt={nama}
+      width={400}
+      height={192}
+      class="w-full h-full object-cover"
+      loading="lazy"
+      decoding="async"
+    />
+    <span
+      class="absolute top-3 left-3 px-2 py-1 bg-accent-dark text-white text-xs font-medium rounded-full capitalize"
+    >
+      {kategori}
+    </span>
+  </div>
+  <div class="p-4">
+    <h3
+      class="text-lg font-semibold text-gray-900 mb-1 group-hover:text-primary transition-colors"
+    >
+      {nama}
+    </h3>
+    <p class="text-sm text-gray-500 mb-2">oleh {pemilik}</p>
+    <p class="text-gray-600 text-sm line-clamp-2">{deskripsi}</p>
+  </div>
+</a>

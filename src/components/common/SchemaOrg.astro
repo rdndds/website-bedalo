@@ -1,0 +1,30 @@
+---
+import { siteConfig } from '../../data/siteConfig';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: siteConfig.name,
+  description: siteConfig.description,
+  url: 'https://bedalo.vercel.app',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: siteConfig.address.kalurahan,
+    addressRegion: siteConfig.address.provinsi,
+    postalCode: siteConfig.address.kodePos,
+    addressCountry: 'ID',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -8.091970191936598,
+    longitude: 110.48636027500821,
+  },
+  sameAs: [siteConfig.mapsUrl],
+};
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>

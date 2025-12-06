@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import AboutIntro from '../components/home/AboutIntro.astro';
+import FeaturedWisata from '../components/home/FeaturedWisata.astro';
+import FeaturedUmkm from '../components/home/FeaturedUmkm.astro';
+import BeritaTimeline from '../components/home/BeritaTimeline.astro';
+import GaleriPreview from '../components/home/GaleriPreview.astro';
+import LocationContact from '../components/home/LocationContact.astro';
+---
+
+<BaseLayout
+  title="Beranda"
+  description="Dusun Bedalo - Surga tersembunyi di pesisir selatan Gunungkidul dengan 4 pantai eksotis, budaya yang kaya, dan keramahan warga yang hangat."
+>
+  <Hero />
+  <AboutIntro />
+  <FeaturedWisata />
+  <FeaturedUmkm />
+  <BeritaTimeline />
+  <GaleriPreview />
+  <LocationContact />
+</BaseLayout>

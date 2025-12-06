@@ -1,0 +1,41 @@
+---
+interface Props {
+  nama: string;
+  deskripsi: string;
+  alamat: string;
+  whatsapp: string;
+  jamOperasional: string;
+  mapsUrl: string;
+  image?: string;
+}
+
+const { nama, deskripsi, alamat, whatsapp, jamOperasional, mapsUrl, image } =
+  Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: nama,
+  description: deskripsi,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: alamat,
+    addressLocality: 'Krambilsawit',
+    addressRegion: 'Daerah Istimewa Yogyakarta',
+    postalCode: '55871',
+    addressCountry: 'ID',
+  },
+  telephone: whatsapp,
+  openingHours: jamOperasional,
+  url: mapsUrl,
+  image: image,
+  priceRange: '$$',
+  '@id': Astro.url.href,
+};
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>

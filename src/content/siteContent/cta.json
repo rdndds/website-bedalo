@@ -1,0 +1,8 @@
+{
+  "cta": {
+    "title": "Rencanakan Kunjungan Anda",
+    "description": "Hubungi kami untuk informasi lebih lanjut tentang wisata, akomodasi, atau peluang kerjasama dengan Dusun Bedalo.",
+    "primaryButton": { "label": "Hubungi Kami", "href": "/kontak" },
+    "secondaryButton": { "label": "Lihat Destinasi", "href": "/potensi" }
+  }
+}

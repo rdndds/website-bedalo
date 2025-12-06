@@ -1,0 +1,178 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import SectionTitle from '../common/SectionTitle.astro';
+import Button from '../common/Button.astro';
+import { kategoriBeritaTimelineColors } from '../../data/constants';
+
+const allBerita = await getCollection('berita');
+const sortedBerita = allBerita
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 4);
+
+const sectionData = await getEntry('siteContent', 'section-titles');
+const sectionTitles = sectionData?.data?.sectionTitles;
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+};
+
+const categoryColors = kategoriBeritaTimelineColors;
+
+const featuredBerita = sortedBerita[0];
+const otherBerita = sortedBerita.slice(1);
+---
+
+<section class="py-16 lg:py-24 bg-secondary">
+  <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <SectionTitle
+      title={sectionTitles?.berita?.title || 'Berita & Kegiatan'}
+      subtitle={sectionTitles?.berita?.subtitle ||
+        'Kabar terbaru dari Dusun Bedalo'}
+      center={true}
+    />
+
+    <div class="mt-12">
+      {
+        featuredBerita && (
+          <a
+            href={`/berita/${featuredBerita.slug}`}
+            class="block mb-8 group"
+            data-aos="fade-up"
+          >
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all border border-gray-100 hover:border-primary/20">
+              <div class="grid md:grid-cols-2 gap-0">
+                <div class="relative h-64 md:h-80 overflow-hidden">
+                  <Image
+                    src={featuredBerita.data.thumbnail}
+                    alt={featuredBerita.data.title}
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    width={600}
+                    height={400}
+                  />
+                  <div class="absolute top-4 left-4">
+                    <span class="bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                      TERBARU
+                    </span>
+                  </div>
+                </div>
+                <div class="p-6 md:p-8 flex flex-col justify-center">
+                  <div class="flex items-center gap-3 mb-4">
+                    <span
+                      class={`${categoryColors[featuredBerita.data.kategori] || 'bg-gray-500'} text-white text-xs font-medium px-3 py-1 rounded-full`}
+                    >
+                      {featuredBerita.data.kategori}
+                    </span>
+                    <span class="text-gray-400 text-sm">
+                      {formatDate(featuredBerita.data.date)}
+                    </span>
+                  </div>
+                  <h3 class="text-xl md:text-2xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-3 line-clamp-2">
+                    {featuredBerita.data.title}
+                  </h3>
+                  <p class="text-gray-500 line-clamp-3 mb-4">
+                    {featuredBerita.data.excerpt}
+                  </p>
+                  <span class="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
+                    Baca Selengkapnya
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
+                    </svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </a>
+        )
+      }
+
+      {
+        otherBerita.length > 0 && (
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {otherBerita.map((berita, index) => {
+              const categoryColor =
+                categoryColors[berita.data.kategori] || 'bg-gray-500';
+
+              return (
+                <a
+                  href={`/berita/${berita.slug}`}
+                  class="block group"
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                >
+                  <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-100 hover:border-primary/20 h-full">
+                    <div class="relative h-48 overflow-hidden">
+                      <Image
+                        src={berita.data.thumbnail}
+                        alt={berita.data.title}
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        width={400}
+                        height={250}
+                      />
+                    </div>
+                    <div class="p-5">
+                      <div class="flex items-center gap-2 mb-3">
+                        <span
+                          class={`${categoryColor} text-white text-xs font-medium px-2.5 py-0.5 rounded-full`}
+                        >
+                          {berita.data.kategori}
+                        </span>
+                        <span class="text-gray-400 text-xs">
+                          {formatDate(berita.data.date)}
+                        </span>
+                      </div>
+                      <h3 class="font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2 mb-2">
+                        {berita.data.title}
+                      </h3>
+                      <p class="text-gray-500 text-sm line-clamp-2">
+                        {berita.data.excerpt}
+                      </p>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        )
+      }
+    </div>
+
+    <div class="text-center mt-10">
+      <Button
+        href="/agenda"
+        variant="outline"
+        class="gap-2 border-0 shadow-none bg-transparent"
+      >
+        Lihat Semua Berita
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 8l4 4m0 0l-4 4m4-4H3"
+          >
+          </path>
+        </svg>
+      </Button>
+    </div>
+  </div>
+</section>

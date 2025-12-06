@@ -1,0 +1,29 @@
+---
+import { getEntry } from 'astro:content';
+
+const data = await getEntry('siteContent', 'kontak');
+const nomorPenting = data?.data?.nomorPenting || [];
+---
+
+<div
+  class="bg-white rounded-2xl p-6 shadow-lg"
+  data-aos="fade-up"
+  data-aos-delay="100"
+>
+  <h2 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="text-xl">🆘</span> Nomor Penting
+  </h2>
+  <div class="space-y-3">
+    {
+      nomorPenting.map((item) => (
+        <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+          <div class="flex items-center gap-3">
+            <span class="text-lg">{item.icon}</span>
+            <span class="text-gray-700">{item.nama}</span>
+          </div>
+          <span class="font-semibold text-gray-900">{item.nomor}</span>
+        </div>
+      ))
+    }
+  </div>
+</div>

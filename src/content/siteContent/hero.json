@@ -1,0 +1,9 @@
+{
+  "hero": {
+    "title": "Selamat Datang di",
+    "highlight": "Dusun Bedalo",
+    "description": "Surga tersembunyi di pesisir selatan Gunungkidul dengan 4 pantai eksotis, budaya yang kaya, dan keramahan warga yang hangat.",
+    "primaryButton": { "label": "Jelajahi Wisata", "href": "/potensi" },
+    "secondaryButton": { "label": "Tentang Dusun", "href": "/profil" }
+  }
+}

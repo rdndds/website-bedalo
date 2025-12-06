@@ -1,0 +1,78 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import SEO from '../components/common/SEO.astro';
+import SchemaOrg from '../components/common/SchemaOrg.astro';
+import SkipLink from '../components/common/SkipLink.astro';
+import Toast from '../components/common/Toast.astro';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/800.css';
+import 'aos/dist/aos.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+}
+
+const { title, description, image, type } = Astro.props;
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="dns-prefetch" href="https://maps.google.com" />
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <SEO title={title} description={description} image={image} type={type} />
+    <SchemaOrg />
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen flex flex-col bg-secondary">
+    <SkipLink />
+    <Header />
+    <main
+      id="main-content"
+      role="main"
+      aria-label="Konten utama"
+      class="flex-1 pt-16"
+    >
+      <slot />
+    </main>
+    <Footer />
+    <Toast />
+    <script>
+      import AOS from 'aos';
+
+      const initAOS = () => {
+        AOS.init({
+          duration: 700,
+          easing: 'ease-out-quart',
+          once: true,
+          offset: 80,
+          delay: 0,
+          anchorPlacement: 'top-bottom',
+          disable: false,
+        });
+      };
+
+      initAOS();
+
+      document.addEventListener('astro:after-swap', initAOS);
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "uiConfig": {
+    "kategoriBeritaColors": {
+      "kesehatan": { "bg": "bg-red-100", "text": "text-red-700", "icon": "🏥" },
+      "pendidikan": {
+        "bg": "bg-blue-100",
+        "text": "text-blue-700",
+        "icon": "📚"
+      },
+      "budaya": {
+        "bg": "bg-purple-100",
+        "text": "text-purple-700",
+        "icon": "🎭"
+      },
+      "karang-taruna": {
+        "bg": "bg-green-100",
+        "text": "text-green-700",
+        "icon": "👥"
+      },
+      "umum": { "bg": "bg-gray-100", "text": "text-gray-700", "icon": "📰" }
+    },
+    "kategoriBeritaTimelineColors": {
+      "kesehatan": "bg-red-500",
+      "pendidikan": "bg-blue-500",
+      "budaya": "bg-purple-500",
+      "karang-taruna": "bg-green-500",
+      "umum": "bg-gray-500"
+    },
+    "waktuColors": {
+      "Pagi": "bg-orange-100 text-orange-700",
+      "Siang": "bg-yellow-100 text-yellow-700",
+      "Sore": "bg-amber-100 text-amber-700",
+      "Malam": "bg-indigo-100 text-indigo-700"
+    },
+    "fasilitasIcons": {
+      "Parkir Motor": "🏍️",
+      "Parkir Mobil": "🚗",
+      "Warung": "🍜",
+      "Warung makan": "🍜",
+      "Toilet": "🚻",
+      "Toilet/MCK": "🚻",
+      "Gazebo": "🛖",
+      "Spot Foto": "📸",
+      "Spot foto": "📸",
+      "Tangga Akses": "🪜",
+      "Penjaga Pantai": "🏊",
+      "Mushola": "🕌",
+      "Area parkir": "🅿️"
+    },
+    "umkmKategoriIcons": {
+      "makanan": "🍽️",
+      "kerajinan": "🎨",
+      "jasa": "🛠️"
+    },
+    "umkmKategoriLabels": {
+      "makanan": { "label": "Makanan", "color": "bg-orange-500" },
+      "kerajinan": { "label": "Kerajinan", "color": "bg-purple-500" },
+      "jasa": { "label": "Jasa", "color": "bg-blue-500" }
+    },
+    "galeriKategoriList": [
+      { "id": "semua", "label": "Semua", "icon": "📷" },
+      { "id": "wisata", "label": "Wisata", "icon": "🏖️" },
+      { "id": "kegiatan", "label": "Kegiatan", "icon": "🎉" },
+      { "id": "umkm", "label": "UMKM", "icon": "🛍️" },
+      { "id": "budaya", "label": "Budaya", "icon": "🎭" }
+    ],
+    "galeriKategoriLabels": {
+      "wisata": "🏖️ Wisata",
+      "kegiatan": "🎉 Kegiatan",
+      "umkm": "🛍️ UMKM",
+      "budaya": "🎭 Budaya"
+    }
+  }
+}

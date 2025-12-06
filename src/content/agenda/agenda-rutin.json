@@ -1,0 +1,60 @@
+{
+  "agenda": [
+    {
+      "icon": "📖",
+      "title": "Yasinan Bapak",
+      "jadwal": "Setiap Minggu",
+      "waktu": "Malam",
+      "waktuIcon": "🌙",
+      "color": "bg-emerald-50"
+    },
+    {
+      "icon": "📖",
+      "title": "Yasinan Ibu",
+      "jadwal": "Setiap Minggu",
+      "waktu": "Siang",
+      "waktuIcon": "☀️",
+      "color": "bg-teal-50"
+    },
+    {
+      "icon": "🎶",
+      "title": "Karawitan",
+      "jadwal": "3x / Minggu",
+      "waktu": "Malam",
+      "waktuIcon": "🌙",
+      "color": "bg-amber-50"
+    },
+    {
+      "icon": "🎭",
+      "title": "Latihan Reog",
+      "jadwal": "Sabtu - Minggu",
+      "waktu": "Sore",
+      "waktuIcon": "🌅",
+      "color": "bg-red-50"
+    },
+    {
+      "icon": "🏥",
+      "title": "Posyandu",
+      "jadwal": "Tanggal 15",
+      "waktu": "Pagi",
+      "waktuIcon": "🌄",
+      "color": "bg-pink-50"
+    },
+    {
+      "icon": "🏃",
+      "title": "Senam Sehat",
+      "jadwal": "Setiap Sabtu",
+      "waktu": "Pagi",
+      "waktuIcon": "🌄",
+      "color": "bg-sky-50"
+    },
+    {
+      "icon": "🧹",
+      "title": "Jumat Bersih",
+      "jadwal": "Setiap Jumat",
+      "waktu": "Pagi",
+      "waktuIcon": "🌄",
+      "color": "bg-lime-50"
+    }
+  ]
+}

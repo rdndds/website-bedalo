@@ -1,0 +1,34 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+
+const data = await getEntry('profil', 'budaya-tradisi');
+const budayaTradisi = data?.data?.budayaTradisi || [];
+---
+
+<div class="mb-12">
+  <SectionTitle title="Budaya & Tradisi" />
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+    {
+      budayaTradisi.map((item, index) => (
+        <div
+          class="bg-white rounded-2xl p-5 md:p-6 shadow-lg text-center hover:shadow-xl hover:-translate-y-1 transition-all"
+          data-aos="zoom-in"
+          data-aos-delay={Math.min(index * 100, 300)}
+        >
+          <div
+            class:list={[
+              'w-16 h-16',
+              item.color,
+              'rounded-2xl flex items-center justify-center mx-auto mb-4',
+            ]}
+          >
+            <span class="text-3xl">{item.icon}</span>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-1">{item.title}</h3>
+          <p class="text-sm text-gray-500">{item.desc}</p>
+        </div>
+      ))
+    }
+  </div>
+</div>

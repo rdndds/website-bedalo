@@ -1,0 +1,708 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+locale: 'id'
+
+media_folder: src/assets/images
+public_folder: ../../assets/images
+
+collections:
+  # ============================================
+  # MARKDOWN CONTENT COLLECTIONS
+  # ============================================
+
+  - name: wisata
+    label: Objek Wisata
+    folder: src/content/wisata
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: title, label: Nama Objek, widget: string }
+      - { name: description, label: Deskripsi Singkat, widget: text }
+      - { name: thumbnail, label: Foto Utama, widget: image }
+      - name: kategori
+        label: Kategori
+        widget: select
+        options:
+          - { label: Pantai, value: pantai }
+          - { label: Bukit, value: bukit }
+      - { name: lokasi, label: Lokasi, widget: string }
+      - { name: mapsUrl, label: Link Google Maps, widget: string }
+      - { name: tiket, label: Harga Tiket, widget: string }
+      - { name: jamBuka, label: Jam Buka, widget: string }
+      - name: fasilitas
+        label: Fasilitas
+        widget: list
+        field: { name: item, label: Fasilitas, widget: string }
+      - { name: kontakPengelola, label: Kontak Pengelola (WA), widget: string, required: false }
+      - name: status
+        label: Status
+        widget: select
+        default: aktif
+        options:
+          - { label: Aktif, value: aktif }
+          - { label: Tutup Sementara, value: tutup-sementara }
+      - name: galeri
+        label: Galeri Foto
+        widget: list
+        required: false
+        field: { name: image, label: Foto, widget: image }
+      - { name: order, label: Urutan, widget: number, default: 0 }
+      - { name: body, label: Konten Detail, widget: markdown }
+
+  - name: umkm
+    label: UMKM
+    folder: src/content/umkm
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: nama, label: Nama Usaha, widget: string }
+      - { name: pemilik, label: Nama Pemilik, widget: string }
+      - name: kategori
+        label: Kategori
+        widget: select
+        options:
+          - { label: Makanan, value: makanan }
+          - { label: Kerajinan, value: kerajinan }
+          - { label: Jasa, value: jasa }
+      - { name: thumbnail, label: Foto Utama, widget: image }
+      - { name: deskripsi, label: Deskripsi Singkat, widget: text }
+      - name: produk
+        label: Daftar Produk
+        widget: list
+        field: { name: item, label: Produk, widget: string }
+      - { name: alamat, label: Alamat, widget: string }
+      - { name: mapsUrl, label: Link Google Maps, widget: string }
+      - { name: whatsapp, label: Nomor WhatsApp, widget: string }
+      - { name: jamOperasional, label: Jam Operasional, widget: string }
+      - name: galeri
+        label: Galeri Foto
+        widget: list
+        required: false
+        field: { name: image, label: Foto, widget: image }
+      - { name: body, label: Konten Detail, widget: markdown }
+
+  - name: berita
+    label: Berita & Agenda
+    folder: src/content/berita
+    create: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { name: title, label: Judul, widget: string }
+      - { name: date, label: Tanggal, widget: datetime }
+      - { name: thumbnail, label: Foto Utama, widget: image }
+      - name: kategori
+        label: Kategori
+        widget: select
+        options:
+          - { label: Kesehatan, value: kesehatan }
+          - { label: Pendidikan, value: pendidikan }
+          - { label: Budaya, value: budaya }
+          - { label: Karang Taruna, value: karang-taruna }
+          - { label: Umum, value: umum }
+      - { name: excerpt, label: Ringkasan, widget: text }
+      - { name: author, label: Penulis, widget: string, required: false }
+      - { name: body, label: Konten, widget: markdown }
+
+  - name: galeri
+    label: Galeri
+    folder: src/content/galeri
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: title, label: Judul, widget: string }
+      - name: type
+        label: Tipe Media
+        widget: select
+        default: foto
+        options:
+          - { label: Foto, value: foto }
+          - { label: Video, value: video }
+      - { name: image, label: Gambar/Thumbnail, widget: image, required: false }
+      - { name: videoUrl, label: URL Video (YouTube/dll), widget: string, required: false }
+      - name: kategori
+        label: Kategori
+        widget: select
+        options:
+          - { label: Wisata, value: wisata }
+          - { label: Kegiatan, value: kegiatan }
+          - { label: UMKM, value: umkm }
+          - { label: Budaya, value: budaya }
+      - name: tags
+        label: Tags
+        widget: list
+        required: false
+        field: { name: tag, label: Tag, widget: string }
+      - { name: date, label: Tanggal, widget: datetime }
+      - { name: featured, label: Tampilkan di Beranda, widget: boolean, default: false }
+
+  # ============================================
+  # PROFIL DUSUN (JSON FILES)
+  # ============================================
+
+  - name: profil
+    label: Profil Dusun
+    files:
+      - name: penduduk
+        label: Data Penduduk
+        file: src/content/profil/penduduk.json
+        fields:
+          - name: penduduk
+            label: Data per RT
+            widget: list
+            fields:
+              - { name: rt, label: Nama RT, widget: string }
+              - { name: kk, label: Jumlah KK, widget: number }
+              - { name: jiwa, label: Jumlah Jiwa, widget: number }
+              - { name: color, label: Warna (Tailwind class), widget: string }
+
+      - name: pemerintahan
+        label: Pemerintahan Dusun
+        file: src/content/profil/pemerintahan.json
+        fields:
+          - name: pemerintahan
+            label: Daftar Pejabat
+            widget: list
+            fields:
+              - { name: jabatan, label: Jabatan, widget: string }
+              - { name: nama, label: Nama, widget: string }
+              - { name: foto, label: Foto, widget: image, required: false }
+
+      - name: visi-misi
+        label: Visi & Misi
+        file: src/content/profil/visi-misi.json
+        fields:
+          - { name: visi, label: Visi, widget: text }
+          - name: misi
+            label: Misi
+            widget: list
+            field: { name: item, label: Misi, widget: string }
+
+      - name: lokasi
+        label: Lokasi & Wilayah
+        file: src/content/profil/lokasi.json
+        fields:
+          - name: lokasi
+            label: Data Lokasi
+            widget: object
+            fields:
+              - name: administratif
+                label: Administratif
+                widget: list
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: value, label: Nilai, widget: string }
+              - name: batasWilayah
+                label: Batas Wilayah
+                widget: list
+                fields:
+                  - { name: arah, label: Arah, widget: string }
+                  - { name: value, label: Berbatasan dengan, widget: string }
+              - name: jarakFasilitas
+                label: Jarak ke Fasilitas
+                widget: list
+                fields:
+                  - { name: jarak, label: Jarak, widget: string }
+                  - { name: satuan, label: Satuan, widget: string, default: km }
+                  - { name: nama, label: Nama Fasilitas, widget: string }
+                  - { name: icon, label: Icon (emoji), widget: string }
+
+      - name: mata-pencaharian
+        label: Mata Pencaharian
+        file: src/content/profil/mata-pencaharian.json
+        fields:
+          - name: mataPencaharian
+            label: Daftar Mata Pencaharian
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Judul, widget: string }
+              - { name: desc, label: Deskripsi, widget: string }
+              - { name: color, label: Warna (Tailwind class), widget: string }
+
+      - name: potensi-ekonomi
+        label: Potensi Ekonomi
+        file: src/content/profil/potensi-ekonomi.json
+        fields:
+          - name: potensiEkonomi
+            label: Daftar Potensi Ekonomi
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Judul, widget: string }
+              - { name: desc, label: Deskripsi, widget: string }
+              - name: items
+                label: Item
+                widget: list
+                field: { name: item, label: Item, widget: string }
+              - { name: color, label: Warna Gradient (Tailwind), widget: string }
+
+      - name: budaya-tradisi
+        label: Budaya & Tradisi
+        file: src/content/profil/budaya-tradisi.json
+        fields:
+          - name: budayaTradisi
+            label: Daftar Budaya & Tradisi
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Judul, widget: string }
+              - { name: desc, label: Deskripsi, widget: string }
+              - { name: color, label: Warna (Tailwind class), widget: string }
+
+  # ============================================
+  # LAYANAN & AGENDA (JSON FILES)
+  # ============================================
+
+  - name: layanan
+    label: Layanan & Fasilitas
+    files:
+      - name: layanan
+        label: Daftar Layanan
+        file: src/content/layanan/layanan.json
+        fields:
+          - name: layanan
+            label: Layanan
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Nama Layanan, widget: string }
+              - { name: description, label: Deskripsi, widget: text }
+              - { name: lokasi, label: Lokasi, widget: string }
+              - { name: jadwal, label: Jadwal, widget: string }
+              - { name: color, label: Warna Background (Tailwind), widget: string }
+              - { name: iconBg, label: Warna Icon Background (Tailwind), widget: string }
+          - name: sumberAir
+            label: Sumber Air
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: text, label: Keterangan, widget: string }
+
+  - name: agenda
+    label: Agenda Rutin
+    files:
+      - name: agenda-rutin
+        label: Agenda Rutin
+        file: src/content/agenda/agenda-rutin.json
+        fields:
+          - name: agenda
+            label: Daftar Agenda
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Nama Kegiatan, widget: string }
+              - { name: jadwal, label: Jadwal, widget: string }
+              - { name: waktu, label: Waktu (Pagi/Siang/Sore/Malam), widget: string }
+              - { name: waktuIcon, label: Icon Waktu (emoji), widget: string }
+              - { name: color, label: Warna Background (Tailwind), widget: string }
+
+  # ============================================
+  # SITE CONTENT (JSON FILES)
+  # ============================================
+
+  - name: siteContent
+    label: Konten Website
+    files:
+      - name: site-config
+        label: Konfigurasi Situs
+        file: src/content/siteContent/site-config.json
+        fields:
+          - name: siteConfig
+            label: Konfigurasi
+            widget: object
+            fields:
+              - { name: name, label: Nama Situs, widget: string }
+              - { name: tagline, label: Tagline, widget: string }
+              - { name: description, label: Deskripsi SEO, widget: text }
+              - name: address
+                label: Alamat
+                widget: object
+                fields:
+                  - { name: dusun, label: Dusun, widget: string }
+                  - { name: kalurahan, label: Kalurahan, widget: string }
+                  - { name: kapanewon, label: Kapanewon, widget: string }
+                  - { name: kabupaten, label: Kabupaten, widget: string }
+                  - { name: provinsi, label: Provinsi, widget: string }
+                  - { name: kodePos, label: Kode Pos, widget: string }
+              - { name: mapsEmbedUrl, label: Google Maps Embed URL, widget: string }
+              - { name: mapsUrl, label: Google Maps Link, widget: string }
+              - name: stats
+                label: Statistik
+                widget: object
+                fields:
+                  - { name: jiwa, label: Jumlah Jiwa, widget: number }
+                  - { name: kk, label: Jumlah KK, widget: number }
+                  - { name: rt, label: Jumlah RT, widget: number }
+                  - { name: pantai, label: Jumlah Pantai, widget: number }
+
+      - name: hero
+        label: Hero Beranda
+        file: src/content/siteContent/hero.json
+        fields:
+          - name: hero
+            label: Hero Section
+            widget: object
+            fields:
+              - { name: title, label: Judul, widget: string }
+              - { name: highlight, label: Teks Highlight, widget: string }
+              - { name: description, label: Deskripsi, widget: text }
+              - name: primaryButton
+                label: Tombol Utama
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+              - name: secondaryButton
+                label: Tombol Sekunder
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+
+      - name: highlights
+        label: Highlights Beranda
+        file: src/content/siteContent/highlights.json
+        fields:
+          - name: highlights
+            label: Highlight Cards
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Judul, widget: string }
+              - { name: description, label: Deskripsi, widget: text }
+              - { name: href, label: Link, widget: string }
+
+      - name: cta
+        label: Call to Action
+        file: src/content/siteContent/cta.json
+        fields:
+          - name: cta
+            label: CTA Section
+            widget: object
+            fields:
+              - { name: title, label: Judul, widget: string }
+              - { name: description, label: Deskripsi, widget: text }
+              - name: primaryButton
+                label: Tombol Utama
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+              - name: secondaryButton
+                label: Tombol Sekunder
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+
+      - name: navigation
+        label: Navigasi
+        file: src/content/siteContent/navigation.json
+        fields:
+          - name: navigation
+            label: Navigasi
+            widget: object
+            fields:
+              - name: mainNavItems
+                label: Menu Utama
+                widget: list
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+              - name: footerNavLinks
+                label: Link Footer (Navigasi)
+                widget: list
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+              - name: footerInfoLinks
+                label: Link Footer (Informasi)
+                widget: list
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: href, label: Link, widget: string }
+
+      - name: kontak
+        label: Kontak
+        file: src/content/siteContent/kontak.json
+        fields:
+          - name: kontakResmi
+            label: Kontak Resmi
+            widget: list
+            fields:
+              - { name: title, label: Judul, widget: string }
+              - { name: deskripsi, label: Deskripsi, widget: text }
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: color, label: Warna Background (Tailwind), widget: string }
+              - { name: iconBg, label: Warna Icon Background (Tailwind), widget: string }
+          - name: nomorPenting
+            label: Nomor Penting
+            widget: list
+            fields:
+              - { name: nama, label: Nama, widget: string }
+              - { name: nomor, label: Nomor Telepon, widget: string }
+              - { name: icon, label: Icon (emoji), widget: string }
+
+      - name: about-intro
+        label: About Intro
+        file: src/content/siteContent/about-intro.json
+        fields:
+          - name: aboutIntro
+            label: Intro Section
+            widget: object
+            fields:
+              - { name: quote, label: Quote, widget: string }
+              - { name: quoteHighlight, label: Quote Highlight, widget: string }
+              - { name: quoteFooter, label: Quote Footer, widget: string }
+              - name: paragraphs
+                label: Paragraf
+                widget: list
+                field: { name: paragraph, label: Paragraf, widget: text }
+              - { name: buttonLabel, label: Label Tombol, widget: string }
+              - { name: buttonHref, label: Link Tombol, widget: string }
+
+      - name: tentang-proyek
+        label: Tentang Proyek
+        file: src/content/siteContent/tentang-proyek.json
+        fields:
+          - name: digitalisasi
+            label: Digitalisasi Dusun
+            widget: object
+            fields:
+              - { name: title, label: Judul, widget: string }
+              - name: paragraphs
+                label: Paragraf
+                widget: list
+                field: { name: paragraph, label: Paragraf, widget: text }
+              - name: features
+                label: Fitur
+                widget: list
+                fields:
+                  - { name: icon, label: Icon (emoji), widget: string }
+                  - { name: title, label: Judul, widget: string }
+          - name: programKKN
+            label: Program KKN
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: title, label: Judul, widget: string }
+              - name: items
+                label: Item Program
+                widget: list
+                field: { name: item, label: Item, widget: string }
+              - { name: color, label: Warna Background (Tailwind), widget: string }
+              - { name: iconBg, label: Warna Icon Background (Tailwind), widget: string }
+          - name: techStack
+            label: Tech Stack
+            widget: list
+            fields:
+              - { name: icon, label: Icon (emoji), widget: string }
+              - { name: name, label: Nama, widget: string }
+              - { name: desc, label: Deskripsi, widget: string }
+              - { name: color, label: Warna Background (Tailwind), widget: string }
+              - { name: iconBg, label: Warna Icon Background (Tailwind), widget: string }
+
+      - name: section-titles
+        label: Judul Section
+        file: src/content/siteContent/section-titles.json
+        fields:
+          - name: sectionTitles
+            label: Judul-judul Section
+            widget: object
+            fields:
+              - name: wisata
+                label: Wisata
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+              - name: umkm
+                label: UMKM
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+              - name: berita
+                label: Berita
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+              - name: galeri
+                label: Galeri
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+              - name: location
+                label: Lokasi
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+
+      - name: ui-config
+        label: Konfigurasi UI
+        file: src/content/siteContent/ui-config.json
+        fields:
+          - name: uiConfig
+            label: UI Config
+            widget: object
+            fields:
+              - name: kategoriBeritaColors
+                label: Warna Kategori Berita
+                widget: object
+                fields:
+                  - name: kesehatan
+                    label: Kesehatan
+                    widget: object
+                    fields:
+                      - { name: bg, label: Background, widget: string }
+                      - { name: text, label: Text, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+                  - name: pendidikan
+                    label: Pendidikan
+                    widget: object
+                    fields:
+                      - { name: bg, label: Background, widget: string }
+                      - { name: text, label: Text, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+                  - name: budaya
+                    label: Budaya
+                    widget: object
+                    fields:
+                      - { name: bg, label: Background, widget: string }
+                      - { name: text, label: Text, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+                  - name: karang-taruna
+                    label: Karang Taruna
+                    widget: object
+                    fields:
+                      - { name: bg, label: Background, widget: string }
+                      - { name: text, label: Text, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+                  - name: umum
+                    label: Umum
+                    widget: object
+                    fields:
+                      - { name: bg, label: Background, widget: string }
+                      - { name: text, label: Text, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+              - name: kategoriBeritaTimelineColors
+                label: Warna Timeline Berita
+                widget: object
+                fields:
+                  - { name: kesehatan, label: Kesehatan, widget: string }
+                  - { name: pendidikan, label: Pendidikan, widget: string }
+                  - { name: budaya, label: Budaya, widget: string }
+                  - { name: karang-taruna, label: Karang Taruna, widget: string }
+                  - { name: umum, label: Umum, widget: string }
+              - name: waktuColors
+                label: Warna Waktu
+                widget: object
+                fields:
+                  - { name: Pagi, label: Pagi, widget: string }
+                  - { name: Siang, label: Siang, widget: string }
+                  - { name: Sore, label: Sore, widget: string }
+                  - { name: Malam, label: Malam, widget: string }
+              - name: fasilitasIcons
+                label: Icon Fasilitas
+                widget: object
+                fields:
+                  - { name: 'Parkir Motor', label: Parkir Motor, widget: string }
+                  - { name: 'Parkir Mobil', label: Parkir Mobil, widget: string }
+                  - { name: 'Warung', label: Warung, widget: string }
+                  - { name: 'Warung makan', label: Warung makan, widget: string }
+                  - { name: 'Toilet', label: Toilet, widget: string }
+                  - { name: 'Toilet/MCK', label: Toilet/MCK, widget: string }
+                  - { name: 'Gazebo', label: Gazebo, widget: string }
+                  - { name: 'Spot Foto', label: Spot Foto, widget: string }
+                  - { name: 'Spot foto', label: Spot foto, widget: string }
+                  - { name: 'Tangga Akses', label: Tangga Akses, widget: string }
+                  - { name: 'Penjaga Pantai', label: Penjaga Pantai, widget: string }
+                  - { name: 'Mushola', label: Mushola, widget: string }
+                  - { name: 'Area parkir', label: Area parkir, widget: string }
+              - name: umkmKategoriIcons
+                label: Icon Kategori UMKM
+                widget: object
+                fields:
+                  - { name: makanan, label: Makanan, widget: string }
+                  - { name: kerajinan, label: Kerajinan, widget: string }
+                  - { name: jasa, label: Jasa, widget: string }
+              - name: umkmKategoriLabels
+                label: Label Kategori UMKM
+                widget: object
+                fields:
+                  - name: makanan
+                    label: Makanan
+                    widget: object
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: color, label: Warna, widget: string }
+                  - name: kerajinan
+                    label: Kerajinan
+                    widget: object
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: color, label: Warna, widget: string }
+                  - name: jasa
+                    label: Jasa
+                    widget: object
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: color, label: Warna, widget: string }
+              - name: galeriKategoriList
+                label: Daftar Kategori Galeri
+                widget: list
+                fields:
+                  - { name: id, label: ID, widget: string }
+                  - { name: label, label: Label, widget: string }
+                  - { name: icon, label: Icon, widget: string }
+              - name: galeriKategoriLabels
+                label: Label Kategori Galeri
+                widget: object
+                fields:
+                  - { name: wisata, label: Wisata, widget: string }
+                  - { name: kegiatan, label: Kegiatan, widget: string }
+                  - { name: umkm, label: UMKM, widget: string }
+                  - { name: budaya, label: Budaya, widget: string }
+
+      - name: error-pages
+        label: Halaman Error
+        file: src/content/siteContent/error-pages.json
+        fields:
+          - name: errorPages
+            label: Error Pages
+            widget: object
+            fields:
+              - name: notFound
+                label: 404 Not Found
+                widget: object
+                fields:
+                  - { name: icon, label: Icon, widget: string }
+                  - { name: title, label: Judul, widget: string }
+                  - { name: description, label: Deskripsi, widget: text }
+                  - name: primaryButton
+                    label: Tombol Utama
+                    widget: object
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: href, label: Link, widget: string }
+                  - name: secondaryButton
+                    label: Tombol Sekunder
+                    widget: object
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: href, label: Link, widget: string }
+                  - { name: quickLinksTitle, label: Judul Quick Links, widget: string }
+                  - name: quickLinks
+                    label: Quick Links
+                    widget: list
+                    fields:
+                      - { name: href, label: Link, widget: string }
+                      - { name: icon, label: Icon, widget: string }
+                      - { name: label, label: Label, widget: string }

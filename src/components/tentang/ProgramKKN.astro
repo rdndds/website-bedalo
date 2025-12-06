@@ -1,0 +1,47 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+
+const data = await getEntry('siteContent', 'tentang-proyek');
+const programKKN = data?.data?.programKKN || [];
+---
+
+<div class="mb-10">
+  <SectionTitle
+    title="Program KKN 2025"
+    subtitle="Berbagai program kerja yang telah dilaksanakan bersama warga"
+  />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    {
+      programKKN.map((program, index) => (
+        <div
+          class:list={[
+            program.color,
+            'rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all',
+          ]}
+          data-aos={index % 2 === 0 ? 'fade-right' : 'fade-left'}
+          data-aos-delay={Math.min(index * 100, 200)}
+        >
+          <div
+            class:list={[
+              'w-14 h-14',
+              program.iconBg,
+              'rounded-xl flex items-center justify-center mb-4',
+            ]}
+          >
+            <span class="text-3xl">{program.icon}</span>
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 mb-3">{program.title}</h3>
+          <ul class="space-y-2">
+            {program.items.map((item) => (
+              <li class="text-sm text-gray-600 flex items-start gap-2">
+                <span class="text-primary mt-0.5">•</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</div>

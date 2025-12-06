@@ -1,0 +1,475 @@
+---
+import { Image, getImage } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { LightGallery } from 'astro-lightgallery';
+import { galeriKategoriList } from '../data/constants';
+
+const ITEMS_PER_PAGE = 12;
+
+const allGaleri = await getCollection('galeri');
+const sortedGaleri = allGaleri.sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const fotoItems = sortedGaleri.filter((item) => item.data.type === 'foto');
+const videoItems = sortedGaleri.filter((item) => item.data.type === 'video');
+
+// Pre-process foto items to get optimized image URLs for lightbox
+const fotoWithUrls = await Promise.all(
+  fotoItems.map(async (item, index) => {
+    if (item.data.image) {
+      const optimized = await getImage({ src: item.data.image, width: 1920 });
+      return { ...item, lightboxSrc: optimized.src, index };
+    }
+    return { ...item, lightboxSrc: '', index };
+  })
+);
+
+const allTags = [
+  ...new Set(sortedGaleri.flatMap((item) => item.data.tags || [])),
+];
+
+function getYouTubeThumbnail(url: string): string {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const match = url.match(regExp);
+  const videoId = match && match[2].length === 11 ? match[2] : null;
+  return videoId
+    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+    : '';
+}
+---
+
+<BaseLayout
+  title="Galeri"
+  description="Galeri foto dan video kegiatan dan keindahan Dusun Bedalo."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-8" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          <span class="gradient-text">Galeri</span> Media
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
+          Dokumentasi keindahan alam, kegiatan warga, dan produk UMKM Dusun
+          Bedalo.
+        </p>
+        <div class="inline-flex items-center gap-4 text-sm text-gray-500">
+          <span class="flex items-center gap-1">
+            <span class="text-lg">📷</span>
+            <strong class="text-gray-900">{fotoItems.length}</strong> Foto
+          </span>
+          <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+          <span class="flex items-center gap-1">
+            <span class="text-lg">🎬</span>
+            <strong class="text-gray-900">{videoItems.length}</strong> Video
+          </span>
+        </div>
+      </div>
+
+      <div class="flex justify-center gap-2 mb-6">
+        <button
+          id="tab-foto"
+          class="type-tab px-6 py-3 rounded-xl font-semibold transition-all bg-primary text-white shadow-md"
+          data-type="foto"
+        >
+          📷 Foto
+        </button>
+        <button
+          id="tab-video"
+          class="type-tab px-6 py-3 rounded-xl font-semibold transition-all bg-white text-gray-700 shadow hover:bg-gray-200"
+          data-type="video"
+        >
+          🎬 Video
+        </button>
+      </div>
+
+      <div class="flex justify-center gap-2 mb-4 flex-wrap">
+        {
+          galeriKategoriList.map((kat) => (
+            <button
+              data-filter={kat.id}
+              class:list={[
+                'filter-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow-md',
+                kat.id === 'semua'
+                  ? 'bg-primary text-white shadow-md'
+                  : 'bg-white text-gray-700 shadow hover:bg-gray-200',
+              ]}
+            >
+              <span>{kat.icon}</span>
+              <span>{kat.label}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        allTags.length > 0 && (
+          <div class="flex justify-center gap-2 mb-10 flex-wrap">
+            {allTags.map((tag) => (
+              <button
+                data-tag={tag}
+                class="tag-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all"
+              >
+                #{tag}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      <div id="foto-section">
+        {
+          fotoWithUrls.length > 0 ? (
+            <>
+              <LightGallery
+                options={{ thumbnail: true }}
+                addPlugins={['zoom', 'thumbnail']}
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+                id="foto-grid"
+              >
+                {fotoWithUrls.map((item, idx) => (
+                  <a
+                    href={item.lightboxSrc}
+                    data-sub-html={`<h4>${item.data.title}</h4><p>${item.data.kategori}</p>`}
+                    data-kategori={item.data.kategori}
+                    data-tags={item.data.tags?.join(',') || ''}
+                    data-index={idx}
+                    class:list={[
+                      'foto-item group relative aspect-square overflow-hidden rounded-2xl bg-gray-200 shadow-lg hover:shadow-xl transition-all cursor-pointer',
+                      idx >= ITEMS_PER_PAGE ? 'hidden' : '',
+                    ]}
+                  >
+                    {item.data.image && (
+                      <Image
+                        src={item.data.image}
+                        alt={item.data.title}
+                        width={400}
+                        height={400}
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                    {item.data.featured && (
+                      <span class="absolute top-3 right-3 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">
+                        ⭐ Featured
+                      </span>
+                    )}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="absolute bottom-0 left-0 right-0 p-4 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                        <p class="text-white font-semibold">
+                          {item.data.title}
+                        </p>
+                        <p class="text-white/70 text-sm capitalize">
+                          {item.data.kategori}
+                        </p>
+                        {item.data.tags && item.data.tags.length > 0 && (
+                          <div class="flex flex-wrap gap-1 mt-2">
+                            {item.data.tags.slice(0, 3).map((tag) => (
+                              <span class="px-2 py-0.5 bg-white/20 rounded-full text-xs text-white">
+                                #{tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </LightGallery>
+
+              {fotoWithUrls.length > ITEMS_PER_PAGE && (
+                <div class="text-center mt-8">
+                  <button
+                    id="load-more-foto"
+                    class="inline-flex items-center gap-2 px-8 py-3 bg-primary text-white font-semibold rounded-xl shadow-md hover:bg-primary-hover hover:-translate-y-0.5 hover:shadow-lg transition-all"
+                    data-total={fotoWithUrls.length}
+                    data-per-page={ITEMS_PER_PAGE}
+                  >
+                    <span>Muat Lebih Banyak</span>
+                    <span id="foto-count" class="text-sm opacity-80">
+                      ({ITEMS_PER_PAGE}/{fotoWithUrls.length})
+                    </span>
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
+              <div class="text-7xl mb-4">📷</div>
+              <p class="text-gray-500 text-lg">Belum ada foto di galeri.</p>
+            </div>
+          )
+        }
+      </div>
+
+      <div id="video-section" class="hidden">
+        {
+          videoItems.length > 0 ? (
+            <LightGallery
+              options={{}}
+              addPlugins={['video']}
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {videoItems.map((item, idx) => {
+                const thumbUrl = getYouTubeThumbnail(item.data.videoUrl || '');
+                return (
+                  <a
+                    href={item.data.videoUrl}
+                    data-sub-html={`<h4>${item.data.title}</h4><p>${item.data.kategori}</p>`}
+                    data-kategori={item.data.kategori}
+                    data-tags={item.data.tags?.join(',') || ''}
+                    data-index={idx}
+                    class="video-item group relative aspect-video overflow-hidden rounded-2xl bg-gray-900 shadow-lg hover:shadow-xl transition-all cursor-pointer"
+                  >
+                    <img
+                      src={thumbUrl}
+                      alt={item.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                        <svg
+                          class="w-7 h-7 text-white ml-1"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                    {item.data.featured && (
+                      <span class="absolute top-3 right-3 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">
+                        ⭐ Featured
+                      </span>
+                    )}
+                    <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+                      <p class="text-white font-semibold">{item.data.title}</p>
+                      <p class="text-white/70 text-sm capitalize">
+                        {item.data.kategori}
+                      </p>
+                    </div>
+                  </a>
+                );
+              })}
+            </LightGallery>
+          ) : (
+            <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
+              <div class="text-7xl mb-4">🎬</div>
+              <p class="text-gray-500 text-lg">Belum ada video di galeri.</p>
+            </div>
+          )
+        }
+      </div>
+
+      <div
+        id="no-results"
+        class="hidden bg-white rounded-2xl p-16 shadow-lg text-center"
+      >
+        <div class="text-7xl mb-4">🔍</div>
+        <p class="text-gray-500 text-lg">
+          Tidak ada hasil yang cocok dengan filter.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  let cleanupFns: (() => void)[] = [];
+
+  document.addEventListener('astro:page-load', () => {
+    const loadMoreFotoBtn = document.getElementById(
+      'load-more-foto'
+    ) as HTMLElement | null;
+    const fotoCountEl = document.getElementById('foto-count');
+    const fotoSection = document.getElementById('foto-section');
+    const videoSection = document.getElementById('video-section');
+    const noResults = document.getElementById('no-results');
+
+    const itemsPerPage = parseInt(loadMoreFotoBtn?.dataset.perPage || '12');
+    const totalFoto = parseInt(loadMoreFotoBtn?.dataset.total || '0');
+    let fotoLoaded = itemsPerPage;
+    let activeCategory = 'semua';
+    let activeTag = '';
+
+    // Type tabs
+    const typeTabs = document.querySelectorAll('.type-tab');
+    typeTabs.forEach((tab) => {
+      const handler = () => {
+        const type = tab.getAttribute('data-type');
+
+        typeTabs.forEach((t) => {
+          t.classList.remove('bg-primary', 'text-white', 'shadow-md');
+          t.classList.add('bg-white', 'text-gray-700', 'shadow');
+        });
+        tab.classList.remove('bg-white', 'text-gray-700', 'shadow');
+        tab.classList.add('bg-primary', 'text-white', 'shadow-md');
+
+        if (type === 'foto') {
+          fotoSection?.classList.remove('hidden');
+          videoSection?.classList.add('hidden');
+        } else {
+          fotoSection?.classList.add('hidden');
+          videoSection?.classList.remove('hidden');
+        }
+      };
+      tab.addEventListener('click', handler);
+      cleanupFns.push(() => tab.removeEventListener('click', handler));
+    });
+
+    // Load More for Foto
+    if (loadMoreFotoBtn) {
+      const loadMoreHandler = () => {
+        const fotoItems = document.querySelectorAll('.foto-item');
+        const newLoaded = Math.min(fotoLoaded + itemsPerPage, totalFoto);
+
+        fotoItems.forEach((item, idx) => {
+          if (idx < newLoaded) {
+            item.classList.remove('hidden');
+          }
+        });
+
+        fotoLoaded = newLoaded;
+
+        if (fotoCountEl) {
+          fotoCountEl.textContent = `(${fotoLoaded}/${totalFoto})`;
+        }
+
+        if (fotoLoaded >= totalFoto) {
+          loadMoreFotoBtn.style.display = 'none';
+        }
+
+        // Refresh AOS for newly visible elements
+        if (window.AOS) {
+          window.AOS.refresh();
+        }
+      };
+      loadMoreFotoBtn.addEventListener('click', loadMoreHandler);
+      cleanupFns.push(() =>
+        loadMoreFotoBtn.removeEventListener('click', loadMoreHandler)
+      );
+    }
+
+    // Filter function
+    function applyFilters() {
+      let visibleCount = 0;
+      let matchedCount = 0;
+      const currentSection = fotoSection?.classList.contains('hidden')
+        ? 'video'
+        : 'foto';
+      const items =
+        currentSection === 'foto'
+          ? document.querySelectorAll('.foto-item')
+          : document.querySelectorAll('.video-item');
+
+      items.forEach((item) => {
+        const kategori = item.getAttribute('data-kategori');
+        const tags = item.getAttribute('data-tags') || '';
+
+        const matchesCategory =
+          activeCategory === 'semua' || kategori === activeCategory;
+        const matchesTag = !activeTag || tags.split(',').includes(activeTag);
+
+        if (matchesCategory && matchesTag) {
+          matchedCount++;
+          if (currentSection === 'foto') {
+            if (matchedCount <= fotoLoaded) {
+              item.classList.remove('hidden');
+              visibleCount++;
+            } else {
+              item.classList.add('hidden');
+            }
+          } else {
+            item.classList.remove('hidden');
+            visibleCount++;
+          }
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      if (currentSection === 'foto' && loadMoreFotoBtn) {
+        if (
+          matchedCount <= fotoLoaded ||
+          activeCategory !== 'semua' ||
+          activeTag
+        ) {
+          loadMoreFotoBtn.style.display = 'none';
+        } else {
+          loadMoreFotoBtn.style.display = 'inline-flex';
+        }
+      }
+
+      if (noResults) {
+        if (visibleCount === 0) {
+          noResults.classList.remove('hidden');
+        } else {
+          noResults.classList.add('hidden');
+        }
+      }
+    }
+
+    // Category filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach((btn) => {
+      const handler = () => {
+        activeCategory = btn.getAttribute('data-filter') || 'semua';
+
+        fotoLoaded = itemsPerPage;
+        if (fotoCountEl) {
+          fotoCountEl.textContent = `(${fotoLoaded}/${totalFoto})`;
+        }
+
+        filterBtns.forEach((b) => {
+          b.classList.remove('bg-primary', 'text-white', 'shadow-md');
+          b.classList.add('bg-white', 'text-gray-700', 'shadow');
+        });
+        btn.classList.remove('bg-white', 'text-gray-700', 'shadow');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+
+        applyFilters();
+      };
+      btn.addEventListener('click', handler);
+      cleanupFns.push(() => btn.removeEventListener('click', handler));
+    });
+
+    // Tag filter
+    const tagBtns = document.querySelectorAll('.tag-btn');
+    tagBtns.forEach((btn) => {
+      const handler = () => {
+        const tag = btn.getAttribute('data-tag') || '';
+
+        fotoLoaded = itemsPerPage;
+        if (fotoCountEl) {
+          fotoCountEl.textContent = `(${fotoLoaded}/${totalFoto})`;
+        }
+
+        if (activeTag === tag) {
+          activeTag = '';
+          btn.classList.remove('bg-primary', 'text-white');
+          btn.classList.add('bg-gray-100', 'text-gray-600');
+        } else {
+          activeTag = tag;
+          tagBtns.forEach((b) => {
+            b.classList.remove('bg-primary', 'text-white');
+            b.classList.add('bg-gray-100', 'text-gray-600');
+          });
+          btn.classList.remove('bg-gray-100', 'text-gray-600');
+          btn.classList.add('bg-primary', 'text-white');
+        }
+
+        applyFilters();
+      };
+      btn.addEventListener('click', handler);
+      cleanupFns.push(() => btn.removeEventListener('click', handler));
+    });
+  });
+
+  document.addEventListener('astro:before-swap', () => {
+    cleanupFns.forEach((fn) => fn());
+    cleanupFns = [];
+  });
+</script>

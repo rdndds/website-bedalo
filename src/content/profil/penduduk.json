@@ -1,0 +1,7 @@
+{
+  "penduduk": [
+    { "rt": "RT 01", "kk": 45, "jiwa": 198, "color": "bg-blue-600" },
+    { "rt": "RT 02", "kk": 48, "jiwa": 212, "color": "bg-primary-dark" },
+    { "rt": "RT 03", "kk": 44, "jiwa": 195, "color": "bg-sky-600" }
+  ]
+}

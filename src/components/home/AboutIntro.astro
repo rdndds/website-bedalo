@@ -1,0 +1,72 @@
+---
+import { getEntry } from 'astro:content';
+import Button from '../common/Button.astro';
+
+const data = await getEntry('siteContent', 'about-intro');
+const aboutIntro = data?.data?.aboutIntro;
+
+const quoteParts = aboutIntro?.quote.split(aboutIntro.quoteHighlight) || [];
+---
+
+{
+  aboutIntro && (
+    <section class="relative py-16 lg:py-24 bg-white overflow-hidden">
+      <div class="absolute inset-0 topo-pattern opacity-5" />
+
+      <div class="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+          <div class="lg:col-span-2 relative" data-aos="fade-right">
+            <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary via-accent to-primary-light rounded-full" />
+            <blockquote class="pl-6 lg:pl-8">
+              <p class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                "{quoteParts[0]}
+                <span class="gradient-text">{aboutIntro.quoteHighlight}</span>
+                {quoteParts[1]}"
+              </p>
+              <footer class="mt-4 text-gray-500 text-sm">
+                — {aboutIntro.quoteFooter}
+              </footer>
+            </blockquote>
+          </div>
+
+          <div
+            class="lg:col-span-3 space-y-6"
+            data-aos="fade-left"
+            data-aos-delay="100"
+          >
+            {aboutIntro.paragraphs.map((paragraph, index) => (
+              <p
+                class={`text-gray-600 leading-relaxed ${index === 0 ? 'text-lg' : ''}`}
+                set:html={paragraph}
+              />
+            ))}
+            <div class="flex flex-wrap gap-4 pt-2">
+              <Button href={aboutIntro.buttonHref} variant="primary">
+                {aboutIntro.buttonLabel}
+                <svg
+                  class="w-4 h-4 ml-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .topo-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0c16.569 0 30 13.431 30 30 0 16.569-13.431 30-30 30C13.431 60 0 46.569 0 30 0 13.431 13.431 0 30 0zm0 5C16.193 5 5 16.193 5 30c0 13.807 11.193 25 25 25 13.807 0 25-11.193 25-25C55 16.193 43.807 5 30 5zm0 10c8.284 0 15 6.716 15 15 0 8.284-6.716 15-15 15-8.284 0-15-6.716-15-15 0-8.284 6.716-15 15-15zm0 5c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10z' fill='%231e40af' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+</style>

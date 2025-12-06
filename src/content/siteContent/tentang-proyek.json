@@ -1,0 +1,78 @@
+{
+  "digitalisasi": {
+    "title": "Digitalisasi Dusun Bedalo",
+    "paragraphs": [
+      "Website ini merupakan bagian dari program <strong class=\"text-gray-900\">Digitalisasi Dusun Bedalo</strong> yang diinisiasi oleh mahasiswa KKN UIN Sunan Kalijaga Yogyakarta Angkatan 117 Kelompok 129 pada tahun 2025.",
+      "Program ini bertujuan untuk memperluas jangkauan pemasaran UMKM lokal, meningkatkan eksposur destinasi wisata, serta menyediakan infrastruktur digital dengan biaya operasional nol bagi masyarakat Dusun Bedalo."
+    ],
+    "features": [
+      { "icon": "🛍️", "title": "Pemasaran UMKM" },
+      { "icon": "🏖️", "title": "Promosi Wisata" },
+      { "icon": "📍", "title": "Pendataan Google Maps" }
+    ]
+  },
+  "programKKN": [
+    {
+      "icon": "📚",
+      "title": "Pendidikan",
+      "items": [
+        "Pendampingan TPA & Mengaji",
+        "Pendampingan PAUD",
+        "Bimbingan Belajar"
+      ],
+      "color": "bg-blue-50",
+      "iconBg": "bg-blue-100"
+    },
+    {
+      "icon": "🏥",
+      "title": "Kesehatan",
+      "items": ["Posyandu", "Sosialisasi Stunting", "Semarak Sabtu Sehat"],
+      "color": "bg-red-50",
+      "iconBg": "bg-red-100"
+    },
+    {
+      "icon": "🌿",
+      "title": "Lingkungan",
+      "items": ["Jumat Bersih", "Bedalo Terang (Lampu Jalan)"],
+      "color": "bg-green-50",
+      "iconBg": "bg-green-100"
+    },
+    {
+      "icon": "🎭",
+      "title": "Sosial Budaya",
+      "items": ["Gebyar Kemerdekaan", "Tirakatan", "Digitalisasi Dusun"],
+      "color": "bg-purple-50",
+      "iconBg": "bg-purple-100"
+    }
+  ],
+  "techStack": [
+    {
+      "icon": "🚀",
+      "name": "Astro",
+      "desc": "Framework web modern untuk website statis yang cepat",
+      "color": "bg-orange-50",
+      "iconBg": "bg-orange-100"
+    },
+    {
+      "icon": "🎨",
+      "name": "Tailwind CSS",
+      "desc": "Styling yang responsif dan mudah dikustomisasi",
+      "color": "bg-cyan-50",
+      "iconBg": "bg-cyan-100"
+    },
+    {
+      "icon": "📝",
+      "name": "Decap CMS",
+      "desc": "Sistem manajemen konten tanpa biaya server",
+      "color": "bg-pink-50",
+      "iconBg": "bg-pink-100"
+    },
+    {
+      "icon": "▲",
+      "name": "Vercel",
+      "desc": "Hosting gratis dengan performa tinggi",
+      "color": "bg-gray-50",
+      "iconBg": "bg-gray-200"
+    }
+  ]
+}

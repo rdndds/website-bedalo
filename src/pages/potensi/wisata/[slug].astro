@@ -1,0 +1,256 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Button from '../../../components/common/Button.astro';
+import MapLink from '../../../components/common/MapLink.astro';
+import WhatsAppLink from '../../../components/common/WhatsAppLink.astro';
+import ShareButtons from '../../../components/common/ShareButtons.astro';
+import RelatedContent from '../../../components/common/RelatedContent.astro';
+import SchemaTouristAttraction from '../../../components/common/SchemaTouristAttraction.astro';
+import SchemaBreadcrumb from '../../../components/common/SchemaBreadcrumb.astro';
+import { LightGallery } from 'astro-lightgallery';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { fasilitasIcons } from '../../../data/constants';
+
+export async function getStaticPaths() {
+  const wisataEntries = await getCollection('wisata');
+  return wisataEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry, allWisata: wisataEntries },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'wisata'>;
+  allWisata: CollectionEntry<'wisata'>[];
+}
+
+const { entry, allWisata } = Astro.props;
+const { Content } = await entry.render();
+const {
+  title,
+  description,
+  thumbnail,
+  kategori,
+  lokasi,
+  mapsUrl,
+  tiket,
+  jamBuka,
+  fasilitas,
+  kontakPengelola,
+  status,
+  galeri,
+} = entry.data;
+
+const relatedWisata = allWisata
+  .filter((w) => w.slug !== entry.slug && w.data.kategori === kategori)
+  .slice(0, 3)
+  .map((w) => ({
+    title: w.data.title,
+    slug: w.slug,
+    thumbnail: w.data.thumbnail,
+    description: w.data.description,
+    kategori: w.data.kategori,
+  }));
+---
+
+<BaseLayout title={title} description={description} image={thumbnail.src}>
+  <SchemaBreadcrumb
+    items={[
+      { name: 'Potensi', url: '/potensi' },
+      { name: 'Wisata' },
+      { name: title },
+    ]}
+  />
+  <SchemaTouristAttraction
+    title={title}
+    description={description}
+    lokasi={lokasi}
+    mapsUrl={mapsUrl}
+    tiket={tiket}
+    jamBuka={jamBuka}
+    image={thumbnail.src}
+  />
+  <article class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        class="relative rounded-2xl overflow-hidden mb-8 shadow-xl"
+        data-aos="zoom-in"
+      >
+        <Image
+          src={thumbnail}
+          alt={title}
+          width={1200}
+          height={600}
+          class="w-full h-72 md:h-[28rem] object-cover"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
+        >
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span
+              class="px-3 py-1.5 bg-primary text-white text-sm font-semibold rounded-full capitalize shadow-lg"
+            >
+              🏖️ {kategori}
+            </span>
+            {
+              status === 'tutup-sementara' && (
+                <span class="px-3 py-1.5 bg-red-500 text-white text-sm font-semibold rounded-full shadow-lg">
+                  ⚠️ Tutup Sementara
+                </span>
+              )
+            }
+          </div>
+          <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-2">
+            {title}
+          </h1>
+          <p class="text-white/80 flex items-center gap-2">
+            <span>📍</span>
+            {lokasi}
+          </p>
+        </div>
+      </div>
+
+      <p class="text-lg text-gray-600 leading-relaxed mb-8" data-aos="fade-up">
+        {description}
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div
+          class="bg-blue-50 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+          data-aos="fade-right"
+        >
+          <div class="flex items-center gap-3 mb-2">
+            <div
+              class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center"
+            >
+              <span class="text-xl">📍</span>
+            </div>
+            <span class="text-sm text-gray-600">Lokasi</span>
+          </div>
+          <p class="font-semibold text-gray-900">{lokasi}</p>
+        </div>
+        <div
+          class="bg-green-50 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <div class="flex items-center gap-3 mb-2">
+            <div
+              class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center"
+            >
+              <span class="text-xl">🎫</span>
+            </div>
+            <span class="text-sm text-gray-600">Tiket Masuk</span>
+          </div>
+          <p class="font-semibold text-gray-900">{tiket}</p>
+        </div>
+        <div
+          class="bg-amber-50 rounded-2xl p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
+          <div class="flex items-center gap-3 mb-2">
+            <div
+              class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"
+            >
+              <span class="text-xl">🕐</span>
+            </div>
+            <span class="text-sm text-gray-600">Jam Buka</span>
+          </div>
+          <p class="font-semibold text-gray-900">{jamBuka}</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-6 shadow-lg mb-8" data-aos="flip-up">
+        <h2
+          class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
+        >
+          <span class="text-2xl">🏕️</span> Fasilitas
+        </h2>
+        <div class="flex flex-wrap gap-3">
+          {
+            fasilitas.map((item) => (
+              <span class="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors">
+                <span>{fasilitasIcons[item] || '✓'}</span>
+                {item}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-4 mb-10" data-aos="fade-up">
+        <MapLink url={mapsUrl} />
+        {
+          kontakPengelola && (
+            <WhatsAppLink
+              phone={kontakPengelola}
+              message={`Halo, saya ingin bertanya tentang ${title}`}
+            />
+          )
+        }
+      </div>
+
+      {
+        galeri && galeri.length > 0 && (
+          <div class="mb-10" data-aos="fade-up">
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="text-2xl">📷</span> Galeri
+            </h2>
+            <LightGallery
+              options={{ thumbnail: true }}
+              addPlugins={['zoom', 'thumbnail']}
+              class="grid grid-cols-2 md:grid-cols-3 gap-4"
+            >
+              {galeri.map((img) => (
+                <a
+                  href={img}
+                  class="group relative aspect-video rounded-2xl overflow-hidden shadow-lg cursor-pointer"
+                >
+                  <img
+                    src={img}
+                    alt={title}
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="text-white text-2xl">🔍</span>
+                  </div>
+                </a>
+              ))}
+            </LightGallery>
+          </div>
+        )
+      }
+
+      <div
+        class="prose prose-lg prose-blue max-w-none mb-10"
+        data-aos="fade-up"
+      >
+        <Content />
+      </div>
+
+      <div class="mb-10" data-aos="fade-up">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Bagikan:</h3>
+        <ShareButtons title={title} />
+      </div>
+
+      <RelatedContent
+        items={relatedWisata}
+        type="wisata"
+        title="Wisata Lainnya"
+      />
+
+      <div class="mt-10">
+        <Button href="/potensi" variant="outline">
+          ← Kembali ke Potensi Dusun
+        </Button>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

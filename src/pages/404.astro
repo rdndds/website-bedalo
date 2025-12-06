@@ -1,0 +1,241 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/common/Button.astro';
+
+const errorData = await getEntry('siteContent', 'error-pages');
+const notFound = errorData?.data?.errorPages?.notFound;
+
+const quickLinks = notFound?.quickLinks || [
+  { href: '/potensi', icon: '🏖️', label: 'Wisata' },
+  { href: '/potensi', icon: '🛍️', label: 'UMKM' },
+  { href: '/galeri', icon: '📷', label: 'Galeri' },
+  { href: '/profil', icon: '🏘️', label: 'Profil' },
+  { href: '/berita', icon: '📰', label: 'Berita' },
+  { href: '/kontak', icon: '📞', label: 'Kontak' },
+];
+
+const beachFacts = notFound?.beachFacts || [
+  'Dusun Bedalo memiliki 4 pantai eksotis dalam satu wilayah',
+];
+---
+
+<BaseLayout
+  title="Halaman Tidak Ditemukan"
+  description="Maaf, halaman yang Anda cari tidak ditemukan."
+>
+  <section class="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50 via-white to-sky-50/50 flex items-center justify-center py-12 px-4">
+    <div class="w-full max-w-4xl mx-auto">
+      
+      <!-- Main Card -->
+      <div class="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 md:p-12 text-center border border-gray-100/80 relative overflow-hidden">
+        
+        <!-- Decorative circles -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-primary/5 to-accent/5 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-gradient-to-br from-accent/5 to-primary/5 rounded-full blur-2xl"></div>
+        
+        <!-- Compass SVG -->
+        <div class="compass-wrapper mb-6 relative z-10">
+          <svg class="compass-svg w-24 h-24 mx-auto" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Outer ring -->
+            <circle cx="50" cy="50" r="46" stroke="url(#compassGradient)" stroke-width="2" fill="none" opacity="0.3"/>
+            <circle cx="50" cy="50" r="40" stroke="url(#compassGradient)" stroke-width="1" fill="none" opacity="0.2"/>
+            
+            <!-- Direction markers -->
+            <text x="50" y="18" text-anchor="middle" class="fill-gray-400 text-[8px] font-medium">N</text>
+            <text x="50" y="88" text-anchor="middle" class="fill-gray-400 text-[8px] font-medium">S</text>
+            <text x="12" y="53" text-anchor="middle" class="fill-gray-400 text-[8px] font-medium">W</text>
+            <text x="88" y="53" text-anchor="middle" class="fill-gray-400 text-[8px] font-medium">E</text>
+            
+            <!-- Inner circle -->
+            <circle cx="50" cy="50" r="8" fill="url(#compassGradient)" opacity="0.1"/>
+            <circle cx="50" cy="50" r="4" fill="url(#compassGradient)"/>
+            
+            <!-- Compass needle -->
+            <g class="compass-needle" transform-origin="50 50">
+              <polygon points="50,22 54,50 50,54 46,50" fill="url(#needleGradient)"/>
+              <polygon points="50,78 54,50 50,46 46,50" fill="#94a3b8"/>
+            </g>
+            
+            <defs>
+              <linearGradient id="compassGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1e40af"/>
+                <stop offset="100%" stop-color="#0ea5e9"/>
+              </linearGradient>
+              <linearGradient id="needleGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+                <stop offset="0%" stop-color="#1e40af"/>
+                <stop offset="100%" stop-color="#3b82f6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- 404 Text -->
+        <div class="mb-6 relative z-10">
+          <span class="text-404 text-8xl md:text-9xl font-black tracking-tight">
+            404
+          </span>
+        </div>
+
+        <!-- Title & Description -->
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3 relative z-10">
+          {notFound?.title || 'Halaman Tidak Ditemukan'}
+        </h1>
+        <p class="text-gray-500 text-lg mb-8 max-w-md mx-auto relative z-10">
+          {notFound?.description || 'Sepertinya halaman yang Anda cari sudah dipindahkan atau tidak tersedia.'}
+        </p>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-center relative z-10">
+          <button 
+            onclick="history.length > 1 ? history.back() : location.href='/'"
+            class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Kembali
+          </button>
+          <Button href="/" size="lg">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            Beranda
+          </Button>
+          <Button href="/potensi" variant="outline" size="lg">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+            </svg>
+            Jelajahi
+          </Button>
+        </div>
+      </div>
+
+      <!-- Quick Links Grid -->
+      <div class="mt-8">
+        <p class="text-center text-gray-400 text-sm font-medium mb-4">
+          {notFound?.quickLinksTitle || 'Atau kunjungi halaman populer'}
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {quickLinks.map((link) => (
+            <a
+              href={link.href}
+              class="link-card group flex flex-col items-center gap-2 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all hover:-translate-y-1"
+            >
+              <span class="text-2xl group-hover:scale-110 transition-transform">
+                {link.icon}
+              </span>
+              <span class="text-sm font-medium text-gray-600 group-hover:text-primary transition-colors">
+                {link.label}
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Beach Fact -->
+      <div class="mt-8 text-center">
+        <div class="fact-container inline-flex items-center gap-3 px-5 py-3 bg-white rounded-full border border-gray-100 shadow-sm">
+          <span class="text-xl">💡</span>
+          <span class="fact-text text-sm text-gray-500">
+            <span class="text-gray-400">Tahukah Anda?</span>
+            <span class="fact-content ml-1 text-gray-600"></span>
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>
+
+<script define:vars={{ beachFacts }}>
+  const facts = beachFacts;
+  let currentIndex = 0;
+  const factElement = document.querySelector('.fact-content');
+  
+  function showFact() {
+    if (!factElement) return;
+    factElement.style.opacity = '0';
+    setTimeout(() => {
+      factElement.textContent = facts[currentIndex];
+      factElement.style.opacity = '1';
+      currentIndex = (currentIndex + 1) % facts.length;
+    }, 300);
+  }
+  
+  showFact();
+  if (facts.length > 1) {
+    setInterval(showFact, 5000);
+  }
+</script>
+
+<style>
+  .text-404 {
+    background: linear-gradient(135deg, #1e40af 0%, #0ea5e9 50%, #1e40af 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient-shift 4s ease-in-out infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .compass-needle {
+    animation: needle-wobble 3s ease-in-out infinite;
+  }
+
+  @keyframes needle-wobble {
+    0%, 100% { transform: rotate(-15deg); }
+    50% { transform: rotate(15deg); }
+  }
+
+  .compass-svg {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.05));
+  }
+
+  .link-card {
+    position: relative;
+  }
+
+  .link-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    padding: 2px;
+    background: linear-gradient(135deg, #1e40af, #0ea5e9);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .link-card:hover::before {
+    opacity: 1;
+  }
+
+  .fact-content {
+    transition: opacity 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .text-404,
+    .compass-needle {
+      animation: none;
+    }
+    
+    .text-404 {
+      background-position: 0% 50%;
+    }
+    
+    .compass-needle {
+      transform: rotate(0deg);
+    }
+  }
+</style>

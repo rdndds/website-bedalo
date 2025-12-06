@@ -1,0 +1,157 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Button from '../../components/common/Button.astro';
+import ShareButtons from '../../components/common/ShareButtons.astro';
+import ReadingProgress from '../../components/common/ReadingProgress.astro';
+import SchemaBreadcrumb from '../../components/common/SchemaBreadcrumb.astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { formatDate } from '../../lib/utils';
+import { kategoriBeritaColors } from '../../data/constants';
+
+export async function getStaticPaths() {
+  const beritaEntries = await getCollection('berita');
+  return beritaEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'berita'>;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, date, thumbnail, kategori, excerpt } = entry.data;
+
+const allBerita = await getCollection('berita');
+const otherBerita = allBerita
+  .filter((b) => b.slug !== entry.slug)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout title={title} description={excerpt} image={thumbnail.src}>
+  <ReadingProgress />
+  <SchemaBreadcrumb
+    items={[{ name: 'Berita', url: '/berita' }, { name: title }]}
+  />
+  <article class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div
+        class="relative rounded-2xl overflow-hidden mb-8 shadow-xl"
+        data-aos="zoom-in"
+      >
+        <Image
+          src={thumbnail}
+          alt={title}
+          width={1200}
+          height={600}
+          class="w-full h-72 md:h-[28rem] object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"
+        >
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span
+              class={`px-3 py-1.5 text-sm font-semibold rounded-full capitalize shadow-lg ${kategoriBeritaColors[kategori]?.bg || 'bg-gray-100'} ${kategoriBeritaColors[kategori]?.text || 'text-gray-700'}`}
+            >
+              {kategoriBeritaColors[kategori]?.icon || '📰'}
+              {kategori.replace('-', ' ')}
+            </span>
+            <span
+              class="px-3 py-1.5 bg-white/20 text-white text-sm rounded-full"
+            >
+              📅 {formatDate(date)}
+            </span>
+          </div>
+          <h1
+            class="text-2xl md:text-4xl font-extrabold text-white leading-tight"
+          >
+            {title}
+          </h1>
+        </div>
+      </div>
+
+      <div
+        class="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl p-6 mb-8"
+        data-aos="fade-up"
+      >
+        <p class="text-lg text-gray-700 leading-relaxed italic">{excerpt}</p>
+      </div>
+
+      <div
+        class="prose prose-lg prose-blue max-w-none mb-12"
+        data-aos="fade-up"
+      >
+        <Content />
+      </div>
+
+      <div class="mb-10" data-aos="fade-up">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Bagikan:</h3>
+        <ShareButtons title={title} />
+      </div>
+
+      <div class="mb-16">
+        <Button href="/berita" variant="outline">
+          ← Kembali ke Daftar Berita
+        </Button>
+      </div>
+
+      {
+        otherBerita.length > 0 && (
+          <div data-aos="fade-up">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                Berita Lainnya
+              </h2>
+              <div class="w-16 h-1 bg-gradient-to-r from-primary to-accent rounded-full" />
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {otherBerita.map((berita, index) => (
+                <a
+                  href={`/berita/${berita.slug}`}
+                  class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all group"
+                  data-aos="fade-up"
+                  data-aos-delay={Math.min(index * 100, 300)}
+                >
+                  <div class="h-36 bg-gray-200 overflow-hidden">
+                    <Image
+                      src={berita.data.thumbnail}
+                      alt={berita.data.title}
+                      width={400}
+                      height={144}
+                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div class="p-4">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span
+                        class={`px-2 py-0.5 text-xs font-medium rounded-full capitalize ${kategoriBeritaColors[berita.data.kategori]?.bg || 'bg-gray-100'} ${kategoriBeritaColors[berita.data.kategori]?.text || 'text-gray-700'}`}
+                      >
+                        {berita.data.kategori.replace('-', ' ')}
+                      </span>
+                    </div>
+                    <h3 class="font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors">
+                      {berita.data.title}
+                    </h3>
+                    <p class="text-xs text-gray-500 mt-2">
+                      {formatDate(berita.data.date)}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
+    </div>
+  </article>
+</BaseLayout>

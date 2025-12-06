@@ -1,0 +1,32 @@
+---
+interface Props {
+  icon: string;
+  size?: 'sm' | 'md' | 'lg';
+  color?: string;
+  class?: string;
+}
+
+const {
+  icon,
+  size = 'md',
+  color = 'bg-gray-100',
+  class: className = '',
+} = Astro.props;
+
+const sizeClasses = {
+  sm: 'w-10 h-10 text-xl',
+  md: 'w-12 h-12 text-2xl',
+  lg: 'w-16 h-16 text-3xl',
+};
+---
+
+<div
+  class:list={[
+    sizeClasses[size],
+    color,
+    'rounded-xl flex items-center justify-center',
+    className,
+  ]}
+>
+  <span>{icon}</span>
+</div>

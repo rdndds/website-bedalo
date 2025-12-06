@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import KontakResmi from '../components/kontak/KontakResmi.astro';
+import NomorPenting from '../components/kontak/NomorPenting.astro';
+import AlamatSection from '../components/kontak/AlamatSection.astro';
+import KontakForm from '../components/kontak/KontakForm.astro';
+---
+
+<BaseLayout
+  title="Kontak"
+  description="Hubungi Dusun Bedalo untuk informasi, kerjasama, atau sampaikan aspirasi Anda."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Kontak & <span class="gradient-text">Aspirasi</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Hubungi kami untuk informasi, kerjasama, atau sampaikan aspirasi Anda.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <KontakResmi />
+          <NomorPenting />
+          <AlamatSection />
+        </div>
+
+        <KontakForm />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

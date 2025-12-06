@@ -1,0 +1,89 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'toast-container' } = Astro.props;
+---
+
+<div
+  id={id}
+  class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"
+>
+</div>
+
+<script>
+  interface ToastOptions {
+    message: string;
+    type?: 'success' | 'error' | 'info';
+    duration?: number;
+  }
+
+  class ToastManager {
+    private container: HTMLElement | null;
+
+    constructor(containerId: string = 'toast-container') {
+      this.container = document.getElementById(containerId);
+    }
+
+    show({ message, type = 'info', duration = 3000 }: ToastOptions) {
+      if (!this.container) return;
+
+      const toast = document.createElement('div');
+      toast.className = `toast pointer-events-auto px-4 py-3 rounded-xl shadow-lg flex items-center gap-3 transform translate-x-full opacity-0 transition-all duration-300 ${this.getTypeClasses(type)}`;
+
+      const icon = this.getIcon(type);
+      toast.innerHTML = `
+        <span class="text-xl">${icon}</span>
+        <span class="font-medium">${message}</span>
+        <button class="ml-2 hover:opacity-70 transition-opacity" aria-label="Tutup">✕</button>
+      `;
+
+      this.container.appendChild(toast);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-full', 'opacity-0');
+      });
+
+      // Close button
+      const closeBtn = toast.querySelector('button');
+      closeBtn?.addEventListener('click', () => this.dismiss(toast));
+
+      // Auto dismiss
+      if (duration > 0) {
+        setTimeout(() => this.dismiss(toast), duration);
+      }
+    }
+
+    private dismiss(toast: HTMLElement) {
+      toast.classList.add('translate-x-full', 'opacity-0');
+      setTimeout(() => toast.remove(), 300);
+    }
+
+    private getTypeClasses(type: string): string {
+      switch (type) {
+        case 'success':
+          return 'bg-green-700 text-white';
+        case 'error':
+          return 'bg-red-500 text-white';
+        default:
+          return 'bg-primary text-white';
+      }
+    }
+
+    private getIcon(type: string): string {
+      switch (type) {
+        case 'success':
+          return '✓';
+        case 'error':
+          return '✕';
+        default:
+          return 'ℹ';
+      }
+    }
+  }
+
+  // Make globally available
+  window.toast = new ToastManager();
+</script>

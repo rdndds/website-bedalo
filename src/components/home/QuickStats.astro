@@ -1,0 +1,120 @@
+---
+import { siteConfig } from '../../data/siteConfig';
+import { getCollection } from 'astro:content';
+
+const allUmkm = await getCollection('umkm');
+
+const stats = [
+  { value: siteConfig.stats.jiwa, label: 'Jiwa', icon: '👥' },
+  { value: siteConfig.stats.kk, label: 'KK', icon: '🏠' },
+  { value: siteConfig.stats.rt, label: 'RT', icon: '📍' },
+  { value: siteConfig.stats.pantai, label: 'Pantai', icon: '🏖️' },
+  { value: allUmkm.length, label: 'UMKM', icon: '🛍️' },
+];
+---
+
+<section id="stats" class="relative py-8 bg-primary-dark overflow-hidden">
+  <div class="absolute inset-0 diagonal-stripes opacity-10"></div>
+
+  <div class="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-wrap justify-center gap-6 md:gap-12 lg:gap-16">
+      {
+        stats.map((stat, index) => (
+          <div
+            class="stat-item flex items-center gap-3 text-white group cursor-default"
+            data-aos="zoom-in"
+            data-aos-delay={index * 50}
+          >
+            <span class="text-2xl md:text-3xl group-hover:scale-125 transition-transform duration-300">
+              {stat.icon}
+            </span>
+            <div class="flex items-baseline gap-1.5">
+              <span
+                class="text-2xl md:text-3xl font-bold counter"
+                data-target={stat.value}
+              >
+                {stat.value}
+              </span>
+              <span class="text-white/70 text-sm md:text-base">
+                {stat.label}
+              </span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .diagonal-stripes {
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.1) 10px,
+      rgba(255, 255, 255, 0.1) 20px
+    );
+  }
+
+  .stat-item + .stat-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+  }
+
+  @media (max-width: 768px) {
+    .stat-item + .stat-item::before {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const animateCounters = () => {
+    const counters = document.querySelectorAll('.counter');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const counter = entry.target as HTMLElement;
+            const target = parseInt(counter.dataset.target || '0');
+            const duration = 1500;
+            const startTime = performance.now();
+
+            const updateCounter = (currentTime: number) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeOut = 1 - Math.pow(1 - progress, 3);
+              const current = Math.floor(easeOut * target);
+
+              counter.textContent = current.toString();
+
+              if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+              } else {
+                counter.textContent = target.toString();
+              }
+            };
+
+            requestAnimationFrame(updateCounter);
+            observer.unobserve(counter);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    counters.forEach((counter) => observer.observe(counter));
+  };
+
+  animateCounters();
+  document.addEventListener('astro:page-load', animateCounters);
+</script>

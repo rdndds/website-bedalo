@@ -1,0 +1,40 @@
+{
+  "potensiEkonomi": [
+    {
+      "icon": "🌱",
+      "title": "Pertanian",
+      "desc": "Lahan subur dengan hasil melimpah",
+      "items": [
+        "Singkong (gathot, tiwul, gaplek)",
+        "Jagung",
+        "Kacang tanah",
+        "Padi tadah hujan"
+      ],
+      "color": "from-green-500 to-emerald-600"
+    },
+    {
+      "icon": "🏖️",
+      "title": "Pariwisata",
+      "desc": "4 pantai eksotis pesisir selatan",
+      "items": [
+        "Pantai Ngedan",
+        "Pantai Ngluwen",
+        "Pantai Butuh",
+        "Pantai Mbirit"
+      ],
+      "color": "from-blue-500 to-cyan-600"
+    },
+    {
+      "icon": "🛍️",
+      "title": "UMKM",
+      "desc": "Produk lokal berkualitas",
+      "items": [
+        "Bakpia lokal",
+        "Olahan singkong",
+        "Kerajinan pelepah pisang",
+        "Warung wisata"
+      ],
+      "color": "from-purple-500 to-pink-600"
+    }
+  ]
+}

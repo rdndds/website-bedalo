@@ -1,0 +1,130 @@
+---
+import { getEntry } from 'astro:content';
+import Button from '../common/Button.astro';
+
+const data = await getEntry('siteContent', 'cta');
+const cta = data?.data?.cta;
+---
+
+{
+  cta && (
+    <section class="relative overflow-hidden">
+      <div class="absolute top-0 left-0 right-0 h-16 md:h-24">
+        <svg
+          class="absolute bottom-0 w-full h-full"
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          fill="none"
+        >
+          <path
+            d="M0,64 C288,120 576,0 864,64 C1152,128 1296,32 1440,64 L1440,120 L0,120 Z"
+            class="fill-primary"
+          />
+          <path
+            d="M0,80 C288,120 576,40 864,80 C1152,120 1296,60 1440,80 L1440,120 L0,120 Z"
+            class="fill-primary-dark opacity-50"
+          />
+        </svg>
+      </div>
+
+      <div class="relative bg-gradient-to-br from-primary via-primary-dark to-primary pt-20 md:pt-28 pb-16 lg:pb-24">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="absolute -top-1/2 -right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
+          <div class="absolute -bottom-1/2 -left-1/4 w-96 h-96 bg-primary-light/20 rounded-full blur-3xl" />
+
+          <div class="absolute bottom-0 right-0 opacity-10">
+            <svg
+              class="w-64 h-64 md:w-96 md:h-96"
+              viewBox="0 0 200 200"
+              fill="none"
+            >
+              <path
+                d="M100,10 Q140,50 100,100 Q60,150 100,190 Q140,150 100,100 Q60,50 100,10"
+                stroke="white"
+                stroke-width="2"
+                fill="none"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="80"
+                stroke="white"
+                stroke-width="1"
+                fill="none"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="60"
+                stroke="white"
+                stroke-width="1"
+                fill="none"
+              />
+              <circle
+                cx="100"
+                cy="100"
+                r="40"
+                stroke="white"
+                stroke-width="1"
+                fill="none"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="relative max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div class="max-w-3xl mx-auto">
+            <h2
+              class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6"
+              data-aos="fade-up"
+            >
+              {cta.title}
+            </h2>
+            <p
+              class="text-blue-100 text-lg md:text-xl max-w-2xl mx-auto mb-10"
+              data-aos="fade-up"
+              data-aos-delay="50"
+            >
+              {cta.description}
+            </p>
+            <div
+              class="flex flex-wrap justify-center gap-4"
+              data-aos="fade-up"
+              data-aos-delay="100"
+            >
+              <Button
+                href={cta.primaryButton?.href || '/kontak'}
+                variant="secondary"
+                size="lg"
+                class="gap-2 rounded-2xl shadow-xl hover:shadow-2xl"
+              >
+                {cta.primaryButton?.label || 'Hubungi Kami'}
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Button>
+              <Button
+                href={cta.secondaryButton?.href || '/potensi'}
+                variant="outline"
+                size="lg"
+                class="gap-2 rounded-2xl border-white text-white hover:bg-white/10 hover:text-white"
+              >
+                {cta.secondaryButton?.label || 'Lihat Destinasi'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

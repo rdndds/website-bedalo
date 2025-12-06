@@ -1,0 +1,51 @@
+---
+import { getEntry } from 'astro:content';
+
+const data = await getEntry('layanan', 'layanan');
+const layananList = data?.data?.layanan || [];
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+  {
+    layananList.map((layanan, index) => (
+      <div
+        class:list={[
+          layanan.color,
+          'rounded-2xl p-6 hover:shadow-lg hover:-translate-y-1 transition-all',
+        ]}
+        data-aos={
+          index % 3 === 0
+            ? 'fade-right'
+            : index % 3 === 1
+              ? 'fade-up'
+              : 'fade-left'
+        }
+        data-aos-delay={Math.min(index * 100, 200)}
+      >
+        <div
+          class:list={[
+            'w-16 h-16',
+            layanan.iconBg,
+            'rounded-2xl flex items-center justify-center mb-4',
+          ]}
+        >
+          <span class="text-3xl">{layanan.icon}</span>
+        </div>
+        <h2 class="text-xl font-bold text-gray-900 mb-2">{layanan.title}</h2>
+        <p class="text-gray-600 text-sm mb-4">{layanan.description}</p>
+        <div class="space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 bg-white/80 rounded-full text-gray-600">
+              📍 {layanan.lokasi}
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs px-2 py-1 bg-white/80 rounded-full text-gray-600">
+              🕐 {layanan.jadwal}
+            </span>
+          </div>
+        </div>
+      </div>
+    ))
+  }
+</div>

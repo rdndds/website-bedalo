@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LayananGrid from '../components/layanan/LayananGrid.astro';
+import SumberAir from '../components/layanan/SumberAir.astro';
+---
+
+<BaseLayout
+  title="Layanan & Fasilitas"
+  description="Layanan dan fasilitas publik di Dusun Bedalo - kesehatan, pendidikan, peribadatan."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          Layanan & <span class="gradient-text">Fasilitas</span>
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
+          Berbagai layanan dan fasilitas yang tersedia untuk warga Dusun Bedalo.
+        </p>
+        <div
+          class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full"
+        >
+          <span class="text-xl">🏢</span>
+          <span class="font-semibold text-primary">6 Layanan Tersedia</span>
+        </div>
+      </div>
+
+      <LayananGrid />
+      <SumberAir />
+    </div>
+  </section>
+</BaseLayout>

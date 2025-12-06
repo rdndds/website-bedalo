@@ -1,0 +1,27 @@
+{
+  "navigation": {
+    "mainNavItems": [
+      { "label": "Beranda", "href": "/" },
+      { "label": "Profil", "href": "/profil" },
+      { "label": "Potensi", "href": "/potensi" },
+      { "label": "Layanan", "href": "/layanan" },
+      { "label": "Agenda", "href": "/agenda" },
+      { "label": "Berita", "href": "/berita" },
+      { "label": "Galeri", "href": "/galeri" },
+      { "label": "Kontak", "href": "/kontak" }
+    ],
+    "footerNavLinks": [
+      { "label": "Beranda", "href": "/" },
+      { "label": "Profil", "href": "/profil" },
+      { "label": "Potensi", "href": "/potensi" },
+      { "label": "Layanan", "href": "/layanan" },
+      { "label": "Galeri", "href": "/galeri" },
+      { "label": "Kontak", "href": "/kontak" }
+    ],
+    "footerInfoLinks": [
+      { "label": "Tentang Proyek", "href": "/tentang-proyek" },
+      { "label": "Agenda & Berita", "href": "/agenda" },
+      { "label": "Peta Situs", "href": "/peta-situs" }
+    ]
+  }
+}

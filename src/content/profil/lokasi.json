@@ -1,0 +1,40 @@
+{
+  "lokasi": {
+    "administratif": [
+      { "label": "Padukuhan", "value": "Bedalo" },
+      { "label": "Kalurahan", "value": "Krambilsawit" },
+      { "label": "Kapanewon", "value": "Saptosari" },
+      { "label": "Kabupaten", "value": "Gunungkidul" },
+      { "label": "Provinsi", "value": "DIY" },
+      { "label": "Kode Pos", "value": "55871" }
+    ],
+    "batasWilayah": [
+      { "arah": "⬆️ Utara", "value": "Dusun lain Krambilsawit" },
+      { "arah": "⬇️ Selatan", "value": "Samudra Hindia" },
+      { "arah": "➡️ Timur", "value": "Kapanewon Tepus" },
+      { "arah": "⬅️ Barat", "value": "Kapanewon Panggang" }
+    ],
+    "jarakFasilitas": [
+      {
+        "jarak": "2.8",
+        "satuan": "km",
+        "nama": "Balai Kalurahan",
+        "icon": "🏛️"
+      },
+      {
+        "jarak": "1",
+        "satuan": "km",
+        "nama": "Jalur Lintas Selatan",
+        "icon": "🛣️"
+      },
+      {
+        "jarak": "5",
+        "satuan": "km",
+        "nama": "Kantor Kapanewon",
+        "icon": "🏢"
+      },
+      { "jarak": "26", "satuan": "km", "nama": "Wonosari", "icon": "🏙️" },
+      { "jarak": "60", "satuan": "km", "nama": "Yogyakarta", "icon": "🌆" }
+    ]
+  }
+}

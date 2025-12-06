@@ -1,0 +1,42 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+import { waktuColors } from '../../data/constants';
+
+const data = await getEntry('agenda', 'agenda-rutin');
+const agendaRutin = data?.data?.agenda || [];
+---
+
+<div class="mb-16">
+  <SectionTitle
+    title="Agenda Rutin"
+    subtitle="Kegiatan rutin mingguan dan bulanan warga Dusun Bedalo"
+  />
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+    {
+      agendaRutin.map((agenda, index) => (
+        <div
+          class:list={[
+            agenda.color,
+            'rounded-2xl p-5 md:p-6 hover:shadow-lg hover:-translate-y-1 transition-all cursor-default',
+          ]}
+          data-aos="fade-up"
+          data-aos-delay={index * 100}
+        >
+          <div class="text-4xl mb-3">{agenda.icon}</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-1">{agenda.title}</h3>
+          <p class="text-sm text-gray-600 mb-3">{agenda.jadwal}</p>
+          <span
+            class:list={[
+              'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
+              waktuColors[agenda.waktu] || 'bg-gray-100 text-gray-700',
+            ]}
+          >
+            {agenda.waktuIcon} {agenda.waktu}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</div>

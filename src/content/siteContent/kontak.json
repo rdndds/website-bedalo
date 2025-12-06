@@ -1,0 +1,30 @@
+{
+  "kontakResmi": [
+    {
+      "title": "Kepala Dusun Bedalo",
+      "deskripsi": "Untuk urusan administrasi dan informasi resmi dusun.",
+      "icon": "👤",
+      "color": "bg-blue-50",
+      "iconBg": "bg-blue-100"
+    },
+    {
+      "title": "Karang Taruna Maju Mulia",
+      "deskripsi": "Untuk kerjasama kegiatan pemuda dan informasi wisata.",
+      "icon": "👥",
+      "color": "bg-green-50",
+      "iconBg": "bg-green-100"
+    },
+    {
+      "title": "Kantor Kalurahan Krambilsawit",
+      "deskripsi": "Untuk urusan administrasi tingkat kalurahan.",
+      "icon": "🏛️",
+      "color": "bg-amber-50",
+      "iconBg": "bg-amber-100"
+    }
+  ],
+  "nomorPenting": [
+    { "nama": "Puskesmas Saptosari", "nomor": "-", "icon": "🏥" },
+    { "nama": "Polsek Saptosari", "nomor": "-", "icon": "🚔" },
+    { "nama": "Kantor Kapanewon", "nomor": "-", "icon": "🏢" }
+  ]
+}

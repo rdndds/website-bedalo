@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AgendaRutin from '../components/agenda/AgendaRutin.astro';
+import BeritaTerbaru from '../components/agenda/BeritaTerbaru.astro';
+---
+
+<BaseLayout
+  title="Agenda"
+  description="Agenda kegiatan rutin warga Dusun Bedalo."
+>
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
+          <span class="gradient-text">Agenda</span> Kegiatan
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          Jadwal kegiatan rutin warga Dusun Bedalo.
+        </p>
+      </div>
+
+      <AgendaRutin />
+      <BeritaTerbaru />
+    </div>
+  </section>
+</BaseLayout>

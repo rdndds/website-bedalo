@@ -1,0 +1,63 @@
+{
+  "layanan": [
+    {
+      "icon": "🏥",
+      "title": "Posyandu",
+      "description": "Pelayanan kesehatan ibu dan anak, imunisasi, dan pemantauan tumbuh kembang.",
+      "lokasi": "Balai Dusun Bedalo",
+      "jadwal": "Setiap tanggal 15",
+      "color": "bg-red-50",
+      "iconBg": "bg-red-100"
+    },
+    {
+      "icon": "👶",
+      "title": "KB/PAUD Insan Cendekia III",
+      "description": "Pendidikan anak usia dini untuk anak-anak Dusun Bedalo dan sekitarnya.",
+      "lokasi": "Dusun Bedalo",
+      "jadwal": "Senin - Jumat, 08.00 - 10.00",
+      "color": "bg-blue-50",
+      "iconBg": "bg-blue-100"
+    },
+    {
+      "icon": "📖",
+      "title": "TPA Masjid Sunan Kalijaga",
+      "description": "Pendidikan Al-Quran dan keagamaan untuk anak-anak.",
+      "lokasi": "Masjid Sunan Kalijaga",
+      "jadwal": "Setiap sore setelah Ashar",
+      "color": "bg-green-50",
+      "iconBg": "bg-green-100"
+    },
+    {
+      "icon": "🕌",
+      "title": "Masjid Sunan Kalijaga",
+      "description": "Pusat kegiatan peribadatan dan keagamaan warga Dusun Bedalo.",
+      "lokasi": "Dusun Bedalo",
+      "jadwal": "5 waktu sholat berjamaah",
+      "color": "bg-emerald-50",
+      "iconBg": "bg-emerald-100"
+    },
+    {
+      "icon": "🏛️",
+      "title": "Balai Padukuhan",
+      "description": "Tempat pertemuan warga, rapat dusun, dan kegiatan kemasyarakatan.",
+      "lokasi": "Dusun Bedalo",
+      "jadwal": "Sesuai kegiatan",
+      "color": "bg-amber-50",
+      "iconBg": "bg-amber-100"
+    },
+    {
+      "icon": "🏐",
+      "title": "Lapangan Voli",
+      "description": "Fasilitas olahraga untuk warga dusun.",
+      "lokasi": "Dusun Bedalo",
+      "jadwal": "Bebas (sore hari)",
+      "color": "bg-purple-50",
+      "iconBg": "bg-purple-100"
+    }
+  ],
+  "sumberAir": [
+    { "icon": "💧", "text": "PDAM dengan jaringan ke rumah warga" },
+    { "icon": "🏠", "text": "Tampungan air komunal 9.000 liter" },
+    { "icon": "🌧️", "text": "Tadah hujan untuk kebutuhan non-konsumsi" }
+  ]
+}

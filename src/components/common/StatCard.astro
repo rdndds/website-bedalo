@@ -1,0 +1,35 @@
+---
+interface Props {
+  icon: string;
+  value: string | number;
+  unit?: string;
+  label: string;
+  class?: string;
+  aosDelay?: number;
+}
+
+const {
+  icon,
+  value,
+  unit,
+  label,
+  class: className = '',
+  aosDelay,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'bg-white rounded-2xl p-5 shadow-lg text-center hover:shadow-xl hover:-translate-y-1 transition-all',
+    className,
+  ]}
+  data-aos="zoom-in"
+  data-aos-delay={aosDelay}
+>
+  <div class="text-3xl mb-2">{icon}</div>
+  <div class="text-2xl font-extrabold text-primary">
+    {value}
+    {unit && <span class="text-sm font-normal text-gray-500 ml-1">{unit}</span>}
+  </div>
+  <div class="text-xs text-gray-500 mt-1">{label}</div>
+</div>

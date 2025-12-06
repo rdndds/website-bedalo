@@ -1,0 +1,85 @@
+---
+import { getEntry } from 'astro:content';
+import SectionTitle from '../common/SectionTitle.astro';
+
+const data = await getEntry('profil', 'penduduk');
+const pendudukData = data?.data?.penduduk || [];
+
+const totalKK = pendudukData.reduce((sum, d) => sum + d.kk, 0);
+const totalJiwa = pendudukData.reduce((sum, d) => sum + d.jiwa, 0);
+---
+
+<div class="mb-12">
+  <SectionTitle title="Data Penduduk" />
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+    <div
+      class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-5 text-center text-white shadow-lg"
+      data-aos="zoom-in"
+    >
+      <p class="text-3xl font-extrabold">{totalKK}</p>
+      <p class="text-sm text-white/80">Kepala Keluarga</p>
+    </div>
+    <div
+      class="bg-gradient-to-br from-primary to-primary-dark rounded-2xl p-5 text-center text-white shadow-lg"
+      data-aos="zoom-in"
+      data-aos-delay="100"
+    >
+      <p class="text-3xl font-extrabold">{totalJiwa}</p>
+      <p class="text-sm text-white/80">Total Jiwa</p>
+    </div>
+  </div>
+
+  <!-- RT Details Table -->
+  <div
+    class="bg-white rounded-2xl shadow-lg overflow-hidden max-w-2xl mx-auto"
+    data-aos="fade-up"
+  >
+    <table class="w-full">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">
+            Wilayah
+          </th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">
+            KK
+          </th>
+          <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">
+            Jiwa
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {
+          pendudukData.map((item) => (
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <div
+                    class:list={[
+                      'w-8 h-8',
+                      item.color,
+                      'rounded-full flex items-center justify-center',
+                    ]}
+                  >
+                    <span class="text-white text-sm font-bold">
+                      {item.rt.split(' ')[1]}
+                    </span>
+                  </div>
+                  <span class="font-medium text-gray-900">{item.rt}</span>
+                </div>
+              </td>
+              <td class="px-6 py-4 text-center font-semibold text-gray-700">
+                {item.kk}
+              </td>
+              <td class="px-6 py-4 text-center font-semibold text-gray-700">
+                {item.jiwa}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

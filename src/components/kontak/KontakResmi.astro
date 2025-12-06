@@ -1,0 +1,42 @@
+---
+import { getEntry } from 'astro:content';
+
+const data = await getEntry('siteContent', 'kontak');
+const kontakList = data?.data?.kontakResmi || [];
+---
+
+<div data-aos="fade-up">
+  <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+    <span class="text-2xl">📞</span> Kontak Resmi
+  </h2>
+  <div class="space-y-4">
+    {
+      kontakList.map((kontak, index) => (
+        <div
+          class:list={[
+            kontak.color,
+            'rounded-2xl p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all',
+          ]}
+          data-aos="fade-right"
+          data-aos-delay={Math.min(index * 100, 300)}
+        >
+          <div class="flex items-start gap-4">
+            <div
+              class:list={[
+                'w-14 h-14',
+                kontak.iconBg,
+                'rounded-xl flex items-center justify-center shrink-0',
+              ]}
+            >
+              <span class="text-2xl">{kontak.icon}</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-gray-900 mb-1">{kontak.title}</h3>
+              <p class="text-sm text-gray-600">{kontak.deskripsi}</p>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

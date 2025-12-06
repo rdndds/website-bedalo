@@ -1,0 +1,28 @@
+{
+  "errorPages": {
+    "notFound": {
+      "icon": "🧭",
+      "title": "Ombak Membawa Anda ke Pantai yang Salah",
+      "description": "Tenang, setiap perjalanan punya jalan pulang. Mari kembali menjelajahi keindahan Dusun Bedalo.",
+      "primaryButton": { "label": "Kembali ke Beranda", "href": "/" },
+      "secondaryButton": { "label": "Jelajahi Wisata", "href": "/potensi" },
+      "quickLinksTitle": "Destinasi Populer",
+      "quickLinks": [
+        { "href": "/potensi", "icon": "🏖️", "label": "Wisata" },
+        { "href": "/potensi", "icon": "🛍️", "label": "UMKM" },
+        { "href": "/galeri", "icon": "📷", "label": "Galeri" },
+        { "href": "/profil", "icon": "🏘️", "label": "Profil" },
+        { "href": "/berita", "icon": "📰", "label": "Berita" },
+        { "href": "/kontak", "icon": "📞", "label": "Kontak" }
+      ],
+      "beachFacts": [
+        "Pantai Ngedan memiliki tebing karang setinggi 50 meter",
+        "Dusun Bedalo memiliki 4 pantai eksotis dalam satu wilayah",
+        "Pantai Butuh terkenal dengan pasir putihnya yang lembut",
+        "Pantai Mbirit adalah spot terbaik untuk melihat sunset",
+        "Pantai Ngluwen masih sangat alami dan sepi pengunjung",
+        "Jarak Dusun Bedalo ke Samudra Hindia hanya 1 km"
+      ]
+    }
+  }
+}

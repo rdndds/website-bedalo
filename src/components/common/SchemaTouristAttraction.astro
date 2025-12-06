@@ -1,0 +1,46 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  lokasi: string;
+  mapsUrl: string;
+  tiket: string;
+  jamBuka: string;
+  image?: string;
+}
+
+const { title, description, lokasi, mapsUrl, tiket, jamBuka, image } =
+  Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'TouristAttraction',
+  name: title,
+  description: description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: lokasi,
+    addressLocality: 'Krambilsawit',
+    addressRegion: 'Daerah Istimewa Yogyakarta',
+    postalCode: '55871',
+    addressCountry: 'ID',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -8.091970191936598,
+    longitude: 110.48636027500821,
+  },
+  openingHours: jamBuka,
+  isAccessibleForFree: tiket.toLowerCase().includes('gratis'),
+  image: image,
+  url: mapsUrl,
+  touristType: 'Beach',
+  '@id': Astro.url.href,
+};
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(schema)}
+/>

@@ -1,0 +1,62 @@
+---
+import { getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Button from '../common/Button.astro';
+import heroImage from '../../assets/images/pantai-ngedan.jpg';
+
+const data = await getEntry('siteContent', 'hero');
+const hero = data?.data?.hero;
+---
+
+{
+  hero && (
+    <section class="relative h-screen flex items-center justify-center overflow-hidden -mt-16">
+      <div class="absolute inset-0">
+        <Image
+          src={heroImage}
+          alt="Pantai Ngedan Dusun Bedalo"
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70" />
+      </div>
+
+      <div class="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20 w-full">
+        <div class="max-w-3xl">
+          <h1
+            class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 drop-shadow-lg"
+            data-aos="fade-right"
+          >
+            {hero.title}
+            <br />
+            <span class="text-accent">{hero.highlight}</span>
+          </h1>
+          <p
+            class="text-lg md:text-xl text-white/90 mb-8 leading-relaxed max-w-2xl drop-shadow"
+            data-aos="fade-right"
+            data-aos-delay="100"
+          >
+            {hero.description}
+          </p>
+          <div
+            class="flex flex-wrap gap-4"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <Button href={hero.primaryButton?.href || '#'} size="lg">
+              {hero.primaryButton?.label || 'Jelajahi'}
+            </Button>
+            <Button
+              href={hero.secondaryButton?.href || '#'}
+              variant="outline"
+              size="lg"
+              class="border-white text-white hover:bg-white/20 hover:border-white/80 backdrop-blur-sm"
+            >
+              {hero.secondaryButton?.label || 'Kontak'}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

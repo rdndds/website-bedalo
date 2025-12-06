@@ -1,0 +1,28 @@
+{
+  "highlights": [
+    {
+      "icon": "🏖️",
+      "title": "4 Pantai Eksotis",
+      "description": "Ngedan, Ngluwen, Butuh, dan Mbirit - pantai-pantai tersembunyi dengan pesona alam yang memukau.",
+      "href": "/potensi"
+    },
+    {
+      "icon": "👥",
+      "title": "605 Jiwa",
+      "description": "Komunitas hangat dalam 137 KK yang tersebar di 3 RT dengan gotong royong yang kuat.",
+      "href": "/profil"
+    },
+    {
+      "icon": "🛍️",
+      "title": "UMKM Lokal",
+      "description": "Produk khas seperti bakpia, olahan singkong, dan kerajinan pelepah pisang.",
+      "href": "/potensi"
+    },
+    {
+      "icon": "🎭",
+      "title": "Budaya Lestari",
+      "description": "Karawitan, reog, yasinan, dan tradisi yang terus dijaga turun-temurun.",
+      "href": "/profil"
+    }
+  ]
+}
