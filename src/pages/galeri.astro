@@ -26,10 +26,6 @@ const fotoWithUrls = await Promise.all(
   })
 );
 
-const allTags = [
-  ...new Set(sortedGaleri.flatMap((item) => item.data.tags || [])),
-];
-
 function getYouTubeThumbnail(url: string): string {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
   const match = url.match(regExp);
@@ -67,56 +63,51 @@ function getYouTubeThumbnail(url: string): string {
         </div>
       </div>
 
-      <div class="flex justify-center gap-2 mb-6">
-        <button
-          id="tab-foto"
-          class="type-tab px-6 py-3 rounded-xl font-semibold transition-all bg-primary text-white shadow-md"
-          data-type="foto"
-        >
-          📷 Foto
-        </button>
-        <button
-          id="tab-video"
-          class="type-tab px-6 py-3 rounded-xl font-semibold transition-all bg-white text-gray-700 shadow hover:bg-gray-200"
-          data-type="video"
-        >
-          🎬 Video
-        </button>
+      <div class="flex justify-center mb-6">
+        <div class="inline-flex bg-gray-100 p-1 rounded-xl gap-1">
+          <button
+            id="tab-foto"
+            class="type-tab px-5 py-2.5 rounded-lg font-medium transition-all bg-white text-primary shadow-sm"
+            data-type="foto"
+          >
+            📷 Foto
+            <span class="text-xs opacity-70 ml-1">({fotoItems.length})</span>
+          </button>
+          <button
+            id="tab-video"
+            class="type-tab px-5 py-2.5 rounded-lg font-medium transition-all text-gray-600 hover:text-gray-900"
+            data-type="video"
+          >
+            🎬 Video
+            <span class="text-xs opacity-70 ml-1">({videoItems.length})</span>
+          </button>
+        </div>
       </div>
 
-      <div class="flex justify-center gap-2 mb-4 flex-wrap">
-        {
-          galeriKategoriList.map((kat) => (
-            <button
-              data-filter={kat.id}
-              class:list={[
-                'filter-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow-md',
-                kat.id === 'semua'
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-gray-700 shadow hover:bg-gray-200',
-              ]}
-            >
-              <span>{kat.icon}</span>
-              <span>{kat.label}</span>
-            </button>
-          ))
-        }
-      </div>
-
-      {
-        allTags.length > 0 && (
-          <div class="flex justify-center gap-2 mb-10 flex-wrap">
-            {allTags.map((tag) => (
+      <div class="flex justify-center mb-4">
+        <div class="flex gap-2 overflow-x-auto pb-2 px-4 max-w-full scrollbar-hide">
+          {
+            galeriKategoriList.map((kat) => (
               <button
-                data-tag={tag}
-                class="tag-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 hover:bg-primary hover:text-white transition-all"
+                data-filter={kat.id}
+                class:list={[
+                  'filter-btn shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all border',
+                  kat.id === 'semua'
+                    ? 'bg-primary text-white border-primary'
+                    : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary',
+                ]}
               >
-                #{tag}
+                <span>{kat.icon}</span>
+                <span>{kat.label}</span>
               </button>
-            ))}
-          </div>
-        )
-      }
+            ))
+          }
+        </div>
+      </div>
+
+      <div id="filter-status" class="text-center text-sm text-gray-500 mb-8">
+        Menampilkan <strong id="visible-count" class="text-gray-900">{fotoItems.length}</strong> foto
+      </div>
 
       <div id="foto-section">
         {
@@ -293,20 +284,22 @@ function getYouTubeThumbnail(url: string): string {
     const totalFoto = parseInt(loadMoreFotoBtn?.dataset.total || '0');
     let fotoLoaded = itemsPerPage;
     let activeCategory = 'semua';
-    let activeTag = '';
 
-    // Type tabs
+    // Type tabs (segmented control)
     const typeTabs = document.querySelectorAll('.type-tab');
+    let activeType = 'foto';
+    
     typeTabs.forEach((tab) => {
       const handler = () => {
         const type = tab.getAttribute('data-type');
+        activeType = type || 'foto';
 
         typeTabs.forEach((t) => {
-          t.classList.remove('bg-primary', 'text-white', 'shadow-md');
-          t.classList.add('bg-white', 'text-gray-700', 'shadow');
+          t.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+          t.classList.add('text-gray-600');
         });
-        tab.classList.remove('bg-white', 'text-gray-700', 'shadow');
-        tab.classList.add('bg-primary', 'text-white', 'shadow-md');
+        tab.classList.remove('text-gray-600');
+        tab.classList.add('bg-white', 'text-primary', 'shadow-sm');
 
         if (type === 'foto') {
           fotoSection?.classList.remove('hidden');
@@ -315,6 +308,8 @@ function getYouTubeThumbnail(url: string): string {
           fotoSection?.classList.add('hidden');
           videoSection?.classList.remove('hidden');
         }
+        
+        updateFilterStatus();
       };
       tab.addEventListener('click', handler);
       cleanupFns.push(() => tab.removeEventListener('click', handler));
@@ -346,11 +341,29 @@ function getYouTubeThumbnail(url: string): string {
         if (window.AOS) {
           window.AOS.refresh();
         }
+        
+        updateFilterStatus();
       };
       loadMoreFotoBtn.addEventListener('click', loadMoreHandler);
       cleanupFns.push(() =>
         loadMoreFotoBtn.removeEventListener('click', loadMoreHandler)
       );
+    }
+
+    // Update filter status text
+    function updateFilterStatus() {
+      const filterStatus = document.getElementById('filter-status');
+      if (!filterStatus) return;
+      
+      const items = activeType === 'foto'
+        ? document.querySelectorAll('.foto-item:not(.hidden)')
+        : document.querySelectorAll('.video-item:not(.hidden)');
+      
+      const count = items.length;
+      const typeLabel = activeType === 'foto' ? 'foto' : 'video';
+      const categoryLabel = activeCategory === 'semua' ? '' : ` kategori <strong class="text-gray-900">${activeCategory}</strong>`;
+      
+      filterStatus.innerHTML = `Menampilkan <strong class="text-gray-900">${count}</strong> ${typeLabel}${categoryLabel}`;
     }
 
     // Filter function
@@ -367,13 +380,11 @@ function getYouTubeThumbnail(url: string): string {
 
       items.forEach((item) => {
         const kategori = item.getAttribute('data-kategori');
-        const tags = item.getAttribute('data-tags') || '';
 
         const matchesCategory =
           activeCategory === 'semua' || kategori === activeCategory;
-        const matchesTag = !activeTag || tags.split(',').includes(activeTag);
 
-        if (matchesCategory && matchesTag) {
+        if (matchesCategory) {
           matchedCount++;
           if (currentSection === 'foto') {
             if (matchedCount <= fotoLoaded) {
@@ -392,11 +403,7 @@ function getYouTubeThumbnail(url: string): string {
       });
 
       if (currentSection === 'foto' && loadMoreFotoBtn) {
-        if (
-          matchedCount <= fotoLoaded ||
-          activeCategory !== 'semua' ||
-          activeTag
-        ) {
+        if (matchedCount <= fotoLoaded || activeCategory !== 'semua') {
           loadMoreFotoBtn.style.display = 'none';
         } else {
           loadMoreFotoBtn.style.display = 'inline-flex';
@@ -410,6 +417,8 @@ function getYouTubeThumbnail(url: string): string {
           noResults.classList.add('hidden');
         }
       }
+      
+      updateFilterStatus();
     }
 
     // Category filter
@@ -424,42 +433,11 @@ function getYouTubeThumbnail(url: string): string {
         }
 
         filterBtns.forEach((b) => {
-          b.classList.remove('bg-primary', 'text-white', 'shadow-md');
-          b.classList.add('bg-white', 'text-gray-700', 'shadow');
+          b.classList.remove('bg-primary', 'text-white', 'border-primary');
+          b.classList.add('bg-white', 'text-gray-600', 'border-gray-200');
         });
-        btn.classList.remove('bg-white', 'text-gray-700', 'shadow');
-        btn.classList.add('bg-primary', 'text-white', 'shadow-md');
-
-        applyFilters();
-      };
-      btn.addEventListener('click', handler);
-      cleanupFns.push(() => btn.removeEventListener('click', handler));
-    });
-
-    // Tag filter
-    const tagBtns = document.querySelectorAll('.tag-btn');
-    tagBtns.forEach((btn) => {
-      const handler = () => {
-        const tag = btn.getAttribute('data-tag') || '';
-
-        fotoLoaded = itemsPerPage;
-        if (fotoCountEl) {
-          fotoCountEl.textContent = `(${fotoLoaded}/${totalFoto})`;
-        }
-
-        if (activeTag === tag) {
-          activeTag = '';
-          btn.classList.remove('bg-primary', 'text-white');
-          btn.classList.add('bg-gray-100', 'text-gray-600');
-        } else {
-          activeTag = tag;
-          tagBtns.forEach((b) => {
-            b.classList.remove('bg-primary', 'text-white');
-            b.classList.add('bg-gray-100', 'text-gray-600');
-          });
-          btn.classList.remove('bg-gray-100', 'text-gray-600');
-          btn.classList.add('bg-primary', 'text-white');
-        }
+        btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-200');
+        btn.classList.add('bg-primary', 'text-white', 'border-primary');
 
         applyFilters();
       };
@@ -473,3 +451,13 @@ function getYouTubeThumbnail(url: string): string {
     cleanupFns = [];
   });
 </script>
+
+<style>
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+</style>
