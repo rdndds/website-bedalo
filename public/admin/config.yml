@@ -140,6 +140,107 @@ collections:
       - { name: featured, label: Tampilkan di Beranda, widget: boolean, default: false }
 
   # ============================================
+  # KKN COLLECTIONS
+  # ============================================
+
+  - name: kkn
+    label: Data KKN
+    folder: src/content/kkn
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: kode, label: Kode KKN, widget: string, hint: 'Contoh: 117, 119' }
+      - { name: kampus, label: Nama Kampus, widget: string }
+      - { name: kelompok, label: Nama Kelompok, widget: string }
+      - { name: tahun, label: Tahun, widget: number }
+      - { name: periodeMulai, label: Tanggal Mulai, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false }
+      - { name: periodeSelesai, label: Tanggal Selesai, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false }
+      - { name: tema, label: Tema KKN, widget: string }
+      - { name: heroImage, label: Foto Hero, widget: image, required: false }
+      - name: highlight
+        label: Highlight Statistik
+        widget: list
+        fields:
+          - { name: label, label: Label, widget: string }
+          - { name: value, label: Nilai, widget: string }
+      - name: socials
+        label: Media Sosial
+        widget: object
+        required: false
+        fields:
+          - { name: instagram, label: Instagram URL, widget: string, required: false }
+          - { name: tiktok, label: TikTok URL, widget: string, required: false }
+          - { name: youtube, label: YouTube URL, widget: string, required: false }
+          - { name: other, label: Link Lainnya, widget: string, required: false }
+      - name: gallery
+        label: Galeri Foto KKN
+        widget: list
+        fields:
+          - { name: src, label: Foto, widget: image }
+          - { name: alt, label: Keterangan Foto, widget: string }
+      - name: videos
+        label: Video KKN
+        widget: list
+        fields:
+          - { name: url, label: URL YouTube, widget: string }
+          - { name: title, label: Judul Video, widget: string }
+      - { name: body, label: Deskripsi Tambahan, widget: markdown, required: false }
+
+  - name: kknProgram
+    label: Program Kerja KKN
+    folder: src/content/kknProgram
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: kknKode, label: Kode KKN, widget: string, hint: 'Contoh: 117' }
+      - { name: title, label: Nama Program, widget: string }
+      - name: kategori
+        label: Kategori
+        widget: select
+        options:
+          - { label: Pendidikan, value: pendidikan }
+          - { label: Kesehatan, value: kesehatan }
+          - { label: Ekonomi, value: ekonomi }
+          - { label: Lingkungan, value: lingkungan }
+          - { label: Keagamaan, value: keagamaan }
+          - { label: Pariwisata, value: pariwisata }
+          - { label: Lainnya, value: lainnya }
+      - name: status
+        label: Status
+        widget: select
+        options:
+          - { label: Selesai, value: selesai }
+          - { label: Berjalan, value: berjalan }
+          - { label: Lanjutan, value: lanjutan }
+          - { label: Rekomendasi, value: rekomendasi }
+      - { name: lokasi, label: Lokasi, widget: string }
+      - { name: tanggal, label: Tanggal Pelaksanaan, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - { name: ringkasan, label: Ringkasan, widget: text }
+      - { name: impact, label: Dampak, widget: text, required: false }
+      - name: gallery
+        label: Galeri Foto Program
+        widget: list
+        fields:
+          - { name: src, label: Foto, widget: image }
+          - { name: alt, label: Keterangan Foto, widget: string }
+      - { name: body, label: Detail Program, widget: markdown, required: false }
+
+  - name: kknMember
+    label: Anggota KKN
+    folder: src/content/kknMember
+    create: true
+    slug: '{{kknKode}}-{{slug}}'
+    fields:
+      - { name: kknKode, label: Kode KKN, widget: string, hint: 'Contoh: 117' }
+      - { name: name, label: Nama Lengkap, widget: string }
+      - { name: role, label: Jabatan/Peran, widget: string }
+      - { name: division, label: Divisi, widget: string }
+      - { name: instagram, label: Instagram URL, widget: string, required: false }
+      - { name: avatar, label: Foto Profil, widget: image, required: false }
+      - { name: isKoordinator, label: Koordinator?, widget: boolean, default: false }
+      - { name: order, label: Urutan Tampil, widget: number, default: 0 }
+
+  # ============================================
   # PROFIL DUSUN (JSON FILES)
   # ============================================
 

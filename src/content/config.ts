@@ -1,5 +1,96 @@
 import { defineCollection, z } from 'astro:content';
 
+// KKN Collection - Main KKN data per period
+const kknCollection = defineCollection({
+  type: 'content',
+  schema: ({ image }) =>
+    z.object({
+      kode: z.string(),
+      kampus: z.string(),
+      kelompok: z.string(),
+      tahun: z.number(),
+      periodeMulai: z.string(),
+      periodeSelesai: z.string(),
+      tema: z.string(),
+      heroImage: image().optional(),
+      highlight: z
+        .array(z.object({ label: z.string(), value: z.string() }))
+        .default([]),
+      socials: z
+        .object({
+          instagram: z.string().optional(),
+          tiktok: z.string().optional(),
+          youtube: z.string().optional(),
+          other: z.string().optional(),
+        })
+        .optional(),
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
+          })
+        )
+        .default([]),
+      videos: z
+        .array(
+          z.object({
+            url: z.string(),
+            title: z.string(),
+          })
+        )
+        .default([]),
+    }),
+});
+
+// KKN Program Collection - Work programs
+const kknProgramCollection = defineCollection({
+  type: 'content',
+  schema: ({ image }) =>
+    z.object({
+      kknKode: z.string(),
+      title: z.string(),
+      kategori: z.enum([
+        'pendidikan',
+        'kesehatan',
+        'ekonomi',
+        'lingkungan',
+        'keagamaan',
+        'pariwisata',
+        'lainnya',
+      ]),
+      status: z.enum(['selesai', 'berjalan', 'lanjutan', 'rekomendasi']),
+      lokasi: z.string(),
+      tanggal: z.string().optional(),
+      ringkasan: z.string(),
+      impact: z.string().optional(),
+      gallery: z
+        .array(
+          z.object({
+            src: image(),
+            alt: z.string(),
+          })
+        )
+        .default([]),
+    }),
+});
+
+// KKN Member Collection - Team members
+const kknMemberCollection = defineCollection({
+  type: 'content',
+  schema: ({ image }) =>
+    z.object({
+      kknKode: z.string(),
+      name: z.string(),
+      role: z.string(),
+      division: z.string(),
+      instagram: z.string().optional(),
+      avatar: image().optional(),
+      isKoordinator: z.boolean().default(false),
+      order: z.number().default(0),
+    }),
+});
+
 const wisataCollection = defineCollection({
   type: 'content',
   schema: ({ image }) =>
@@ -378,4 +469,7 @@ export const collections = {
   layanan: layananCollection,
   agenda: agendaCollection,
   siteContent: siteContentCollection,
+  kkn: kknCollection,
+  kknProgram: kknProgramCollection,
+  kknMember: kknMemberCollection,
 };

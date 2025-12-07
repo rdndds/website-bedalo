@@ -1,0 +1,238 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { LightGallery } from 'astro-lightgallery';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  programs: CollectionEntry<'kknProgram'>[];
+  kode: string;
+}
+
+const { programs, kode } = Astro.props;
+
+const sortedPrograms = programs.sort((a, b) => {
+  if (a.data.tanggal && b.data.tanggal) {
+    return new Date(a.data.tanggal).getTime() - new Date(b.data.tanggal).getTime();
+  }
+  if (a.data.tanggal) return -1;
+  if (b.data.tanggal) return 1;
+  return a.data.title.localeCompare(b.data.title);
+});
+
+const kategoriConfig: Record<string, { icon: string; bgColor: string; textColor: string }> = {
+  pendidikan: { icon: '📚', bgColor: 'bg-blue-100', textColor: 'text-blue-700' },
+  kesehatan: { icon: '🏥', bgColor: 'bg-green-100', textColor: 'text-green-700' },
+  ekonomi: { icon: '💰', bgColor: 'bg-yellow-100', textColor: 'text-yellow-700' },
+  lingkungan: { icon: '🌿', bgColor: 'bg-emerald-100', textColor: 'text-emerald-700' },
+  keagamaan: { icon: '🕌', bgColor: 'bg-purple-100', textColor: 'text-purple-700' },
+  pariwisata: { icon: '🏖️', bgColor: 'bg-cyan-100', textColor: 'text-cyan-700' },
+  lainnya: { icon: '📋', bgColor: 'bg-gray-100', textColor: 'text-gray-700' },
+};
+
+const statusConfig: Record<string, { label: string; bgColor: string; textColor: string }> = {
+  selesai: { label: 'Selesai', bgColor: 'bg-green-100', textColor: 'text-green-700' },
+  berjalan: { label: 'Berjalan', bgColor: 'bg-blue-100', textColor: 'text-blue-700' },
+  lanjutan: { label: 'Lanjutan', bgColor: 'bg-orange-100', textColor: 'text-orange-700' },
+  rekomendasi: { label: 'Rekomendasi', bgColor: 'bg-purple-100', textColor: 'text-purple-700' },
+};
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+// Pre-process galleries for each program
+const programsWithGalleries = await Promise.all(
+  sortedPrograms.map(async (program) => {
+    const galleryWithUrls = await Promise.all(
+      (program.data.gallery || []).map(async (item, index) => {
+        const optimized = await getImage({ src: item.src, width: 1920 });
+        return { ...item, lightboxSrc: optimized.src, index };
+      })
+    );
+    return { ...program, galleryWithUrls };
+  })
+);
+---
+
+<section id="program-kerja" class="py-12 lg:py-16 scroll-mt-16">
+  <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+        Program Kerja <span class="gradient-text">KKN {kode}</span>
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Daftar program kerja yang dilaksanakan selama periode KKN
+      </p>
+    </div>
+    
+    {sortedPrograms.length > 0 ? (
+      <div class="max-w-4xl mx-auto">
+        <div class="space-y-0">
+          {programsWithGalleries.map((program, index) => {
+            const katConfig = kategoriConfig[program.data.kategori] || kategoriConfig.lainnya;
+            const statConfig = statusConfig[program.data.status] || statusConfig.selesai;
+            const isLast = index === programsWithGalleries.length - 1;
+            const hasGallery = program.galleryWithUrls.length > 0;
+            const programId = `program-${index}`;
+            
+            return (
+              <div
+                class="flex gap-4"
+                data-aos="fade-up"
+                data-aos-delay={index * 50}
+              >
+                <div class="flex flex-col items-center">
+                  <div class={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${katConfig.bgColor}`}>
+                    <span class="text-lg">{katConfig.icon}</span>
+                  </div>
+                  {!isLast && <div class="w-0.5 flex-1 bg-gray-200 min-h-[2rem]"></div>}
+                </div>
+                
+                <div class={`flex-1 ${!isLast ? 'pb-6' : ''}`}>
+                  <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                    <button
+                      type="button"
+                      class="program-toggle w-full text-left p-5 cursor-pointer"
+                      aria-expanded="false"
+                    >
+                      <div class="flex items-start justify-between gap-3">
+                        <div class="flex-1">
+                          <div class="flex flex-wrap items-center gap-2 mb-2">
+                            {program.data.tanggal && (
+                              <time class="text-sm font-semibold text-primary">
+                                {formatDate(program.data.tanggal)}
+                              </time>
+                            )}
+                            <span class={`text-xs font-medium px-2.5 py-0.5 rounded-full capitalize ${katConfig.bgColor} ${katConfig.textColor}`}>
+                              {program.data.kategori}
+                            </span>
+                            <span class={`text-xs font-medium px-2.5 py-0.5 rounded-full ${statConfig.bgColor} ${statConfig.textColor}`}>
+                              {statConfig.label}
+                            </span>
+                          </div>
+                          <h3 class="text-lg font-bold text-gray-900">{program.data.title}</h3>
+                        </div>
+                        <svg class="chevron-icon w-5 h-5 text-gray-400 shrink-0 mt-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </div>
+                    </button>
+                    
+                    <div class="program-body hidden border-t border-gray-100">
+                      <div class="p-5 pt-4">
+                        <p class="text-gray-600 mb-3">{program.data.ringkasan}</p>
+                        
+                        {program.data.impact && (
+                          <div class="bg-gray-50 rounded-lg p-3 mb-3">
+                            <p class="text-sm text-gray-700">
+                              <span class="font-medium">Dampak:</span> {program.data.impact}
+                            </p>
+                          </div>
+                        )}
+                        
+                        <p class="text-sm text-gray-500 flex items-center gap-1.5 mb-3">
+                          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          </svg>
+                          {program.data.lokasi}
+                        </p>
+                        
+                        {hasGallery && (
+                          <div class="mt-4">
+                            <button
+                              type="button"
+                              class="gallery-toggle inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                              data-photo-count={program.galleryWithUrls.length}
+                            >
+                              <span>📷</span>
+                              <span class="gallery-toggle-text">Lihat Dokumentasi ({program.galleryWithUrls.length} foto)</span>
+                              <svg class="gallery-chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                              </svg>
+                            </button>
+                            
+                            <div class="program-gallery hidden mt-3">
+                              <LightGallery
+                                options={{ thumbnail: true }}
+                                addPlugins={['zoom', 'thumbnail']}
+                                class="grid grid-cols-3 sm:grid-cols-4 gap-2"
+                                id={programId}
+                              >
+                                {program.galleryWithUrls.map((item, idx) => (
+                                  <a
+                                    href={item.lightboxSrc}
+                                    data-sub-html={`<h4>${item.alt}</h4>`}
+                                    class="group relative aspect-square overflow-hidden rounded-lg bg-gray-200 cursor-pointer"
+                                  >
+                                    <Image
+                                      src={item.src}
+                                      alt={item.alt}
+                                      width={200}
+                                      height={200}
+                                      class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                      loading="lazy"
+                                    />
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors"></div>
+                                  </a>
+                                ))}
+                              </LightGallery>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ) : (
+      <div class="bg-white rounded-2xl p-16 shadow-lg text-center max-w-2xl mx-auto">
+        <div class="text-7xl mb-4">📋</div>
+        <p class="text-gray-500 text-lg">Belum ada program kerja.</p>
+      </div>
+    )}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    // Toggle program card expand/collapse
+    document.querySelectorAll('.program-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const body = btn.nextElementSibling as HTMLElement;
+        const chevron = btn.querySelector('.chevron-icon') as HTMLElement;
+        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+        
+        btn.setAttribute('aria-expanded', (!isExpanded).toString());
+        body.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+      });
+    });
+    
+    // Toggle gallery visibility
+    document.querySelectorAll('.gallery-toggle').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const gallery = btn.nextElementSibling as HTMLElement;
+        const chevron = btn.querySelector('.gallery-chevron') as HTMLElement;
+        const textEl = btn.querySelector('.gallery-toggle-text') as HTMLElement;
+        const photoCount = btn.getAttribute('data-photo-count');
+        const isHidden = gallery.classList.contains('hidden');
+        
+        gallery.classList.toggle('hidden');
+        chevron.classList.toggle('rotate-180');
+        
+        if (textEl && photoCount) {
+          textEl.textContent = isHidden 
+            ? `Sembunyikan Dokumentasi` 
+            : `Lihat Dokumentasi (${photoCount} foto)`;
+        }
+      });
+    });
+  });
+</script>

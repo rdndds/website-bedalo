@@ -7,5 +7,5 @@ tags:
   - pantai
   - senja
 date: 2025-05-10
-featured: false
+featured: true
 ---

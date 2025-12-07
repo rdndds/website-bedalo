@@ -1,0 +1,88 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name: string;
+  role: string;
+  division: string;
+  instagram?: string;
+  avatar?: ImageMetadata;
+  isKoordinator?: boolean;
+}
+
+const { name, role, division, instagram, avatar, isKoordinator } = Astro.props;
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+const divisionColors: Record<string, string> = {
+  Koordinasi: 'from-primary to-primary-hover',
+  Administrasi: 'from-blue-500 to-blue-600',
+  Pendidikan: 'from-green-500 to-green-600',
+  Kesehatan: 'from-red-500 to-red-600',
+  Ekonomi: 'from-yellow-500 to-yellow-600',
+  Media: 'from-purple-500 to-purple-600',
+  Lingkungan: 'from-emerald-500 to-emerald-600',
+  Keagamaan: 'from-indigo-500 to-indigo-600',
+};
+
+const gradientClass = divisionColors[division] || 'from-gray-500 to-gray-600';
+---
+
+<div
+  class:list={[
+    'member-card bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all',
+    isKoordinator && 'ring-2 ring-primary ring-offset-2',
+  ]}
+  data-division={division}
+>
+  <div class="p-6 text-center">
+    {isKoordinator && (
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-semibold mb-4">
+        <span>👑</span>
+        <span>Koordinator</span>
+      </div>
+    )}
+    
+    <div class="relative w-24 h-24 mx-auto mb-4">
+      {avatar ? (
+        <Image
+          src={avatar}
+          alt={name}
+          width={96}
+          height={96}
+          class="w-full h-full object-cover rounded-full"
+        />
+      ) : (
+        <div class={`w-full h-full rounded-full bg-gradient-to-br ${gradientClass} flex items-center justify-center text-white text-2xl font-bold`}>
+          {getInitials(name)}
+        </div>
+      )}
+    </div>
+    
+    <h3 class="text-lg font-bold text-gray-900 mb-1">{name}</h3>
+    <p class="text-primary font-medium text-sm mb-1">{role}</p>
+    <p class="text-gray-500 text-xs mb-4">{division}</p>
+    
+    {instagram && (
+      <a
+        href={instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-400 text-white text-sm font-medium rounded-full hover:opacity-90 transition-opacity"
+      >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+        <span>Instagram</span>
+      </a>
+    )}
+  </div>
+</div>

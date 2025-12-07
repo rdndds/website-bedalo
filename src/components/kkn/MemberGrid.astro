@@ -1,0 +1,126 @@
+---
+import MemberCard from './MemberCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  members: CollectionEntry<'kknMember'>[];
+  kode: string;
+}
+
+const { members, kode } = Astro.props;
+
+const sortedMembers = members.sort((a, b) => a.data.order - b.data.order);
+const divisions = [...new Set(members.map((m) => m.data.division))];
+---
+
+<section id="anggota" class="py-12 lg:py-16 bg-gradient-to-br from-gray-50 to-white scroll-mt-16">
+  <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+        Tim <span class="gradient-text">KKN {kode}</span>
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Kenali anggota tim KKN {kode} yang mengabdi di Dusun Bedalo
+      </p>
+    </div>
+    
+    {divisions.length > 1 && (
+      <div class="flex flex-wrap justify-center gap-2 mb-8" data-aos="fade-up" data-aos-delay="100">
+        <button
+          data-filter-division="semua"
+          class="division-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-primary text-white shadow-md"
+        >
+          Semua
+        </button>
+        {divisions.map((div) => (
+          <button
+            data-filter-division={div}
+            class="division-btn px-4 py-2 rounded-full text-sm font-medium transition-all bg-white text-gray-700 shadow hover:bg-gray-50"
+          >
+            {div}
+          </button>
+        ))}
+      </div>
+    )}
+    
+    {sortedMembers.length > 0 ? (
+      <div id="member-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+        {sortedMembers.map((member, index) => (
+          <div data-aos="fade-up" data-aos-delay={index * 50}>
+            <MemberCard
+              name={member.data.name}
+              role={member.data.role}
+              division={member.data.division}
+              instagram={member.data.instagram}
+              avatar={member.data.avatar}
+            />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
+        <div class="text-7xl mb-4">👥</div>
+        <p class="text-gray-500 text-lg">Belum ada data anggota.</p>
+      </div>
+    )}
+    
+    <div id="no-member-results" class="hidden bg-white rounded-2xl p-16 shadow-lg text-center">
+      <div class="text-7xl mb-4">🔍</div>
+      <p class="text-gray-500 text-lg">Tidak ada anggota di divisi ini.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const divisionButtons = document.querySelectorAll('.division-btn');
+    const memberGrid = document.getElementById('member-grid');
+    const noResults = document.getElementById('no-member-results');
+    
+    let activeDivision = 'semua';
+    
+    function applyFilters() {
+      const cards = document.querySelectorAll('.member-card');
+      let visibleCount = 0;
+      
+      cards.forEach((card) => {
+        const division = card.getAttribute('data-division');
+        const parent = card.parentElement;
+        
+        const matches = activeDivision === 'semua' || division === activeDivision;
+        
+        if (matches) {
+          parent?.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          parent?.classList.add('hidden');
+        }
+      });
+      
+      if (noResults && memberGrid) {
+        if (visibleCount === 0) {
+          memberGrid.classList.add('hidden');
+          noResults.classList.remove('hidden');
+        } else {
+          memberGrid.classList.remove('hidden');
+          noResults.classList.add('hidden');
+        }
+      }
+    }
+    
+    divisionButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeDivision = btn.getAttribute('data-filter-division') || 'semua';
+        
+        divisionButtons.forEach((b) => {
+          b.classList.remove('bg-primary', 'text-white', 'shadow-md');
+          b.classList.add('bg-white', 'text-gray-700', 'shadow');
+        });
+        btn.classList.remove('bg-white', 'text-gray-700', 'shadow');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+        
+        applyFilters();
+      });
+    });
+  });
+</script>

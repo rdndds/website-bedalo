@@ -1,0 +1,86 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import KknHero from '../../components/kkn/KknHero.astro';
+import KknHighlights from '../../components/kkn/KknHighlights.astro';
+import KknSocials from '../../components/kkn/KknSocials.astro';
+import ProgramSection from '../../components/kkn/ProgramSection.astro';
+import MemberGrid from '../../components/kkn/MemberGrid.astro';
+import KknGallery from '../../components/kkn/KknGallery.astro';
+import KknVideoGallery from '../../components/kkn/KknVideoGallery.astro';
+
+export async function getStaticPaths() {
+  const allKkn = await getCollection('kkn');
+  return allKkn.map((kkn) => ({
+    params: { kode: kkn.data.kode },
+    props: { kkn },
+  }));
+}
+
+const { kkn } = Astro.props;
+const kode = kkn.data.kode;
+
+const allPrograms = await getCollection('kknProgram');
+const programs = allPrograms.filter((p) => p.data.kknKode === kode);
+
+const allMembers = await getCollection('kknMember');
+const members = allMembers.filter((m) => m.data.kknKode === kode);
+
+const pageTitle = `Tentang KKN ${kode} di Dusun Bedalo`;
+const pageDescription = `${kkn.data.tema}. KKN ${kode} ${kkn.data.kampus} mengabdi di Dusun Bedalo.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <KknHero
+    kode={kode}
+    kampus={kkn.data.kampus}
+    kelompok={kkn.data.kelompok}
+    tema={kkn.data.tema}
+    periodeMulai={kkn.data.periodeMulai}
+    periodeSelesai={kkn.data.periodeSelesai}
+    heroImage={kkn.data.heroImage}
+  />
+  
+  {kkn.data.highlight.length > 0 && (
+    <KknHighlights highlights={kkn.data.highlight} />
+  )}
+  
+  <KknSocials socials={kkn.data.socials} kode={kode} />
+  
+  <ProgramSection programs={programs} kode={kode} />
+  
+  <MemberGrid members={members} kode={kode} />
+  
+  <KknGallery gallery={kkn.data.gallery} kode={kode} />
+  
+  <KknVideoGallery videos={kkn.data.videos} kode={kode} />
+  
+  <section class="py-12 lg:py-16">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-r from-primary to-primary-hover rounded-2xl p-8 md:p-12 text-center text-white" data-aos="fade-up">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4">
+          Terima Kasih KKN {kode}! 🙏
+        </h2>
+        <p class="text-white/90 max-w-2xl mx-auto mb-6">
+          Atas dedikasi dan kontribusi nyata untuk kemajuan Dusun Bedalo. Semoga ilmu dan pengalaman yang didapat bermanfaat untuk masa depan.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a
+            href="/"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+          >
+            <span>🏠</span>
+            <span>Beranda</span>
+          </a>
+          <a
+            href="/tentang-proyek"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-white/20 text-white font-semibold rounded-xl hover:bg-white/30 transition-colors"
+          >
+            <span>📖</span>
+            <span>Tentang Proyek</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

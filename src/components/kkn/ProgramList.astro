@@ -1,0 +1,171 @@
+---
+import ProgramCard from './ProgramCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  programs: CollectionEntry<'kknProgram'>[];
+  kode: string;
+}
+
+const { programs, kode } = Astro.props;
+
+const kategoriList = [
+  { id: 'semua', label: 'Semua', icon: '📋' },
+  { id: 'pendidikan', label: 'Pendidikan', icon: '📚' },
+  { id: 'kesehatan', label: 'Kesehatan', icon: '🏥' },
+  { id: 'ekonomi', label: 'Ekonomi', icon: '💰' },
+  { id: 'lingkungan', label: 'Lingkungan', icon: '🌿' },
+  { id: 'keagamaan', label: 'Keagamaan', icon: '🕌' },
+  { id: 'pariwisata', label: 'Pariwisata', icon: '🏖️' },
+  { id: 'lainnya', label: 'Lainnya', icon: '📁' },
+];
+
+const statusList = [
+  { id: 'semua', label: 'Semua Status' },
+  { id: 'selesai', label: 'Selesai' },
+  { id: 'berjalan', label: 'Berjalan' },
+  { id: 'lanjutan', label: 'Lanjutan' },
+  { id: 'rekomendasi', label: 'Rekomendasi' },
+];
+
+const sortedPrograms = programs.sort((a, b) => {
+  if (a.data.tanggal && b.data.tanggal) {
+    return new Date(b.data.tanggal).getTime() - new Date(a.data.tanggal).getTime();
+  }
+  return a.data.title.localeCompare(b.data.title);
+});
+---
+
+<section id="program-kerja" class="py-12 lg:py-16 scroll-mt-20">
+  <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-8" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+        Program Kerja <span class="gradient-text">KKN {kode}</span>
+      </h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Daftar program kerja yang dilaksanakan selama periode KKN
+      </p>
+    </div>
+    
+    <div class="flex flex-col md:flex-row justify-center gap-4 mb-8" data-aos="fade-up" data-aos-delay="100">
+      <div class="flex flex-wrap justify-center gap-2">
+        {kategoriList.map((kat) => (
+          <button
+            data-filter-kategori={kat.id}
+            class:list={[
+              'kategori-btn inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all hover:-translate-y-0.5 hover:shadow-md',
+              kat.id === 'semua'
+                ? 'bg-primary text-white shadow-md'
+                : 'bg-white text-gray-700 shadow hover:bg-gray-50',
+            ]}
+          >
+            <span>{kat.icon}</span>
+            <span>{kat.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+    
+    <div class="flex justify-center mb-8" data-aos="fade-up" data-aos-delay="150">
+      <select
+        id="status-filter"
+        class="px-4 py-2 rounded-xl border border-gray-200 bg-white text-gray-700 font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+      >
+        {statusList.map((status) => (
+          <option value={status.id}>{status.label}</option>
+        ))}
+      </select>
+    </div>
+    
+    {sortedPrograms.length > 0 ? (
+      <div id="program-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedPrograms.map((program, index) => (
+          <div data-aos="fade-up" data-aos-delay={index * 50}>
+            <ProgramCard
+              title={program.data.title}
+              kategori={program.data.kategori}
+              status={program.data.status}
+              lokasi={program.data.lokasi}
+              tanggal={program.data.tanggal}
+              ringkasan={program.data.ringkasan}
+              impact={program.data.impact}
+            />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
+        <div class="text-7xl mb-4">📋</div>
+        <p class="text-gray-500 text-lg">Belum ada program kerja.</p>
+      </div>
+    )}
+    
+    <div id="no-program-results" class="hidden bg-white rounded-2xl p-16 shadow-lg text-center">
+      <div class="text-7xl mb-4">🔍</div>
+      <p class="text-gray-500 text-lg">Tidak ada program yang cocok dengan filter.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const kategoriButtons = document.querySelectorAll('.kategori-btn');
+    const statusSelect = document.getElementById('status-filter') as HTMLSelectElement;
+    const programGrid = document.getElementById('program-grid');
+    const noResults = document.getElementById('no-program-results');
+    
+    let activeKategori = 'semua';
+    let activeStatus = 'semua';
+    
+    function applyFilters() {
+      const cards = document.querySelectorAll('.program-card');
+      let visibleCount = 0;
+      
+      cards.forEach((card) => {
+        const kategori = card.getAttribute('data-kategori');
+        const status = card.getAttribute('data-status');
+        const parent = card.parentElement;
+        
+        const matchesKategori = activeKategori === 'semua' || kategori === activeKategori;
+        const matchesStatus = activeStatus === 'semua' || status === activeStatus;
+        
+        if (matchesKategori && matchesStatus) {
+          parent?.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          parent?.classList.add('hidden');
+        }
+      });
+      
+      if (noResults && programGrid) {
+        if (visibleCount === 0) {
+          programGrid.classList.add('hidden');
+          noResults.classList.remove('hidden');
+        } else {
+          programGrid.classList.remove('hidden');
+          noResults.classList.add('hidden');
+        }
+      }
+    }
+    
+    kategoriButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeKategori = btn.getAttribute('data-filter-kategori') || 'semua';
+        
+        kategoriButtons.forEach((b) => {
+          b.classList.remove('bg-primary', 'text-white', 'shadow-md');
+          b.classList.add('bg-white', 'text-gray-700', 'shadow');
+        });
+        btn.classList.remove('bg-white', 'text-gray-700', 'shadow');
+        btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+        
+        applyFilters();
+      });
+    });
+    
+    statusSelect?.addEventListener('change', () => {
+      activeStatus = statusSelect.value;
+      applyFilters();
+    });
+  });
+</script>
