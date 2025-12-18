@@ -422,9 +422,46 @@ const categoryColorsJson = JSON.stringify(
   }
 </style>
 
-<script define:vars={{ categoryColorsJson }}>
-  const categoryColors = JSON.parse(categoryColorsJson);
-  let beritaCache = null;
+<div
+  id="category-colors-data"
+  data-category-colors={categoryColorsJson}
+  class="hidden"
+>
+</div>
+
+<script>
+  type CategoryColor = {
+    bg?: string;
+    text?: string;
+    icon?: string;
+  };
+
+  type BeritaItem = {
+    slug: string;
+    title: string;
+    excerpt: string;
+    kategori: string;
+    date: string;
+    thumbnail: string;
+    author: string;
+    month: string;
+  };
+
+  type FilterType = 'all' | 'kategori' | 'month';
+
+  const categoryColors = (() => {
+    const el = document.getElementById('category-colors-data');
+    const raw = el?.getAttribute('data-category-colors');
+    if (!raw) return {};
+
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {};
+    }
+  })() as Record<string, CategoryColor>;
+
+  let beritaCache: BeritaItem[] | null = null;
 
   function initFilter() {
     const filterBtns = document.querySelectorAll('.filter-btn');
@@ -438,7 +475,7 @@ const categoryColorsJson = JSON.stringify(
     const dynamicList = document.getElementById('berita-list-dynamic');
     const loadingState = document.getElementById('loading-state');
 
-    function formatDate(dateStr) {
+    function formatDate(dateStr: string) {
       return new Date(dateStr).toLocaleDateString('id-ID', {
         day: 'numeric',
         month: 'long',
@@ -446,13 +483,13 @@ const categoryColorsJson = JSON.stringify(
       });
     }
 
-    function getBorderColor(kategori) {
+    function getBorderColor(kategori: string) {
       const color = categoryColors[kategori];
       if (!color?.bg) return 'border-gray-300';
       return color.bg.replace('bg-', 'border-').replace('-100', '-500');
     }
 
-    function createCard(berita) {
+    function createCard(berita: BeritaItem) {
       const catColor = categoryColors[berita.kategori] || {};
       const readTime = Math.ceil((berita.excerpt?.length || 100) / 200) + 2;
 
@@ -492,7 +529,7 @@ const categoryColorsJson = JSON.stringify(
       `;
     }
 
-    function updateURL(type, value) {
+    function updateURL(type: FilterType, value: string) {
       const url = new URL(window.location.href);
       url.searchParams.delete('kategori');
       url.searchParams.delete('arsip');
@@ -510,7 +547,7 @@ const categoryColorsJson = JSON.stringify(
       history.pushState({}, '', url.toString());
     }
 
-    function updateActiveButtons(type, value) {
+    function updateActiveButtons(type: FilterType, value: string) {
       filterBtns.forEach((btn) => {
         const btnKategori = btn.getAttribute('data-filter');
         const btnMonth = btn.getAttribute('data-filter-month');
@@ -524,7 +561,11 @@ const categoryColorsJson = JSON.stringify(
       });
     }
 
-    async function applyFilter(type, value, updateUrl = true) {
+    async function applyFilter(
+      type: FilterType,
+      value: string,
+      updateUrl: boolean = true
+    ) {
       // Update button states immediately
       updateActiveButtons(type, value);
 
@@ -552,11 +593,11 @@ const categoryColorsJson = JSON.stringify(
         // Fetch data if not cached
         if (!beritaCache) {
           const res = await fetch('/berita/data.json');
-          beritaCache = await res.json();
+          beritaCache = (await res.json()) as BeritaItem[];
         }
 
         // Filter results
-        let filtered = beritaCache;
+        let filtered: BeritaItem[] = beritaCache;
         if (type === 'kategori') {
           filtered = beritaCache.filter((b) => b.kategori === value);
         } else if (type === 'month') {
@@ -568,7 +609,10 @@ const categoryColorsJson = JSON.stringify(
         if (filtered.length === 0) {
           noResults?.classList.remove('hidden');
         } else {
-          dynamicList.innerHTML = filtered.map(createCard).join('');
+          dynamicList?.replaceChildren();
+          if (dynamicList) {
+            dynamicList.innerHTML = filtered.map(createCard).join('');
+          }
           dynamicList?.classList.remove('hidden');
         }
 

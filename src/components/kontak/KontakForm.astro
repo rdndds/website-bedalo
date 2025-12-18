@@ -3,8 +3,44 @@ import { getEntry } from 'astro:content';
 import Button from '../common/Button.astro';
 
 const contactEntry = await getEntry('siteContent', 'kontak-form');
-const formConfig = contactEntry?.data;
-const defaultFields = [
+
+type ContactFieldType = 'text' | 'textarea' | 'select';
+
+type ContactFieldOption = {
+  label: string;
+  value: string;
+};
+
+type ContactField = {
+  id: string;
+  label: string;
+  name: string;
+  type: ContactFieldType;
+  placeholder?: string;
+  required?: boolean;
+  options?: ContactFieldOption[];
+  rows?: number;
+};
+
+type ContactFormConfig = {
+  title: string;
+  description?: string;
+  note?: string;
+  actionUrl: string;
+  target?: string;
+  submitLabel: string;
+  toast?: {
+    message: string;
+    type?: string;
+    duration?: number;
+  };
+  fields: ContactField[];
+};
+
+const formConfig: ContactFormConfig | undefined =
+  contactEntry?.data?.contactForm;
+
+const defaultFields: ContactField[] = [
   {
     id: 'nama',
     label: 'Nama Lengkap',
@@ -47,6 +83,12 @@ const defaultFields = [
   },
 ];
 
+function normalizeToastType(value: unknown): ToastType | undefined {
+  if (value === 'success' || value === 'error' || value === 'info')
+    return value;
+  return undefined;
+}
+
 const title = formConfig?.title ?? 'Kirim Pesan';
 const description =
   formConfig?.description ??
@@ -60,18 +102,19 @@ const actionUrl =
 const target = formConfig?.target ?? '_blank';
 const fields = formConfig?.fields ?? defaultFields;
 const submitLabel = formConfig?.submitLabel ?? 'Kirim Pesan →';
-const toastConfig =
-  formConfig?.toast ?? {
-    message: 'Pesan Anda sedang dikirim. Terima kasih!',
-    type: 'success',
-    duration: 5000,
-  };
+const toastConfig: ToastOptions = {
+  message:
+    formConfig?.toast?.message ?? 'Pesan Anda sedang dikirim. Terima kasih!',
+  type: normalizeToastType(formConfig?.toast?.type) ?? 'success',
+  duration: formConfig?.toast?.duration ?? 5000,
+};
 const toastDataAttr = JSON.stringify(toastConfig);
 ---
 
 <div data-aos="fade-up">
   <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-    <span class="text-2xl">✉️</span> {title}
+    <span class="text-2xl">✉️</span>
+    {title}
   </h2>
   <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg relative">
     <p class="text-gray-600 mb-6">{description}</p>
@@ -84,18 +127,18 @@ const toastDataAttr = JSON.stringify(toastConfig);
       data-toast={toastDataAttr}
       class="space-y-5"
     >
-      {fields.map((field) => (
-        <div>
-          <label
-            for={field.id}
-            class="block text-sm font-semibold text-gray-700 mb-2"
-          >
-            {field.label}
-            {field.required && <span class="text-red-500"> *</span>}
-          </label>
+      {
+        fields.map((field: ContactField) => (
+          <div>
+            <label
+              for={field.id}
+              class="block text-sm font-semibold text-gray-700 mb-2"
+            >
+              {field.label}
+              {field.required && <span class="text-red-500"> *</span>}
+            </label>
 
-          {
-            field.type === 'textarea' ? (
+            {field.type === 'textarea' ? (
               <textarea
                 id={field.id}
                 name={field.name}
@@ -103,7 +146,7 @@ const toastDataAttr = JSON.stringify(toastConfig);
                 required={field.required}
                 placeholder={field.placeholder}
                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition resize-none"
-              ></textarea>
+              />
             ) : field.type === 'select' ? (
               <select
                 id={field.id}
@@ -114,7 +157,7 @@ const toastDataAttr = JSON.stringify(toastConfig);
                 <option value="">
                   {field.placeholder ?? 'Pilih salah satu'}
                 </option>
-                {field.options?.map((option) => (
+                {field.options?.map((option: ContactFieldOption) => (
                   <option value={option.value}>{option.label}</option>
                 ))}
               </select>
@@ -127,17 +170,15 @@ const toastDataAttr = JSON.stringify(toastConfig);
                 placeholder={field.placeholder}
                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
               />
-            )
-          }
-        </div>
-      ))}
+            )}
+          </div>
+        ))
+      }
 
       <Button type="submit" class="w-full"> {submitLabel} </Button>
     </form>
 
-    {note && (
-      <p class="text-xs text-gray-500 mt-4 text-center">{note}</p>
-    )}
+    {note && <p class="text-xs text-gray-500 mt-4 text-center">{note}</p>}
 
     <div
       id="contact-loading"
@@ -145,7 +186,10 @@ const toastDataAttr = JSON.stringify(toastConfig);
       aria-live="polite"
     >
       <div class="flex items-center gap-3">
-        <div class="animate-spin h-5 w-5 rounded-full border-2 border-gray-300 border-t-primary"></div>
+        <div
+          class="animate-spin h-5 w-5 rounded-full border-2 border-gray-300 border-t-primary"
+        >
+        </div>
         <span>Mengirim pesan...</span>
       </div>
     </div>
@@ -153,10 +197,38 @@ const toastDataAttr = JSON.stringify(toastConfig);
 </div>
 
 <script>
-  let formHandler = null;
-  let formElement = null;
-  let overlayElement = null;
-  let clientToastConfig = null;
+  let formHandler: ((event: SubmitEvent) => void) | null = null;
+  let formElement: HTMLFormElement | null = null;
+  let overlayElement: HTMLElement | null = null;
+  let clientToastConfig: ToastOptions | null = null;
+
+  function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+  }
+
+  function parseToastOptions(raw: string): ToastOptions | null {
+    try {
+      const parsed: unknown = JSON.parse(raw);
+      if (!isRecord(parsed)) return null;
+
+      const message =
+        typeof parsed.message === 'string' ? parsed.message : null;
+      if (!message) return null;
+
+      const type =
+        parsed.type === 'success' ||
+        parsed.type === 'error' ||
+        parsed.type === 'info'
+          ? parsed.type
+          : undefined;
+      const duration =
+        typeof parsed.duration === 'number' ? parsed.duration : undefined;
+
+      return { message, type, duration };
+    } catch {
+      return null;
+    }
+  }
 
   document.addEventListener('astro:page-load', () => {
     const element = document.getElementById('contact-form');
@@ -166,14 +238,10 @@ const toastDataAttr = JSON.stringify(toastConfig);
 
     const toastData = element.getAttribute('data-toast');
     if (toastData) {
-      try {
-        clientToastConfig = JSON.parse(toastData);
-      } catch (err) {
-        clientToastConfig = null;
-      }
+      clientToastConfig = parseToastOptions(toastData);
     }
 
-    formHandler = async (event) => {
+    const handler = async (event: SubmitEvent) => {
       event.preventDefault();
       const formData = new FormData(element);
       const action = element.getAttribute('action') || '';
@@ -208,7 +276,9 @@ const toastDataAttr = JSON.stringify(toastConfig);
       }, 100);
     };
 
-    formElement.addEventListener('submit', formHandler);
+    formHandler = handler;
+
+    formElement.addEventListener('submit', handler);
   });
 
   document.addEventListener('astro:before-swap', () => {

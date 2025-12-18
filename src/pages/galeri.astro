@@ -85,7 +85,9 @@ function getYouTubeThumbnail(url: string): string {
       </div>
 
       <div class="flex justify-center mb-4">
-        <div class="flex gap-2 overflow-x-auto pb-2 px-4 max-w-full scrollbar-hide">
+        <div
+          class="flex gap-2 overflow-x-auto pb-2 px-4 max-w-full scrollbar-hide"
+        >
           {
             galeriKategoriList.map((kat) => (
               <button
@@ -106,7 +108,9 @@ function getYouTubeThumbnail(url: string): string {
       </div>
 
       <div id="filter-status" class="text-center text-sm text-gray-500 mb-8">
-        Menampilkan <strong id="visible-count" class="text-gray-900">{fotoItems.length}</strong> foto
+        Menampilkan <strong id="visible-count" class="text-gray-900">
+          {fotoItems.length}
+        </strong> foto
       </div>
 
       <div id="foto-section">
@@ -288,7 +292,7 @@ function getYouTubeThumbnail(url: string): string {
     // Type tabs (segmented control)
     const typeTabs = document.querySelectorAll('.type-tab');
     let activeType = 'foto';
-    
+
     typeTabs.forEach((tab) => {
       const handler = () => {
         const type = tab.getAttribute('data-type');
@@ -308,7 +312,7 @@ function getYouTubeThumbnail(url: string): string {
           fotoSection?.classList.add('hidden');
           videoSection?.classList.remove('hidden');
         }
-        
+
         updateFilterStatus();
       };
       tab.addEventListener('click', handler);
@@ -341,7 +345,7 @@ function getYouTubeThumbnail(url: string): string {
         if (window.AOS) {
           window.AOS.refresh();
         }
-        
+
         updateFilterStatus();
       };
       loadMoreFotoBtn.addEventListener('click', loadMoreHandler);
@@ -354,15 +358,19 @@ function getYouTubeThumbnail(url: string): string {
     function updateFilterStatus() {
       const filterStatus = document.getElementById('filter-status');
       if (!filterStatus) return;
-      
-      const items = activeType === 'foto'
-        ? document.querySelectorAll('.foto-item:not(.hidden)')
-        : document.querySelectorAll('.video-item:not(.hidden)');
-      
+
+      const items =
+        activeType === 'foto'
+          ? document.querySelectorAll('.foto-item:not(.hidden)')
+          : document.querySelectorAll('.video-item:not(.hidden)');
+
       const count = items.length;
       const typeLabel = activeType === 'foto' ? 'foto' : 'video';
-      const categoryLabel = activeCategory === 'semua' ? '' : ` kategori <strong class="text-gray-900">${activeCategory}</strong>`;
-      
+      const categoryLabel =
+        activeCategory === 'semua'
+          ? ''
+          : ` kategori <strong class="text-gray-900">${activeCategory}</strong>`;
+
       filterStatus.innerHTML = `Menampilkan <strong class="text-gray-900">${count}</strong> ${typeLabel}${categoryLabel}`;
     }
 
@@ -417,7 +425,7 @@ function getYouTubeThumbnail(url: string): string {
           noResults.classList.add('hidden');
         }
       }
-      
+
       updateFilterStatus();
     }
 

@@ -16,17 +16,19 @@ const icons = ['👥', '📋', '⏱️', '🎯', '🏆', '📊', '💡', '🌟']
 <section class="py-8 lg:py-12">
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-      {highlights.map((item, index) => (
-        <div
-          class="bg-white rounded-2xl p-5 shadow-lg text-center hover:shadow-xl hover:-translate-y-1 transition-all"
-          data-aos="zoom-in"
-          data-aos-delay={index * 100}
-        >
-          <div class="text-3xl mb-2">{icons[index % icons.length]}</div>
-          <div class="text-2xl font-extrabold text-primary">{item.value}</div>
-          <div class="text-xs text-gray-500 mt-1">{item.label}</div>
-        </div>
-      ))}
+      {
+        highlights.map((item, index) => (
+          <div
+            class="bg-white rounded-2xl p-5 shadow-lg text-center hover:shadow-xl hover:-translate-y-1 transition-all"
+            data-aos="zoom-in"
+            data-aos-delay={index * 100}
+          >
+            <div class="text-3xl mb-2">{icons[index % icons.length]}</div>
+            <div class="text-2xl font-extrabold text-primary">{item.value}</div>
+            <div class="text-xs text-gray-500 mt-1">{item.label}</div>
+          </div>
+        ))
+      }
     </div>
   </div>
 </section>

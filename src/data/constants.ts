@@ -10,10 +10,10 @@ export const kategoriBeritaColors = ui.kategoriBeritaColors;
 export const kategoriBeritaTimelineColors = ui.kategoriBeritaTimelineColors;
 
 // Time of day colors - used in agenda
-export const waktuColors = ui.waktuColors;
+export const waktuColors: Record<string, string> = ui.waktuColors;
 
 // Wisata facilities icons
-export const fasilitasIcons = ui.fasilitasIcons;
+export const fasilitasIcons: Record<string, string> = ui.fasilitasIcons;
 
 // UMKM category icons
 export const umkmKategoriIcons = ui.umkmKategoriIcons;

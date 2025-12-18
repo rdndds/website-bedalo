@@ -60,6 +60,19 @@ const shareUrl = url || Astro.url.href;
 <script>
   let cleanupFns: (() => void)[] = [];
 
+  function fallbackCopyText(text: string) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    (document as any).execCommand?.('copy');
+    textarea.remove();
+  }
+
   document.addEventListener('astro:page-load', () => {
     const buttons = document.querySelectorAll('[data-share]');
 
@@ -84,21 +97,16 @@ const shareUrl = url || Astro.url.href;
             );
             break;
           case 'copy':
-            try {
-              await navigator.clipboard.writeText(url);
-              if (window.toast) {
-                window.toast.show({
-                  message: 'Link berhasil disalin!',
-                  type: 'success',
-                });
+            {
+              let copied = false;
+              try {
+                await navigator.clipboard.writeText(url);
+                copied = true;
+              } catch {
+                copied = false;
               }
-            } catch {
-              const input = document.createElement('input');
-              input.value = url;
-              document.body.appendChild(input);
-              input.select();
-              document.execCommand('copy');
-              document.body.removeChild(input);
+
+              if (!copied) fallbackCopyText(url);
               if (window.toast) {
                 window.toast.show({
                   message: 'Link berhasil disalin!',

@@ -11,7 +11,16 @@ interface Props {
 
 const { notes, kode } = Astro.props;
 
-const typeConfig: Record<string, { icon: string; label: string; bgColor: string; borderColor: string; textColor: string }> = {
+const typeConfig: Record<
+  string,
+  {
+    icon: string;
+    label: string;
+    bgColor: string;
+    borderColor: string;
+    textColor: string;
+  }
+> = {
   lanjutan: {
     icon: '🔄',
     label: 'Program Lanjutan',
@@ -36,40 +45,45 @@ const typeConfig: Record<string, { icon: string; label: string; bgColor: string;
 };
 ---
 
-{notes.length > 0 && (
-  <section id="catatan" class="py-12 lg:py-16 scroll-mt-20">
-    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-          Catatan untuk <span class="gradient-text">KKN Berikutnya</span>
-        </h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">
-          Rekomendasi dan catatan penting dari KKN {kode} untuk periode selanjutnya
-        </p>
-      </div>
-      
-      <div class="max-w-3xl mx-auto space-y-4">
-        {notes.map((note, index) => {
-          const config = typeConfig[note.type];
-          return (
-            <div
-              class={`${config.bgColor} rounded-xl p-5 border-l-4 ${config.borderColor}`}
-              data-aos="fade-up"
-              data-aos-delay={index * 100}
-            >
-              <div class="flex items-start gap-3">
-                <span class="text-2xl">{config.icon}</span>
-                <div>
-                  <span class={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${config.textColor} ${config.bgColor} mb-2`}>
-                    {config.label}
-                  </span>
-                  <p class="text-gray-700">{note.text}</p>
+{
+  notes.length > 0 && (
+    <section id="catatan" class="py-12 lg:py-16 scroll-mt-20">
+      <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8" data-aos="fade-up">
+          <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
+            Catatan untuk <span class="gradient-text">KKN Berikutnya</span>
+          </h2>
+          <p class="text-gray-600 max-w-2xl mx-auto">
+            Rekomendasi dan catatan penting dari KKN {kode} untuk periode
+            selanjutnya
+          </p>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-4">
+          {notes.map((note, index) => {
+            const config = typeConfig[note.type];
+            return (
+              <div
+                class={`${config.bgColor} rounded-xl p-5 border-l-4 ${config.borderColor}`}
+                data-aos="fade-up"
+                data-aos-delay={index * 100}
+              >
+                <div class="flex items-start gap-3">
+                  <span class="text-2xl">{config.icon}</span>
+                  <div>
+                    <span
+                      class={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ${config.textColor} ${config.bgColor} mb-2`}
+                    >
+                      {config.label}
+                    </span>
+                    <p class="text-gray-700">{note.text}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
-)}
+    </section>
+  )
+}

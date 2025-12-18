@@ -13,13 +13,7 @@ const { id = 'toast-container' } = Astro.props;
 </div>
 
 <script>
-  interface ToastOptions {
-    message: string;
-    type?: 'success' | 'error' | 'info';
-    duration?: number;
-  }
-
-  class ToastManager {
+  class ToastManagerClient implements ToastManager {
     private container: HTMLElement | null;
 
     constructor(containerId: string = 'toast-container') {
@@ -61,7 +55,7 @@ const { id = 'toast-container' } = Astro.props;
       setTimeout(() => toast.remove(), 300);
     }
 
-    private getTypeClasses(type: string): string {
+    private getTypeClasses(type: ToastType): string {
       switch (type) {
         case 'success':
           return 'bg-green-700 text-white';
@@ -72,7 +66,7 @@ const { id = 'toast-container' } = Astro.props;
       }
     }
 
-    private getIcon(type: string): string {
+    private getIcon(type: ToastType): string {
       switch (type) {
         case 'success':
           return '✓';
@@ -85,5 +79,5 @@ const { id = 'toast-container' } = Astro.props;
   }
 
   // Make globally available
-  window.toast = new ToastManager();
+  window.toast = new ToastManagerClient();
 </script>
