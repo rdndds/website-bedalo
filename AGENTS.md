@@ -1,34 +1,51 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Root config: `astro.config.mjs`, `tsconfig.json`, `eslint.config.js`, `vercel.json`. Built assets land in `dist/`; static passthrough files live in `public/`.
-- Application code sits under `src/`: pages (`pages/`), shared layouts (`layouts/`), UI pieces (`components/`), global styles (`styles/`), content entries (`content/`), data helpers (`data/`), assets imported via bundling (`assets/`), and utilities/types (`lib/`, `types/`). Path aliases like `@components/*` and `@content/*` are defined in `tsconfig.json`.
+
+- `src/pages/`: Route entrypoints (Astro pages). File names map to URLs (e.g. `src/pages/agenda.astro`).
+- `src/components/`: Reusable UI components grouped by feature (e.g. `src/components/home/`, `src/components/common/`).
+- `src/layouts/`: Page layouts (e.g. `src/layouts/BaseLayout.astro`).
+- `src/content/`: Astro Content Collections (Markdown/data content). Schemas live in `src/content/config.ts`.
+- `src/assets/` and `public/`: Images and static files. CMS configuration is in `public/admin/`.
+- Generated/output (do not edit/commit): `.astro/`, `dist/`, `node_modules/`.
 
 ## Build, Test, and Development Commands
-- Install: `pnpm install`
-- Develop: `pnpm dev` (serves on http://localhost:4321 with hot reload)
-- Production build: `pnpm build` → outputs to `dist/`
-- Preview built site: `pnpm preview`
-- Static analysis: `pnpm lint` (ESLint) / `pnpm lint:fix` to apply fixes
-- Formatting: `pnpm format:check` and `pnpm format`
-- Type and Astro diagnostics: `pnpm astro check` (available via the Astro CLI)
+
+Use `pnpm` (lockfile: `pnpm-lock.yaml`).
+
+- `pnpm install`: Install dependencies.
+- `pnpm dev`: Start local dev server.
+- `pnpm build`: Production build to `dist/`.
+- `pnpm preview`: Serve the built site locally.
+- `pnpm astro check`: Type/content checks via Astro (@astrojs/check).
+- `pnpm lint` / `pnpm lint:fix`: Run ESLint (and auto-fix where safe).
+- `pnpm format` / `pnpm format:check`: Format or verify formatting with Prettier.
 
 ## Coding Style & Naming Conventions
-- TypeScript is strict; prefer typed props/params and explicit return types for utilities in `src/lib`.
-- Formatting is handled by Prettier (2-space indent, semicolons, single quotes in JS/TS). Run `pnpm format` before pushing.
-- Components and layouts use PascalCase (`HeroSection.astro`), utilities use camelCase, and route/content slugs use kebab-case.
-- Keep imports using the provided aliases over long relative paths.
 
-## Testing & Quality
-- No automated tests are defined yet; treat `pnpm lint`, `pnpm format:check`, and `pnpm astro check` as the baseline gate before any PR.
-- When adding tests in the future, colocate near source files or mirror the `src/` tree, and prefer data-driven cases for `src/data` utilities.
-- Perform manual QA on the preview build for layout regressions and link integrity before merging.
+- Formatting is enforced by Prettier (`.prettierrc`): 2-space indentation, single quotes, semicolons, ~80 char width.
+- Linting uses ESLint with TypeScript + Astro recommendations (`eslint.config.js`).
+- Component files: `PascalCase.astro` (e.g. `src/components/common/SectionTitle.astro`).
+- Non-component scripts: prefer `kebab-case.ts` (e.g. `src/scripts/admin-kontak.ts`).
+- Prefer TS path aliases from `tsconfig.json` (e.g. `@components/*`, `@lib/*`).
+
+## Testing Guidelines
+
+This repo does not include a dedicated unit test runner; treat these as the “test suite”:
+
+- `pnpm astro check` for type/content validation.
+- `pnpm lint` and `pnpm format:check` for code quality.
+- `pnpm build` to catch build-time regressions.
+
+For content changes, run `pnpm dev` and verify affected routes manually.
 
 ## Commit & Pull Request Guidelines
-- Current history uses short summaries; prefer imperative, present-tense messages with scope, e.g., `Add gallery carousel` or `Fix hero spacing`. Commit every change with a meaningful message that explains intent, not just the files touched.
-- For PRs, include: what changed, why, how to verify (commands like `pnpm lint && pnpm build`), and screenshots/GIFs for visual updates. Link related issues or tickets when available.
-- Keep changes scoped; if a PR touches both content and layout, note both areas in the description. Update docs or `public/` assets alongside code changes to keep previews accurate.
 
-## Security & Configuration Tips
-- Do not commit secrets; use `.env` files and document required variables in the PR. Prefer local `.env` over hardcoded values in `src/data` or `astro.config.mjs`.
-- For external assets, place public files in `public/` when they must remain unbundled; otherwise, import from `src/assets` so Astro optimizes them at build time.
+- Commit history is short and mostly uses simple, lowercase, descriptive subjects (e.g. “properly configured contact form”), with a few placeholder numeric commits. Prefer clear, action-oriented subjects.
+- PRs should include: a brief summary, the affected pages/routes, and screenshots for UI/layout changes.
+- Before opening a PR, run: `pnpm format:check && pnpm lint && pnpm astro check && pnpm build`.
+
+## Content & CMS Notes
+
+- Content collection entries must match `src/content/config.ts` schemas.
+- `berita` slugs follow `YYYY-MM-DD-slug.md` (see `public/admin/config.yml`). Keep dates and frontmatter consistent.
