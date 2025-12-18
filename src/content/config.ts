@@ -368,6 +368,38 @@ const siteContentCollection = defineCollection({
         z.object({ nama: z.string(), nomor: z.string(), icon: z.string() })
       )
       .optional(),
+    // For kontak-form.json
+    contactForm: z
+      .object({
+        title: z.string(),
+        description: z.string().optional(),
+        actionUrl: z.string().url(),
+        target: z.string().default('_blank'),
+        submitLabel: z.string(),
+        note: z.string().optional(),
+        toast: z
+          .object({
+            message: z.string(),
+            type: z.string().default('success'),
+            duration: z.number().default(5000),
+          })
+          .optional(),
+        fields: z.array(
+          z.object({
+            id: z.string(),
+            label: z.string(),
+            name: z.string(),
+            type: z.enum(['text', 'textarea', 'select']),
+            placeholder: z.string().optional(),
+            required: z.boolean().default(true),
+            options: z
+              .array(z.object({ label: z.string(), value: z.string() }))
+              .optional(),
+            rows: z.number().optional(),
+          })
+        ),
+      })
+      .optional(),
     // For site-config.json
     siteConfig: z
       .object({

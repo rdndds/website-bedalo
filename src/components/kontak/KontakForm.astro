@@ -1,122 +1,208 @@
 ---
+import { getEntry } from 'astro:content';
 import Button from '../common/Button.astro';
+
+const contactEntry = await getEntry('siteContent', 'kontak-form');
+const formConfig = contactEntry?.data;
+const defaultFields = [
+  {
+    id: 'nama',
+    label: 'Nama Lengkap',
+    name: 'entry.2116275708',
+    type: 'text',
+    placeholder: 'Masukkan nama Anda',
+    required: true,
+  },
+  {
+    id: 'kontak',
+    label: 'No. WhatsApp / Email',
+    name: 'entry.175133211',
+    type: 'text',
+    placeholder: '08xxxxxxxxxx atau email@example.com',
+    required: true,
+  },
+  {
+    id: 'subjek',
+    label: 'Subjek',
+    name: 'entry.1266128475',
+    type: 'select',
+    placeholder: 'Pilih subjek',
+    options: [
+      { label: 'Pertanyaan', value: 'pertanyaan' },
+      { label: 'Saran', value: 'saran' },
+      { label: 'Kritik', value: 'kritik' },
+      { label: 'Kerjasama', value: 'kerjasama' },
+      { label: 'Lainnya', value: 'lainnya' },
+    ],
+    required: true,
+  },
+  {
+    id: 'pesan',
+    label: 'Pesan',
+    name: 'entry.1942425125',
+    type: 'textarea',
+    rows: 4,
+    placeholder: 'Tulis pesan Anda di sini...',
+    required: true,
+  },
+];
+
+const title = formConfig?.title ?? 'Kirim Pesan';
+const description =
+  formConfig?.description ??
+  'Sampaikan pertanyaan, saran, kritik, atau aspirasi Anda. Pesan akan diteruskan ke perangkat dusun.';
+const note =
+  formConfig?.note ??
+  'Form dikirim langsung ke Google Sheets melalui Google Forms tanpa membuka tab baru.';
+const actionUrl =
+  formConfig?.actionUrl ??
+  'https://docs.google.com/forms/u/0/d/e/1FAIpQLSfWaCgBA-cNraUbTmOGjlmrZQ-99edYMdUSkbA-kQBtZm6QOw/formResponse';
+const target = formConfig?.target ?? '_blank';
+const fields = formConfig?.fields ?? defaultFields;
+const submitLabel = formConfig?.submitLabel ?? 'Kirim Pesan →';
+const toastConfig =
+  formConfig?.toast ?? {
+    message: 'Pesan Anda sedang dikirim. Terima kasih!',
+    type: 'success',
+    duration: 5000,
+  };
+const toastDataAttr = JSON.stringify(toastConfig);
 ---
 
 <div data-aos="fade-up">
   <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-    <span class="text-2xl">✉️</span> Kirim Pesan
+    <span class="text-2xl">✉️</span> {title}
   </h2>
-  <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg">
-    <p class="text-gray-600 mb-6">
-      Sampaikan pertanyaan, saran, kritik, atau aspirasi Anda. Pesan akan
-      diteruskan ke perangkat dusun.
-    </p>
+  <div class="bg-white rounded-2xl p-6 md:p-8 shadow-lg relative">
+    <p class="text-gray-600 mb-6">{description}</p>
 
     <form
       id="contact-form"
-      action="https://docs.google.com/forms/d/e/{FORM_ID}/formResponse"
+      action={actionUrl}
       method="POST"
-      target="_blank"
+      target={target}
+      data-toast={toastDataAttr}
       class="space-y-5"
     >
-      <div>
-        <label
-          for="nama"
-          class="block text-sm font-semibold text-gray-700 mb-2"
-        >
-          Nama Lengkap <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="nama"
-          name="entry.XXXXX"
-          required
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
-          placeholder="Masukkan nama Anda"
-        />
-      </div>
+      {fields.map((field) => (
+        <div>
+          <label
+            for={field.id}
+            class="block text-sm font-semibold text-gray-700 mb-2"
+          >
+            {field.label}
+            {field.required && <span class="text-red-500"> *</span>}
+          </label>
 
-      <div>
-        <label
-          for="kontak"
-          class="block text-sm font-semibold text-gray-700 mb-2"
-        >
-          No. WhatsApp / Email <span class="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="kontak"
-          name="entry.XXXXX"
-          required
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
-          placeholder="08xxxxxxxxxx atau email@example.com"
-        />
-      </div>
+          {
+            field.type === 'textarea' ? (
+              <textarea
+                id={field.id}
+                name={field.name}
+                rows={field.rows ?? 4}
+                required={field.required}
+                placeholder={field.placeholder}
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition resize-none"
+              ></textarea>
+            ) : field.type === 'select' ? (
+              <select
+                id={field.id}
+                name={field.name}
+                required={field.required}
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
+              >
+                <option value="">
+                  {field.placeholder ?? 'Pilih salah satu'}
+                </option>
+                {field.options?.map((option) => (
+                  <option value={option.value}>{option.label}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                id={field.id}
+                name={field.name}
+                required={field.required}
+                placeholder={field.placeholder}
+                class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
+              />
+            )
+          }
+        </div>
+      ))}
 
-      <div>
-        <label
-          for="jenis"
-          class="block text-sm font-semibold text-gray-700 mb-2"
-        >
-          Jenis Pesan <span class="text-red-500">*</span>
-        </label>
-        <select
-          id="jenis"
-          name="entry.XXXXX"
-          required
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition"
-        >
-          <option value="">Pilih jenis pesan</option>
-          <option value="pertanyaan">Pertanyaan</option>
-          <option value="saran">Saran</option>
-          <option value="kritik">Kritik</option>
-          <option value="kerjasama">Kerjasama</option>
-          <option value="lainnya">Lainnya</option>
-        </select>
-      </div>
-
-      <div>
-        <label
-          for="pesan"
-          class="block text-sm font-semibold text-gray-700 mb-2"
-        >
-          Pesan <span class="text-red-500">*</span>
-        </label>
-        <textarea
-          id="pesan"
-          name="entry.XXXXX"
-          rows="4"
-          required
-          class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition resize-none"
-          placeholder="Tulis pesan Anda di sini..."
-        >
-        </textarea>
-      </div>
-
-      <Button type="submit" class="w-full"> Kirim Pesan → </Button>
+      <Button type="submit" class="w-full"> {submitLabel} </Button>
     </form>
 
-    <p class="text-xs text-gray-500 mt-4 text-center">
-      Form ini akan membuka tab baru ke Google Forms.
-    </p>
+    {note && (
+      <p class="text-xs text-gray-500 mt-4 text-center">{note}</p>
+    )}
+
+    <div
+      id="contact-loading"
+      class="hidden absolute inset-0 rounded-2xl bg-white/80 backdrop-blur-sm flex items-center justify-center text-gray-700"
+      aria-live="polite"
+    >
+      <div class="flex items-center gap-3">
+        <div class="animate-spin h-5 w-5 rounded-full border-2 border-gray-300 border-t-primary"></div>
+        <span>Mengirim pesan...</span>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  let formHandler: (() => void) | null = null;
-  let formElement: HTMLElement | null = null;
+  let formHandler = null;
+  let formElement = null;
+  let overlayElement = null;
+  let clientToastConfig = null;
 
   document.addEventListener('astro:page-load', () => {
-    formElement = document.getElementById('contact-form');
-    if (!formElement) return;
+    const element = document.getElementById('contact-form');
+    if (!(element instanceof HTMLFormElement)) return;
+    formElement = element;
+    overlayElement = document.getElementById('contact-loading');
 
-    formHandler = () => {
+    const toastData = element.getAttribute('data-toast');
+    if (toastData) {
+      try {
+        clientToastConfig = JSON.parse(toastData);
+      } catch (err) {
+        clientToastConfig = null;
+      }
+    }
+
+    formHandler = async (event) => {
+      event.preventDefault();
+      const formData = new FormData(element);
+      const action = element.getAttribute('action') || '';
+
+      try {
+        if (overlayElement) {
+          overlayElement.classList.remove('hidden');
+        }
+        await fetch(action, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData,
+        });
+      } catch (err) {
+        console.error('Gagal mengirim formulir kontak', err);
+      } finally {
+        if (overlayElement) {
+          overlayElement.classList.add('hidden');
+        }
+      }
+
+      element.reset();
+
       setTimeout(() => {
-        if (window.toast) {
+        if (window.toast && clientToastConfig?.message) {
           window.toast.show({
-            message: 'Pesan Anda sedang dikirim. Terima kasih!',
-            type: 'success',
-            duration: 5000,
+            message: clientToastConfig.message,
+            type: clientToastConfig.type ?? 'success',
+            duration: clientToastConfig.duration ?? 5000,
           });
         }
       }, 100);
