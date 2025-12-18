@@ -40,6 +40,14 @@ type ContactFormConfig = {
 const formConfig: ContactFormConfig | undefined =
   contactEntry?.data?.contactForm;
 
+type ToastType = 'success' | 'error' | 'info';
+
+type ToastOptions = {
+  message: string;
+  type?: ToastType;
+  duration?: number;
+};
+
 const defaultFields: ContactField[] = [
   {
     id: 'nama',

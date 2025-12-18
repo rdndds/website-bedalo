@@ -69,7 +69,17 @@ const shareUrl = url || Astro.url.href;
     textarea.style.left = '-9999px';
     document.body.appendChild(textarea);
     textarea.select();
-    (document as any).execCommand?.('copy');
+
+    const execCommand = (
+      document as unknown as {
+        execCommand?: (
+          commandId: string,
+          showUI?: boolean,
+          value?: string
+        ) => boolean;
+      }
+    ).execCommand;
+    execCommand?.('copy');
     textarea.remove();
   }
 

@@ -1,55 +1,57 @@
 {
-  "title": "Kirim Pesan",
-  "description": "Sampaikan pertanyaan, saran, kritik, atau aspirasi Anda. Pesan akan diteruskan ke perangkat dusun.",
-  "actionUrl": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfWaCgBA-cNraUbTmOGjlmrZQ-99edYMdUSkbA-kQBtZm6QOw/formResponse",
-  "target": "_blank",
-  "submitLabel": "Kirim Pesan →",
-  "note": "Form dikirim langsung ke Google Sheets melalui Google Forms tanpa membuka tab baru.",
-  "toast": {
-    "message": "Pesan Anda sedang dikirim. Terima kasih!",
-    "type": "success",
-    "duration": 5000
-  },
-  "fields": [
-    {
-      "id": "nama",
-      "label": "Nama Lengkap",
-      "name": "entry.2116275708",
-      "type": "text",
-      "placeholder": "Masukkan nama Anda",
-      "required": true
+  "contactForm": {
+    "title": "Kirim Pesan",
+    "description": "Sampaikan pertanyaan, saran, kritik, atau aspirasi Anda. Pesan akan diteruskan ke perangkat dusun.",
+    "actionUrl": "https://docs.google.com/forms/u/0/d/e/1FAIpQLSfWaCgBA-cNraUbTmOGjlmrZQ-99edYMdUSkbA-kQBtZm6QOw/formResponse",
+    "target": "_blank",
+    "submitLabel": "Kirim Pesan →",
+    "note": "Form dikirim langsung ke Google Sheets melalui Google Forms tanpa membuka tab baru.",
+    "toast": {
+      "message": "Pesan Anda sedang dikirim. Terima kasih!",
+      "type": "success",
+      "duration": 5000
     },
-    {
-      "id": "kontak",
-      "label": "No. WhatsApp / Email",
-      "name": "entry.175133211",
-      "type": "text",
-      "placeholder": "08xxxxxxxxxx atau email@example.com",
-      "required": true
-    },
-    {
-      "id": "subjek",
-      "label": "Subjek",
-      "name": "entry.1266128475",
-      "type": "select",
-      "placeholder": "Pilih subjek",
-      "options": [
-        { "label": "Pertanyaan", "value": "pertanyaan" },
-        { "label": "Saran", "value": "saran" },
-        { "label": "Kritik", "value": "kritik" },
-        { "label": "Kerjasama", "value": "kerjasama" },
-        { "label": "Lainnya", "value": "lainnya" }
-      ],
-      "required": true
-    },
-    {
-      "id": "pesan",
-      "label": "Pesan",
-      "name": "entry.1942425125",
-      "type": "textarea",
-      "rows": 4,
-      "placeholder": "Tulis pesan Anda di sini...",
-      "required": true
-    }
-  ]
+    "fields": [
+      {
+        "id": "nama",
+        "label": "Nama Lengkap",
+        "name": "entry.2116275708",
+        "type": "text",
+        "placeholder": "Masukkan nama Anda",
+        "required": true
+      },
+      {
+        "id": "kontak",
+        "label": "No. WhatsApp / Email",
+        "name": "entry.175133211",
+        "type": "text",
+        "placeholder": "08xxxxxxxxxx atau email@example.com",
+        "required": true
+      },
+      {
+        "id": "subjek",
+        "label": "Subjek",
+        "name": "entry.1266128475",
+        "type": "select",
+        "placeholder": "Pilih subjek",
+        "options": [
+          { "label": "Pertanyaan", "value": "pertanyaan" },
+          { "label": "Saran", "value": "saran" },
+          { "label": "Kritik", "value": "kritik" },
+          { "label": "Kerjasama", "value": "kerjasama" },
+          { "label": "Lainnya", "value": "lainnya" }
+        ],
+        "required": true
+      },
+      {
+        "id": "pesan",
+        "label": "Pesan",
+        "name": "entry.1942425125",
+        "type": "textarea",
+        "rows": 4,
+        "placeholder": "Tulis pesan Anda di sini...",
+        "required": true
+      }
+    ]
+  }
 }
