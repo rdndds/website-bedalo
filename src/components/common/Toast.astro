@@ -13,6 +13,8 @@ const { id = 'toast-container' } = Astro.props;
 </div>
 
 <script>
+  import { uiStrings } from '../../data/uiStrings';
+
   class ToastManagerClient implements ToastManager {
     private container: HTMLElement | null;
 
@@ -30,7 +32,7 @@ const { id = 'toast-container' } = Astro.props;
       toast.innerHTML = `
         <span class="text-xl">${icon}</span>
         <span class="font-medium">${message}</span>
-        <button class="ml-2 hover:opacity-70 transition-opacity" aria-label="Tutup">✕</button>
+        <button class="ml-2 hover:opacity-70 transition-opacity" aria-label="${uiStrings.common.close}">✕</button>
       `;
 
       this.container.appendChild(toast);

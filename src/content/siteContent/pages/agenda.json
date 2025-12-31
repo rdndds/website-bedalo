@@ -1,0 +1,18 @@
+{
+  "agendaPage": {
+    "hero": {
+      "titleHighlight": "Agenda",
+      "titleSuffix": "Kegiatan",
+      "description": "Jadwal kegiatan rutin warga Dusun Bedalo."
+    },
+    "agendaRutin": {
+      "title": "Agenda Rutin",
+      "subtitle": "Kegiatan rutin mingguan dan bulanan warga Dusun Bedalo"
+    },
+    "beritaTerbaru": {
+      "title": "Berita Terbaru",
+      "viewAll": "Lihat Semua →",
+      "empty": "Belum ada berita."
+    }
+  }
+}

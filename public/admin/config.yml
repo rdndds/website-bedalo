@@ -533,6 +533,416 @@ collections:
                   - { name: rt, label: Jumlah RT, widget: number }
                   - { name: pantai, label: Jumlah Pantai, widget: number }
 
+      - name: page-meta
+        label: Page Meta
+        file: src/content/siteContent/globals/page-meta.json
+        fields:
+          - name: pageMeta
+            label: Meta Halaman
+            widget: list
+            fields:
+              - { name: id, label: ID, widget: string }
+              - { name: path, label: Path, widget: string }
+              - { name: title, label: Title, widget: string, required: false }
+              - {
+                  name: titleTemplate,
+                  label: Title Template,
+                  widget: string,
+                  required: false,
+                }
+              - {
+                  name: description,
+                  label: Description,
+                  widget: text,
+                  required: false,
+                }
+              - {
+                  name: descriptionTemplate,
+                  label: Description Template,
+                  widget: text,
+                  required: false,
+                }
+
+      - name: ui-strings
+        label: UI Strings
+        file: src/content/siteContent/globals/ui-strings.json
+        fields:
+          - name: uiStrings
+            label: UI Strings
+            widget: object
+            fields:
+              - name: aria
+                label: Aria Labels
+                widget: object
+                fields:
+                  - { name: headerNav, label: Header Nav, widget: string }
+                  - { name: mainContent, label: Main Content, widget: string }
+                  - { name: footer, label: Footer, widget: string, required: false }
+                  - {
+                      name: mobileMenuToggle,
+                      label: Mobile Toggle,
+                      widget: string,
+                    }
+                  - {
+                      name: mobileMenuClose,
+                      label: Mobile Close,
+                      widget: string,
+                    }
+              - name: common
+                label: Common
+                widget: object
+                fields:
+                  - { name: all, label: All, widget: string }
+                  - { name: category, label: Category, widget: string }
+                  - { name: archive, label: Archive, widget: string }
+                  - { name: back, label: Back, widget: string, required: false }
+                  - { name: share, label: Share, widget: string, required: false }
+                  - {
+                      name: openMapsShort,
+                      label: Open Maps (Short),
+                      widget: string,
+                      required: false,
+                    }
+                  - {
+                      name: contactViaWhatsApp,
+                      label: Contact via WhatsApp,
+                      widget: string,
+                      required: false,
+                    }
+                  - { name: previous, label: Previous, widget: string }
+                  - { name: next, label: Next, widget: string }
+                  - { name: close, label: Close, widget: string, required: false }
+                  - { name: skipToContent, label: Skip To Content, widget: string, required: false }
+                  - { name: readMore, label: Read More, widget: string }
+                  - { name: loadMore, label: Load More, widget: string }
+                  - { name: featured, label: Featured, widget: string }
+                  - { name: photo, label: Photo, widget: string }
+                  - { name: video, label: Video, widget: string }
+              - name: share
+                label: Share
+                widget: object
+                fields:
+                  - { name: whatsapp, label: WhatsApp, widget: string }
+                  - { name: facebook, label: Facebook, widget: string }
+                  - { name: copyLink, label: Copy Link, widget: string }
+                  - { name: copiedToast, label: Copied Toast, widget: string }
+              - name: footer
+                label: Footer
+                widget: object
+                fields:
+                  - { name: locationTitle, label: Location Title, widget: string }
+                  - { name: navigationTitle, label: Navigation Title, widget: string }
+                  - { name: infoTitle, label: Info Title, widget: string }
+                  - { name: openMaps, label: Open Maps, widget: string }
+                  - { name: officialDescription, label: Official Description, widget: text }
+                  - { name: builtByPrefix, label: Built By Prefix, widget: string }
+                  - { name: builtByName, label: Built By Name, widget: string, required: false }
+                  - name: address
+                    label: Address Labels
+                    widget: object
+                    required: false
+                    fields:
+                      - { name: dusun, label: Dusun, widget: string }
+                      - { name: kalurahan, label: Kalurahan, widget: string }
+                      - { name: kapanewon, label: Kapanewon, widget: string }
+                      - { name: kabupaten, label: Kabupaten, widget: string }
+                      - { name: kodePos, label: Kode Pos, widget: string }
+              - name: pages
+                label: Pages
+                widget: object
+                fields:
+                  - name: galeri
+                    label: Galeri
+                    widget: object
+                    fields:
+                      - {
+                          name: titleHighlight,
+                          label: Title Highlight,
+                          widget: string,
+                        }
+                      - { name: titleSuffix, label: Title Suffix, widget: string }
+                      - { name: description, label: Description, widget: text }
+                      - { name: tabPhoto, label: Tab Photo, widget: string }
+                      - { name: tabVideo, label: Tab Video, widget: string }
+                      - name: status
+                        label: Status
+                        widget: object
+                        fields:
+                          - { name: prefix, label: Prefix, widget: string }
+                          - { name: typePhoto, label: Type Photo, widget: string }
+                          - { name: typeVideo, label: Type Video, widget: string }
+                          - {
+                              name: categoryPrefix,
+                              label: Category Prefix,
+                              widget: string,
+                            }
+                      - { name: emptyPhoto, label: Empty Photo, widget: string, required: false }
+                      - { name: emptyVideo, label: Empty Video, widget: string, required: false }
+                      - { name: noResults, label: No Results, widget: string }
+                  - name: berita
+                    label: Berita
+                    widget: object
+                    fields:
+                      - {
+                          name: titleHighlight,
+                          label: Title Highlight,
+                          widget: string,
+                        }
+                      - { name: titleSuffix, label: Title Suffix, widget: string }
+                      - { name: description, label: Description, widget: text }
+                      - { name: latestTitle, label: Latest Title, widget: string }
+                      - { name: loading, label: Loading, widget: string }
+                      - { name: countSuffix, label: Count Suffix, widget: string, required: false }
+                      - name: empty
+                        label: Empty
+                        widget: object
+                        fields:
+                          - { name: noResults, label: No Results, widget: string }
+                          - { name: noPosts, label: No Posts, widget: string, required: false }
+                          - { name: reset, label: Reset, widget: string }
+                          - { name: clearFilter, label: Clear Filter, widget: string }
+                      - { name: byAuthorPrefix, label: By Author Prefix, widget: string }
+                      - { name: defaultAuthor, label: Default Author, widget: string }
+
+              - name: home
+                label: Home
+                widget: object
+                fields:
+                  - name: highlights
+                    label: Home Highlights
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - {
+                          name: titleHighlight,
+                          label: Title Highlight,
+                          widget: string,
+                        }
+                      - { name: titleSuffix, label: Title Suffix, widget: string }
+                      - { name: moreLabel, label: More Label, widget: string }
+                  - name: wisata
+                    label: Home Wisata
+                    widget: object
+                    fields:
+                      - { name: explore, label: Explore, widget: string }
+                      - { name: viewAll, label: View All, widget: string }
+                      - {
+                          name: carouselPrevious,
+                          label: Carousel Previous,
+                          widget: string,
+                        }
+                      - { name: carouselNext, label: Carousel Next, widget: string }
+                  - name: umkm
+                    label: Home UMKM
+                    widget: object
+                    fields:
+                      - { name: viewDetail, label: View Detail, widget: string }
+                      - { name: viewAll, label: View All, widget: string }
+                  - name: berita
+                    label: Home Berita
+                    widget: object
+                    fields:
+                      - { name: badgeLatest, label: Badge Latest, widget: string }
+                      - { name: viewAll, label: View All, widget: string }
+                  - name: galeri
+                    label: Home Galeri
+                    widget: object
+                    fields:
+                      - { name: viewAll, label: View All, widget: string }
+                  - name: location
+                    label: Home Location
+                    widget: object
+                    fields:
+                      - { name: mapTitle, label: Map Title, widget: string }
+                      - { name: addressLabel, label: Address Label, widget: string }
+                      - { name: contactTitle, label: Contact Title, widget: string }
+                      - {
+                          name: quickContactLabel,
+                          label: Quick Contact Label,
+                          widget: string,
+                        }
+                      - { name: whatsAppLabel, label: WhatsApp Label, widget: string }
+                      - {
+                          name: distanceToPrefix,
+                          label: Distance To Prefix,
+                          widget: string,
+                          required: false,
+                        }
+
+              - name: kkn
+                label: KKN
+                widget: object
+                fields:
+                  - name: hero
+                    label: Hero
+                    widget: object
+                    fields:
+                      - { name: themeLabel, label: Theme Label, widget: string }
+                      - { name: viewPrograms, label: View Programs, widget: string }
+                      - { name: viewGallery, label: View Gallery, widget: string }
+                      - {
+                          name: imageAltTemplate,
+                          label: Image Alt Template,
+                          widget: string,
+                          required: false,
+                        }
+                  - name: impact
+                    label: Impact
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - { name: subtitle, label: Subtitle, widget: string }
+                  - name: gallery
+                    label: Gallery
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - {
+                          name: subtitleTemplate,
+                          label: Subtitle Template,
+                          widget: string,
+                          required: false,
+                        }
+                  - name: videos
+                    label: Videos
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - {
+                          name: subtitleTemplate,
+                          label: Subtitle Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - {
+                          name: iframeTitleTemplate,
+                          label: Iframe Title Template,
+                          widget: string,
+                        }
+                  - name: socials
+                    label: Socials
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - {
+                          name: subtitleTemplate,
+                          label: Subtitle Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - {
+                          name: instagramLabelTemplate,
+                          label: Instagram Label Template,
+                          widget: string,
+                        }
+                      - {
+                          name: tiktokLabelTemplate,
+                          label: TikTok Label Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - {
+                          name: youtubeLabelTemplate,
+                          label: YouTube Label Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - { name: shortVideoLabel, label: Short Video Label, widget: string }
+                      - {
+                          name: documentationLabel,
+                          label: Documentation Label,
+                          widget: string,
+                        }
+                      - { name: blogLabel, label: Blog Label, widget: string }
+                      - { name: photosLabel, label: Photos Label, widget: string }
+                      - {
+                          name: otherLinksLabel,
+                          label: Other Links Label,
+                          widget: string,
+                        }
+                  - name: members
+                    label: Members
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - {
+                          name: subtitleTemplate,
+                          label: Subtitle Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - { name: filterAll, label: Filter All, widget: string }
+                      - { name: empty, label: Empty, widget: string }
+                      - {
+                          name: emptyDivision,
+                          label: Empty Division,
+                          widget: string,
+                        }
+                  - name: notes
+                    label: Notes
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - { name: titleHighlight, label: Title Highlight, widget: string }
+                      - {
+                          name: subtitleTemplate,
+                          label: Subtitle Template,
+                          widget: string,
+                          required: false,
+                        }
+                      - name: typeLabels
+                        label: Type Labels
+                        widget: object
+                        required: false
+                        fields:
+                          - { name: lanjutan, label: Lanjutan, widget: string }
+                          - { name: saran, label: Saran, widget: string }
+                          - { name: peringatan, label: Peringatan, widget: string }
+                  - name: programs
+                    label: Programs
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - { name: impactLabel, label: Impact Label, widget: string }
+                      - { name: empty, label: Empty, widget: string }
+                      - { name: noMatch, label: No Match, widget: string }
+                      - { name: subtitle, label: Subtitle, widget: string }
+                      - { name: allStatus, label: All Status, widget: string }
+                      - name: categoryLabels
+                        label: Category Labels
+                        widget: object
+                        required: false
+                        fields:
+                          - { name: semua, label: Semua, widget: string }
+                          - { name: pendidikan, label: Pendidikan, widget: string }
+                          - { name: kesehatan, label: Kesehatan, widget: string }
+                          - { name: ekonomi, label: Ekonomi, widget: string }
+                          - { name: lingkungan, label: Lingkungan, widget: string }
+                          - { name: keagamaan, label: Keagamaan, widget: string }
+                          - { name: pariwisata, label: Pariwisata, widget: string }
+                          - { name: lainnya, label: Lainnya, widget: string }
+                      - name: statusLabels
+                        label: Status Labels
+                        widget: object
+                        required: false
+                        fields:
+                          - { name: selesai, label: Selesai, widget: string }
+                          - { name: berjalan, label: Berjalan, widget: string }
+                          - { name: lanjutan, label: Lanjutan, widget: string }
+                          - { name: rekomendasi, label: Rekomendasi, widget: string }
+                  - name: timeline
+                    label: Timeline
+                    widget: object
+                    fields:
+                      - { name: titlePrefix, label: Title Prefix, widget: string }
+                      - { name: subtitle, label: Subtitle, widget: string }
+                  - name: memberCard
+                    label: Member Card
+                    widget: object
+                    fields:
+                      - { name: coordinator, label: Coordinator, widget: string }
+                      - { name: instagram, label: Instagram, widget: string }
+
       - name: hero
         label: Hero Beranda
         file: src/content/siteContent/hero.json
@@ -544,6 +954,7 @@ collections:
               - { name: title, label: Judul, widget: string }
               - { name: highlight, label: Teks Highlight, widget: string }
               - { name: description, label: Deskripsi, widget: text }
+              - { name: imageAlt, label: Image Alt, widget: string, required: false }
               - name: primaryButton
                 label: Tombol Utama
                 widget: object
@@ -648,6 +1059,77 @@ collections:
               - { name: nama, label: Nama, widget: string }
               - { name: nomor, label: Nomor Telepon, widget: string }
               - { name: icon, label: Icon (emoji), widget: string }
+
+      - name: kontak-form
+        label: Form Kontak
+        file: src/content/siteContent/kontak-form.json
+        fields:
+          - name: contactForm
+            label: Contact Form
+            widget: object
+            fields:
+              - { name: title, label: Judul, widget: string }
+              - { name: description, label: Deskripsi, widget: text }
+              - {
+                  name: actionUrl,
+                  label: Action URL (Google Forms),
+                  widget: string,
+                }
+              - {
+                  name: target,
+                  label: Target,
+                  widget: string,
+                  default: _blank,
+                  required: false,
+                }
+              - { name: submitLabel, label: Label Tombol Submit, widget: string }
+              - { name: note, label: Catatan, widget: text, required: false }
+              - name: toast
+                label: Toast
+                widget: object
+                required: false
+                fields:
+                  - { name: message, label: Pesan, widget: string }
+                  - { name: type, label: Type, widget: string, required: false }
+                  - {
+                      name: duration,
+                      label: Durasi (ms),
+                      widget: number,
+                      required: false,
+                    }
+              - name: fields
+                label: Fields
+                widget: list
+                fields:
+                  - { name: id, label: ID, widget: string }
+                  - { name: label, label: Label, widget: string }
+                  - { name: name, label: Name (Google Entry), widget: string }
+                  - {
+                      name: type,
+                      label: Type,
+                      widget: select,
+                      options: ['text', 'textarea', 'select'],
+                    }
+                  - {
+                      name: placeholder,
+                      label: Placeholder,
+                      widget: string,
+                      required: false,
+                    }
+                  - { name: required, label: Required, widget: boolean }
+                  - {
+                      name: rows,
+                      label: Rows,
+                      widget: number,
+                      required: false,
+                    }
+                  - name: options
+                    label: Options (untuk select)
+                    widget: list
+                    required: false
+                    fields:
+                      - { name: label, label: Label, widget: string }
+                      - { name: value, label: Value, widget: string }
 
       - name: about-intro
         label: About Intro
@@ -758,6 +1240,12 @@ collections:
                   - { name: subtitle, label: Subjudul, widget: string }
               - name: location
                 label: Lokasi
+                widget: object
+                fields:
+                  - { name: title, label: Judul, widget: string }
+                  - { name: subtitle, label: Subjudul, widget: string }
+              - name: highlights
+                label: Highlights
                 widget: object
                 fields:
                   - { name: title, label: Judul, widget: string }
@@ -913,6 +1401,139 @@ collections:
                   - { name: umkm, label: UMKM, widget: string }
                   - { name: budaya, label: Budaya, widget: string }
 
+      - name: pages-potensi
+        label: Halaman Potensi
+        file: src/content/siteContent/pages/potensi.json
+        fields:
+          - name: potensiPage
+            label: Konten Potensi
+            widget: object
+            fields:
+              - name: hero
+                label: Hero
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: highlight, label: Highlight, widget: string }
+                  - { name: description, label: Description, widget: text }
+                  - name: stats
+                    label: Stats
+                    widget: list
+                    fields:
+                      - { name: icon, label: Icon, widget: string }
+                      - { name: label, label: Label, widget: string }
+              - name: wisataTags
+                label: Tag Wisata
+                widget: list
+                field: { name: tag, label: Tag, widget: string }
+              - name: wisataSection
+                label: Section Wisata
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: subtitle, label: Subtitle, widget: text }
+                  - { name: ctaLabel, label: CTA Label, widget: string }
+                  - { name: emptyState, label: Empty State, widget: string }
+              - name: wisataCard
+                label: Label Kartu Wisata
+                widget: object
+                fields:
+                  - { name: ticketLabel, label: Ticket, widget: string }
+                  - { name: hoursLabel, label: Hours, widget: string }
+                  - { name: locationLabel, label: Location, widget: string }
+                  - { name: locationValue, label: Location Value, widget: string }
+                  - { name: facilitiesTitle, label: Facilities, widget: string }
+                  - { name: mapsLabel, label: Maps, widget: string }
+                  - { name: whatsAppLabel, label: WhatsApp, widget: string }
+              - name: umkmSection
+                label: Section UMKM
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: subtitle, label: Subtitle, widget: text }
+                  - { name: emptyState, label: Empty State, widget: string }
+              - name: additionalSections
+                label: Section Tambahan
+                widget: object
+                fields:
+                  - {
+                      name: potensiEkonomiTitle,
+                      label: Judul Potensi Ekonomi,
+                      widget: string,
+                    }
+                  - {
+                      name: budayaTradisiTitle,
+                      label: Judul Budaya & Tradisi,
+                      widget: string,
+                    }
+              - name: detailPages
+                label: Detail Pages
+                widget: object
+                fields:
+                  - { name: backLabel, label: Back Label, widget: string }
+                  - { name: shareLabel, label: Share Label, widget: string }
+                  - name: related
+                    label: Related
+                    widget: object
+                    fields:
+                      - { name: wisata, label: Wisata, widget: string }
+                      - { name: umkm, label: UMKM, widget: string }
+                  - name: wisata
+                    label: Detail Wisata
+                    widget: object
+                    fields:
+                      - { name: badgeClosed, label: Badge Closed, widget: string }
+                      - { name: locationLabel, label: Location, widget: string }
+                      - { name: ticketLabel, label: Ticket, widget: string }
+                      - { name: hoursLabel, label: Hours, widget: string }
+                      - {
+                          name: facilitiesTitle,
+                          label: Facilities Title,
+                          widget: string,
+                        }
+                      - { name: galleryTitle, label: Gallery Title, widget: string }
+                  - name: umkm
+                    label: Detail UMKM
+                    widget: object
+                    fields:
+                      - { name: addressLabel, label: Address, widget: string }
+                      - { name: hoursLabel, label: Hours, widget: string }
+                      - { name: productsTitle, label: Products, widget: string }
+                      - { name: galleryTitle, label: Gallery Title, widget: string }
+
+      - name: pages-agenda
+        label: Halaman Agenda
+        file: src/content/siteContent/pages/agenda.json
+        fields:
+          - name: agendaPage
+            label: Konten Agenda
+            widget: object
+            fields:
+              - name: hero
+                label: Hero
+                widget: object
+                fields:
+                  - {
+                      name: titleHighlight,
+                      label: Title Highlight,
+                      widget: string,
+                    }
+                  - { name: titleSuffix, label: Title Suffix, widget: string }
+                  - { name: description, label: Description, widget: text }
+              - name: agendaRutin
+                label: Agenda Rutin
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: subtitle, label: Subtitle, widget: string }
+              - name: beritaTerbaru
+                label: Berita Terbaru
+                widget: object
+                fields:
+                  - { name: title, label: Title, widget: string }
+                  - { name: viewAll, label: View All, widget: string }
+                  - { name: empty, label: Empty, widget: string }
+
       - name: error-pages
         label: Halaman Error
         file: src/content/siteContent/error-pages.json
@@ -952,3 +1573,8 @@ collections:
                       - { name: href, label: Link, widget: string }
                       - { name: icon, label: Icon, widget: string }
                       - { name: label, label: Label, widget: string }
+                  - name: beachFacts
+                    label: Fakta Pantai
+                    widget: list
+                    required: false
+                    field: { name: fact, label: Fakta, widget: string }

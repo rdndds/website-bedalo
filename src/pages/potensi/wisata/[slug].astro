@@ -9,8 +9,9 @@ import RelatedContent from '../../../components/common/RelatedContent.astro';
 import SchemaTouristAttraction from '../../../components/common/SchemaTouristAttraction.astro';
 import SchemaBreadcrumb from '../../../components/common/SchemaBreadcrumb.astro';
 import { LightGallery } from 'astro-lightgallery';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { fasilitasIcons } from '../../../data/constants';
+import { uiStrings } from '../../../data/uiStrings';
 
 export async function getStaticPaths() {
   const wisataEntries = await getCollection('wisata');
@@ -41,6 +42,14 @@ const {
   status,
   galeri,
 } = entry.data;
+
+const potensiEntry = await getEntry('siteContent', 'pages/potensi');
+
+if (!potensiEntry?.data?.potensiPage) {
+  throw new Error('Missing siteContent entry: pages/potensi');
+}
+
+const detailCopy = potensiEntry.data.potensiPage.detailPages;
 
 const relatedWisata = allWisata
   .filter((w) => w.slug !== entry.slug && w.data.kategori === kategori)
@@ -99,7 +108,7 @@ const relatedWisata = allWisata
             {
               status === 'tutup-sementara' && (
                 <span class="px-3 py-1.5 bg-red-500 text-white text-sm font-semibold rounded-full shadow-lg">
-                  ⚠️ Tutup Sementara
+                  {detailCopy.wisata.badgeClosed}
                 </span>
               )
             }
@@ -129,7 +138,9 @@ const relatedWisata = allWisata
             >
               <span class="text-xl">📍</span>
             </div>
-            <span class="text-sm text-gray-600">Lokasi</span>
+            <span class="text-sm text-gray-600">
+              {detailCopy.wisata.locationLabel}
+            </span>
           </div>
           <p class="font-semibold text-gray-900">{lokasi}</p>
         </div>
@@ -144,7 +155,9 @@ const relatedWisata = allWisata
             >
               <span class="text-xl">🎫</span>
             </div>
-            <span class="text-sm text-gray-600">Tiket Masuk</span>
+            <span class="text-sm text-gray-600">
+              {detailCopy.wisata.ticketLabel}
+            </span>
           </div>
           <p class="font-semibold text-gray-900">{tiket}</p>
         </div>
@@ -159,7 +172,9 @@ const relatedWisata = allWisata
             >
               <span class="text-xl">🕐</span>
             </div>
-            <span class="text-sm text-gray-600">Jam Buka</span>
+            <span class="text-sm text-gray-600">
+              {detailCopy.wisata.hoursLabel}
+            </span>
           </div>
           <p class="font-semibold text-gray-900">{jamBuka}</p>
         </div>
@@ -169,7 +184,7 @@ const relatedWisata = allWisata
         <h2
           class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
         >
-          <span class="text-2xl">🏕️</span> Fasilitas
+          <span class="text-2xl">🏕️</span> {detailCopy.wisata.facilitiesTitle}
         </h2>
         <div class="flex flex-wrap gap-3">
           {
@@ -199,7 +214,7 @@ const relatedWisata = allWisata
         galeri && galeri.length > 0 && (
           <div class="mb-10" data-aos="fade-up">
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="text-2xl">📷</span> Galeri
+              <span class="text-2xl">📷</span> {detailCopy.wisata.galleryTitle}
             </h2>
             <LightGallery
               options={{ thumbnail: true }}
@@ -236,19 +251,21 @@ const relatedWisata = allWisata
       </div>
 
       <div class="mb-10" data-aos="fade-up">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Bagikan:</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          {uiStrings.common.share}
+        </h3>
         <ShareButtons title={title} />
       </div>
 
       <RelatedContent
         items={relatedWisata}
         type="wisata"
-        title="Wisata Lainnya"
+        title={detailCopy.related.wisata}
       />
 
       <div class="mt-10">
         <Button href="/potensi" variant="outline">
-          ← Kembali ke Potensi Dusun
+          {detailCopy.backLabel}
         </Button>
       </div>
     </div>

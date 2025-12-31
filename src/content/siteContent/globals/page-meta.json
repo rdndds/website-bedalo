@@ -1,0 +1,77 @@
+{
+  "pageMeta": [
+    {
+      "id": "home",
+      "path": "/",
+      "title": "Beranda",
+      "description": "Dusun Bedalo - Surga tersembunyi di pesisir selatan Gunungkidul dengan 4 pantai eksotis, budaya yang kaya, dan keramahan warga yang hangat."
+    },
+    {
+      "id": "profil",
+      "path": "/profil",
+      "title": "Profil Dusun",
+      "description": "Profil lengkap Dusun Bedalo - data penduduk, potensi ekonomi, budaya, dan informasi wilayah."
+    },
+    {
+      "id": "potensi",
+      "path": "/potensi",
+      "title": "Potensi Dusun",
+      "description": "Jelajahi potensi wisata dan UMKM Dusun Bedalo - 4 pantai eksotis dan produk lokal berkualitas."
+    },
+    {
+      "id": "layanan",
+      "path": "/layanan",
+      "title": "Layanan & Fasilitas",
+      "description": "Layanan dan fasilitas publik di Dusun Bedalo - kesehatan, pendidikan, peribadatan."
+    },
+    {
+      "id": "agenda",
+      "path": "/agenda",
+      "title": "Agenda",
+      "description": "Agenda kegiatan rutin warga Dusun Bedalo."
+    },
+    {
+      "id": "berita",
+      "path": "/berita",
+      "title": "Berita",
+      "titleTemplate": "Berita - Halaman {page}",
+      "description": "Berita dan informasi terbaru dari Dusun Bedalo."
+    },
+    {
+      "id": "galeri",
+      "path": "/galeri",
+      "title": "Galeri",
+      "description": "Galeri foto dan video kegiatan dan keindahan Dusun Bedalo."
+    },
+    {
+      "id": "kontak",
+      "path": "/kontak",
+      "title": "Kontak",
+      "description": "Hubungi Dusun Bedalo untuk informasi, kerjasama, atau sampaikan aspirasi Anda."
+    },
+    {
+      "id": "peta-situs",
+      "path": "/peta-situs",
+      "title": "Peta Situs",
+      "description": "Peta situs lengkap website Dusun Bedalo"
+    },
+    {
+      "id": "tentang-proyek",
+      "path": "/tentang-proyek",
+      "title": "Tentang Proyek",
+      "description": "Tentang proyek Digitalisasi Dusun Bedalo oleh KKN UIN Sunan Kalijaga 2025."
+    },
+    {
+      "id": "tentang-kkn",
+      "path": "/tentang-kkn",
+      "titleTemplate": "Tentang KKN {kode} di Dusun Bedalo",
+      "descriptionTemplate": "{tema}. KKN {kode} {kampus} mengabdi di Dusun Bedalo."
+    },
+    {
+      "id": "not-found",
+      "path": "/404",
+      "title": "Halaman Tidak Ditemukan",
+      "description": "Halaman yang Anda cari tidak ditemukan. Jelajahi halaman lain di website Dusun Bedalo."
+    }
+  ]
+}

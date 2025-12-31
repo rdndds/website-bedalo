@@ -1,8 +1,16 @@
 ---
 import { getEntry } from 'astro:content';
+import { uiStrings } from '../../data/uiStrings';
 
 const data = await getEntry('siteContent', 'highlights');
 const highlights = data?.data?.highlights || [];
+
+const sectionData = await getEntry('siteContent', 'section-titles');
+const sectionTitles = sectionData?.data?.sectionTitles;
+
+if (!sectionTitles?.highlights) {
+  throw new Error('Missing siteContent entry: section-titles.highlights');
+}
 
 const bentoStyles = [
   {
@@ -32,11 +40,12 @@ const bentoStyles = [
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12" data-aos="fade-up">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-        Kenapa Harus ke <span class="gradient-text">Bedalo</span>?
+        {uiStrings.home.highlights.titlePrefix}{' '}
+        <span class="gradient-text">{uiStrings.home.highlights.titleHighlight}</span>
+        {uiStrings.home.highlights.titleSuffix}
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Temukan keindahan alam, kearifan lokal, dan pengalaman otentik pedesaan
-        pesisir Gunungkidul.
+        {sectionTitles.highlights.subtitle}
       </p>
     </div>
 
@@ -83,7 +92,7 @@ const bentoStyles = [
                 </div>
 
                 <div class="mt-4 inline-flex items-center gap-2 text-white/90 font-medium group-hover:gap-3 transition-all">
-                  <span class="text-sm">Selengkapnya</span>
+                  <span class="text-sm">{uiStrings.home.highlights.moreLabel}</span>
                   <svg
                     class="w-4 h-4 group-hover:translate-x-1 transition-transform"
                     fill="none"

@@ -4,6 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { LightGallery } from 'astro-lightgallery';
 import { galeriKategoriList } from '../data/constants';
+import { uiStrings } from '../data/uiStrings';
 
 const ITEMS_PER_PAGE = 12;
 
@@ -36,19 +37,17 @@ function getYouTubeThumbnail(url: string): string {
 }
 ---
 
-<BaseLayout
-  title="Galeri"
-  description="Galeri foto dan video kegiatan dan keindahan Dusun Bedalo."
->
+<BaseLayout>
   <section class="py-12 lg:py-16">
     <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-8" data-aos="fade-up">
         <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
-          <span class="gradient-text">Galeri</span> Media
+          <span class="gradient-text">{uiStrings.pages.galeri.titleHighlight}</span>
+          {' '}
+          {uiStrings.pages.galeri.titleSuffix}
         </h1>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-4">
-          Dokumentasi keindahan alam, kegiatan warga, dan produk UMKM Dusun
-          Bedalo.
+          {uiStrings.pages.galeri.description}
         </p>
         <div class="inline-flex items-center gap-4 text-sm text-gray-500">
           <span class="flex items-center gap-1">
@@ -70,7 +69,7 @@ function getYouTubeThumbnail(url: string): string {
             class="type-tab px-5 py-2.5 rounded-lg font-medium transition-all bg-white text-primary shadow-sm"
             data-type="foto"
           >
-            📷 Foto
+            {uiStrings.pages.galeri.tabPhoto}
             <span class="text-xs opacity-70 ml-1">({fotoItems.length})</span>
           </button>
           <button
@@ -78,7 +77,7 @@ function getYouTubeThumbnail(url: string): string {
             class="type-tab px-5 py-2.5 rounded-lg font-medium transition-all text-gray-600 hover:text-gray-900"
             data-type="video"
           >
-            🎬 Video
+            {uiStrings.pages.galeri.tabVideo}
             <span class="text-xs opacity-70 ml-1">({videoItems.length})</span>
           </button>
         </div>
@@ -108,9 +107,10 @@ function getYouTubeThumbnail(url: string): string {
       </div>
 
       <div id="filter-status" class="text-center text-sm text-gray-500 mb-8">
-        Menampilkan <strong id="visible-count" class="text-gray-900">
-          {fotoItems.length}
-        </strong> foto
+        {uiStrings.pages.galeri.status.prefix}{' '}
+        <strong id="visible-count" class="text-gray-900">{fotoItems.length}</strong>
+        {' '}
+        {uiStrings.pages.galeri.status.typePhoto}
       </div>
 
       <div id="foto-section">
@@ -148,7 +148,7 @@ function getYouTubeThumbnail(url: string): string {
                     )}
                     {item.data.featured && (
                       <span class="absolute top-3 right-3 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">
-                        ⭐ Featured
+                        ⭐ {uiStrings.common.featured}
                       </span>
                     )}
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -182,7 +182,7 @@ function getYouTubeThumbnail(url: string): string {
                     data-total={fotoWithUrls.length}
                     data-per-page={ITEMS_PER_PAGE}
                   >
-                    <span>Muat Lebih Banyak</span>
+                    <span>{uiStrings.common.loadMore}</span>
                     <span id="foto-count" class="text-sm opacity-80">
                       ({ITEMS_PER_PAGE}/{fotoWithUrls.length})
                     </span>
@@ -193,7 +193,9 @@ function getYouTubeThumbnail(url: string): string {
           ) : (
             <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
               <div class="text-7xl mb-4">📷</div>
-              <p class="text-gray-500 text-lg">Belum ada foto di galeri.</p>
+              <p class="text-gray-500 text-lg">
+                {uiStrings.pages.galeri.emptyPhoto}
+              </p>
             </div>
           )
         }
@@ -237,7 +239,7 @@ function getYouTubeThumbnail(url: string): string {
                     </div>
                     {item.data.featured && (
                       <span class="absolute top-3 right-3 px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full">
-                        ⭐ Featured
+                        ⭐ {uiStrings.common.featured}
                       </span>
                     )}
                     <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
@@ -253,7 +255,9 @@ function getYouTubeThumbnail(url: string): string {
           ) : (
             <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
               <div class="text-7xl mb-4">🎬</div>
-              <p class="text-gray-500 text-lg">Belum ada video di galeri.</p>
+              <p class="text-gray-500 text-lg">
+                {uiStrings.pages.galeri.emptyVideo}
+              </p>
             </div>
           )
         }
@@ -265,7 +269,7 @@ function getYouTubeThumbnail(url: string): string {
       >
         <div class="text-7xl mb-4">🔍</div>
         <p class="text-gray-500 text-lg">
-          Tidak ada hasil yang cocok dengan filter.
+          {uiStrings.pages.galeri.noResults}
         </p>
       </div>
     </div>
@@ -273,6 +277,8 @@ function getYouTubeThumbnail(url: string): string {
 </BaseLayout>
 
 <script>
+  import { uiStrings } from '../data/uiStrings';
+
   let cleanupFns: (() => void)[] = [];
 
   document.addEventListener('astro:page-load', () => {
@@ -365,13 +371,15 @@ function getYouTubeThumbnail(url: string): string {
           : document.querySelectorAll('.video-item:not(.hidden)');
 
       const count = items.length;
-      const typeLabel = activeType === 'foto' ? 'foto' : 'video';
+      const status = uiStrings.pages.galeri.status;
+      const typeLabel =
+        activeType === 'foto' ? status.typePhoto : status.typeVideo;
       const categoryLabel =
         activeCategory === 'semua'
           ? ''
-          : ` kategori <strong class="text-gray-900">${activeCategory}</strong>`;
+          : `${status.categoryPrefix}${activeCategory}`;
 
-      filterStatus.innerHTML = `Menampilkan <strong class="text-gray-900">${count}</strong> ${typeLabel}${categoryLabel}`;
+      filterStatus.innerHTML = `${status.prefix} <strong class="text-gray-900">${count}</strong> ${typeLabel}${categoryLabel}`;
     }
 
     // Filter function

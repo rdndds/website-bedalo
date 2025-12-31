@@ -26,11 +26,14 @@ const programs = allPrograms.filter((p) => p.data.kknKode === kode);
 const allMembers = await getCollection('kknMember');
 const members = allMembers.filter((m) => m.data.kknKode === kode);
 
-const pageTitle = `Tentang KKN ${kode} di Dusun Bedalo`;
-const pageDescription = `${kkn.data.tema}. KKN ${kode} ${kkn.data.kampus} mengabdi di Dusun Bedalo.`;
+const metaVars = {
+  kode,
+  tema: kkn.data.tema,
+  kampus: kkn.data.kampus,
+};
 ---
 
-<BaseLayout title={pageTitle} description={pageDescription}>
+<BaseLayout metaId="tentang-kkn" metaVars={metaVars}>
   <KknHero
     kode={kode}
     kampus={kkn.data.kampus}

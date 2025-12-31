@@ -6,24 +6,12 @@ import Button from '../components/common/Button.astro';
 const errorData = await getEntry('siteContent', 'error-pages');
 const notFound = errorData?.data?.errorPages?.notFound;
 
-const quickLinks = notFound?.quickLinks || [
-  { href: '/potensi', icon: '🏖️', label: 'Wisata' },
-  { href: '/potensi', icon: '🛍️', label: 'UMKM' },
-  { href: '/galeri', icon: '📷', label: 'Galeri' },
-  { href: '/profil', icon: '🏘️', label: 'Profil' },
-  { href: '/berita', icon: '📰', label: 'Berita' },
-  { href: '/kontak', icon: '📞', label: 'Kontak' },
-];
-
-const beachFacts = notFound?.beachFacts || [
-  'Dusun Bedalo memiliki 4 pantai eksotis dalam satu wilayah',
-];
+const quickLinks = notFound?.quickLinks || [];
+const beachFacts = notFound?.beachFacts || [];
+const hasBeachFacts = beachFacts.length > 0;
 ---
 
-<BaseLayout
-  title="Halaman Tidak Ditemukan"
-  description="Maaf, halaman yang Anda cari tidak ditemukan."
->
+<BaseLayout title={notFound?.title} description={notFound?.description} metaId="not-found">
   <section
     class="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50 via-white to-sky-50/50 flex items-center justify-center py-12 px-4"
   >
@@ -258,42 +246,46 @@ const beachFacts = notFound?.beachFacts || [
         </div>
       </div>
 
-      <!-- Beach Fact -->
-      <div class="mt-8 text-center">
-        <div
-          class="fact-container inline-flex items-center gap-3 px-5 py-3 bg-white rounded-full border border-gray-100 shadow-sm"
-        >
-          <span class="text-xl">💡</span>
-          <span class="fact-text text-sm text-gray-500">
-            <span class="text-gray-400">Tahukah Anda?</span>
-            <span class="fact-content ml-1 text-gray-600"></span>
-          </span>
-        </div>
-      </div>
+      {hasBeachFacts && (
+        <>
+          <!-- Beach Fact -->
+          <div class="mt-8 text-center">
+            <div
+              class="fact-container inline-flex items-center gap-3 px-5 py-3 bg-white rounded-full border border-gray-100 shadow-sm"
+            >
+              <span class="text-xl">💡</span>
+              <span class="fact-text text-sm text-gray-500">
+                <span class="text-gray-400">Tahukah Anda?</span>
+                <span class="fact-content ml-1 text-gray-600"></span>
+              </span>
+            </div>
+          </div>
+
+          <script is:inline define:vars={{ beachFacts }}>
+            const facts = beachFacts;
+            let currentIndex = 0;
+            const factElement = document.querySelector('.fact-content');
+
+            function showFact() {
+              if (!factElement || facts.length === 0) return;
+              factElement.style.opacity = '0';
+              setTimeout(() => {
+                factElement.textContent = facts[currentIndex];
+                factElement.style.opacity = '1';
+                currentIndex = (currentIndex + 1) % facts.length;
+              }, 300);
+            }
+
+            showFact();
+            if (facts.length > 1) {
+              setInterval(showFact, 5000);
+            }
+          </script>
+        </>
+      )}
     </div>
   </section>
 </BaseLayout>
-
-<script is:inline define:vars={{ beachFacts }}>
-  const facts = beachFacts;
-  let currentIndex = 0;
-  const factElement = document.querySelector('.fact-content');
-
-  function showFact() {
-    if (!factElement) return;
-    factElement.style.opacity = '0';
-    setTimeout(() => {
-      factElement.textContent = facts[currentIndex];
-      factElement.style.opacity = '1';
-      currentIndex = (currentIndex + 1) % facts.length;
-    }, 300);
-  }
-
-  showFact();
-  if (facts.length > 1) {
-    setInterval(showFact, 5000);
-  }
-</script>
 
 <style>
   .text-404 {

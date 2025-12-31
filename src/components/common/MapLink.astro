@@ -1,4 +1,6 @@
 ---
+import { uiStrings } from '../../data/uiStrings';
+
 interface Props {
   url: string;
   class?: string;
@@ -22,5 +24,5 @@ const { url, class: className } = Astro.props;
     >
     </path>
   </svg>
-  Buka di Maps
+  {uiStrings.common.openMapsShort}
 </a>

@@ -1,11 +1,16 @@
 ---
 import { footerNavLinks, footerInfoLinks } from '../../data/navigation';
 import { siteConfig } from '../../data/siteConfig';
+import { uiStrings } from '../../data/uiStrings';
 
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="bg-gray-950 pt-12 pb-6" role="contentinfo" aria-label="Footer">
+<footer
+  class="bg-gray-950 pt-12 pb-6"
+  role="contentinfo"
+  aria-label={uiStrings.aria.footer}
+>
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Top cards grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
@@ -15,15 +20,25 @@ const currentYear = new Date().getFullYear();
         data-aos="fade-right"
       >
         <h3 class="font-bold text-white flex items-center gap-2 mb-4">
-          <span class="text-xl">📍</span> Lokasi
+          <span class="text-xl">📍</span> {uiStrings.footer.locationTitle}
         </h3>
         <div class="space-y-1 text-sm text-blue-100 mb-4">
-          <p class="font-medium text-white">Dusun {siteConfig.address.dusun}</p>
-          <p>Kalurahan {siteConfig.address.kalurahan}</p>
-          <p>Kapanewon {siteConfig.address.kapanewon}</p>
-          <p>Kabupaten {siteConfig.address.kabupaten}</p>
+          <p class="font-medium text-white">
+            {uiStrings.footer.address.dusun} {siteConfig.address.dusun}
+          </p>
+          <p>
+            {uiStrings.footer.address.kalurahan} {siteConfig.address.kalurahan}
+          </p>
+          <p>
+            {uiStrings.footer.address.kapanewon} {siteConfig.address.kapanewon}
+          </p>
+          <p>
+            {uiStrings.footer.address.kabupaten} {siteConfig.address.kabupaten}
+          </p>
           <p>{siteConfig.address.provinsi}</p>
-          <p class="text-blue-200">Kode Pos: {siteConfig.address.kodePos}</p>
+          <p class="text-blue-200">
+            {uiStrings.footer.address.kodePos} {siteConfig.address.kodePos}
+          </p>
         </div>
         <a
           href={siteConfig.mapsUrl}
@@ -52,7 +67,7 @@ const currentYear = new Date().getFullYear();
             >
             </path>
           </svg>
-          Buka di Google Maps
+          {uiStrings.footer.openMaps}
         </a>
       </div>
 
@@ -63,7 +78,7 @@ const currentYear = new Date().getFullYear();
         data-aos-delay="100"
       >
         <h3 class="font-bold text-white flex items-center gap-2 mb-4">
-          <span class="text-xl">🔗</span> Navigasi
+          <span class="text-xl">🔗</span> {uiStrings.footer.navigationTitle}
         </h3>
         <ul class="space-y-2">
           {
@@ -89,7 +104,7 @@ const currentYear = new Date().getFullYear();
         data-aos-delay="200"
       >
         <h3 class="font-bold text-white flex items-center gap-2 mb-4">
-          <span class="text-xl">📚</span> Informasi
+          <span class="text-xl">📚</span> {uiStrings.footer.infoTitle}
         </h3>
         <ul class="space-y-2">
           {
@@ -108,8 +123,7 @@ const currentYear = new Date().getFullYear();
         </ul>
         <div class="mt-4 pt-4 border-t border-blue-400/30">
           <p class="text-xs text-blue-200">
-            Website resmi Dusun Bedalo untuk informasi wisata, UMKM, dan
-            kegiatan warga.
+            {uiStrings.footer.officialDescription}
           </p>
         </div>
       </div>
@@ -130,12 +144,12 @@ const currentYear = new Date().getFullYear();
             {siteConfig.name}
           </p>
           <p class="text-xs text-blue-200">
-            Dibangun oleh{' '}
+            {uiStrings.footer.builtByPrefix}{' '}
             <a
               href="/tentang-proyek"
               class="text-white hover:text-accent transition-colors"
             >
-              KKN UIN Sunan Kalijaga
+              {uiStrings.footer.builtByName}
             </a>
           </p>
         </div>

@@ -1,5 +1,6 @@
 ---
 import { generateWhatsAppLink } from '../../lib/utils';
+import { uiStrings } from '../../data/uiStrings';
 
 interface Props {
   phone: string;
@@ -26,5 +27,5 @@ const waLink = generateWhatsAppLink(phone, message);
     >
     </path>
   </svg>
-  Hubungi via WhatsApp
+  {uiStrings.common.contactViaWhatsApp}
 </a>

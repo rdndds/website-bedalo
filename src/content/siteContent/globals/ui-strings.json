@@ -1,0 +1,200 @@
+{
+  "uiStrings": {
+    "aria": {
+      "headerNav": "Menu utama",
+      "mainContent": "Konten utama",
+      "footer": "Footer",
+      "mobileMenuToggle": "Buka menu",
+      "mobileMenuClose": "Tutup menu"
+    },
+    "common": {
+      "all": "Semua",
+      "category": "Kategori",
+      "archive": "Arsip",
+      "back": "Kembali",
+      "share": "Bagikan:",
+      "openMapsShort": "Buka di Maps",
+      "contactViaWhatsApp": "Hubungi via WhatsApp",
+      "previous": "Sebelumnya",
+      "next": "Selanjutnya",
+      "close": "Tutup",
+      "skipToContent": "Langsung ke konten",
+      "readMore": "Baca Selengkapnya",
+      "loadMore": "Muat Lebih Banyak",
+      "featured": "Featured",
+      "photo": "Foto",
+      "video": "Video"
+    },
+    "share": {
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "copyLink": "Salin Link",
+      "copiedToast": "Link berhasil disalin!"
+    },
+    "footer": {
+      "locationTitle": "Lokasi",
+      "navigationTitle": "Navigasi",
+      "infoTitle": "Informasi",
+      "openMaps": "Buka di Google Maps",
+      "officialDescription": "Website resmi Dusun Bedalo untuk informasi wisata, UMKM, dan kegiatan warga.",
+      "builtByPrefix": "Dibangun oleh",
+      "builtByName": "KKN UIN Sunan Kalijaga",
+      "address": {
+        "dusun": "Dusun",
+        "kalurahan": "Kalurahan",
+        "kapanewon": "Kapanewon",
+        "kabupaten": "Kabupaten",
+        "kodePos": "Kode Pos:"
+      }
+    },
+    "pages": {
+      "galeri": {
+        "titleHighlight": "Galeri",
+        "titleSuffix": "Media",
+        "description": "Dokumentasi keindahan alam, kegiatan warga, dan produk UMKM Dusun Bedalo.",
+        "tabPhoto": "📷 Foto",
+        "tabVideo": "🎬 Video",
+        "status": {
+          "prefix": "Menampilkan",
+          "typePhoto": "foto",
+          "typeVideo": "video",
+          "categoryPrefix": " • Kategori: "
+        },
+        "emptyPhoto": "Belum ada foto di galeri.",
+        "emptyVideo": "Belum ada video di galeri.",
+        "noResults": "Tidak ada hasil yang cocok dengan filter."
+      },
+      "berita": {
+        "titleHighlight": "Berita",
+        "titleSuffix": "Dusun Bedalo",
+        "description": "Informasi dan kabar terbaru seputar kegiatan warga Dusun Bedalo.",
+        "latestTitle": "Berita Terbaru",
+        "loading": "Memuat berita...",
+        "countSuffix": "berita",
+        "empty": {
+          "noResults": "Tidak ada berita untuk filter ini",
+          "noPosts": "Belum ada berita.",
+          "reset": "Tampilkan semua berita",
+          "clearFilter": "× Hapus filter"
+        },
+        "byAuthorPrefix": "oleh",
+        "defaultAuthor": "Admin Bedalo"
+      }
+    },
+    "home": {
+      "highlights": {
+        "titlePrefix": "Kenapa Harus ke",
+        "titleHighlight": "Bedalo",
+        "titleSuffix": "?",
+        "moreLabel": "Selengkapnya"
+      },
+      "wisata": {
+        "explore": "Jelajahi",
+        "viewAll": "Lihat Semua Destinasi",
+        "carouselPrevious": "Previous",
+        "carouselNext": "Next"
+      },
+      "umkm": {
+        "viewDetail": "Lihat Detail",
+        "viewAll": "Lihat Semua UMKM"
+      },
+      "berita": {
+        "badgeLatest": "TERBARU",
+        "viewAll": "Lihat Semua Berita"
+      },
+      "galeri": {
+        "viewAll": "Lihat Galeri Lengkap"
+      },
+      "location": {
+        "mapTitle": "Lokasi Dusun Bedalo",
+        "addressLabel": "Alamat Lengkap",
+        "contactTitle": "Hubungi Kami",
+        "quickContactLabel": "Kontak Cepat:",
+        "whatsAppLabel": "WhatsApp",
+        "distanceToPrefix": "ke"
+      }
+    },
+    "kkn": {
+      "hero": {
+        "themeLabel": "Tema KKN",
+        "viewPrograms": "Lihat Program Kerja",
+        "viewGallery": "Lihat Galeri",
+        "imageAltTemplate": "Hero KKN {kode} {siteName}"
+      },
+      "impact": {
+        "titlePrefix": "Dampak & Hasil",
+        "subtitle": "Kontribusi nyata untuk kemajuan"
+      },
+      "gallery": {
+        "titlePrefix": "Galeri Foto",
+        "subtitleTemplate": "Dokumentasi foto kegiatan KKN {kode} di {siteName}"
+      },
+      "videos": {
+        "titlePrefix": "Video",
+        "subtitleTemplate": "Dokumentasi video kegiatan KKN {kode} di {siteName}",
+        "iframeTitleTemplate": "Video KKN {kode}"
+      },
+      "socials": {
+        "titlePrefix": "Media Sosial",
+        "subtitleTemplate": "Ikuti perjalanan dan kegiatan KKN {kode} di media sosial",
+        "instagramLabelTemplate": "Instagram KKN {kode}",
+        "tiktokLabelTemplate": "TikTok KKN {kode}",
+        "youtubeLabelTemplate": "YouTube KKN {kode}",
+        "shortVideoLabel": "Video pendek kegiatan",
+        "documentationLabel": "Video dokumentasi",
+        "blogLabel": "Blog atau website",
+        "photosLabel": "Foto & story kegiatan",
+        "otherLinksLabel": "Link Lainnya"
+      },
+      "members": {
+        "titlePrefix": "Tim",
+        "subtitleTemplate": "Kenali anggota tim KKN {kode} yang mengabdi di {siteName}",
+        "filterAll": "Semua",
+        "empty": "Belum ada data anggota.",
+        "emptyDivision": "Tidak ada anggota di divisi ini."
+      },
+      "notes": {
+        "titlePrefix": "Catatan untuk",
+        "titleHighlight": "KKN Berikutnya",
+        "subtitleTemplate": "Rekomendasi dan catatan penting dari KKN {kode} untuk periode selanjutnya",
+        "typeLabels": {
+          "lanjutan": "Program Lanjutan",
+          "saran": "Saran",
+          "peringatan": "Peringatan"
+        }
+      },
+      "programs": {
+        "titlePrefix": "Program Kerja",
+        "impactLabel": "Dampak:",
+        "empty": "Belum ada program kerja.",
+        "noMatch": "Tidak ada program yang cocok dengan filter.",
+        "subtitle": "Daftar program kerja yang dilaksanakan selama periode KKN",
+        "allStatus": "Semua Status",
+        "categoryLabels": {
+          "semua": "Semua",
+          "pendidikan": "Pendidikan",
+          "kesehatan": "Kesehatan",
+          "ekonomi": "Ekonomi",
+          "lingkungan": "Lingkungan",
+          "keagamaan": "Keagamaan",
+          "pariwisata": "Pariwisata",
+          "lainnya": "Lainnya"
+        },
+        "statusLabels": {
+          "selesai": "Selesai",
+          "berjalan": "Berjalan",
+          "lanjutan": "Lanjutan",
+          "rekomendasi": "Rekomendasi"
+        }
+      },
+      "timeline": {
+        "titlePrefix": "Timeline",
+        "subtitle": "Perjalanan kegiatan KKN dari awal hingga akhir"
+      },
+      "memberCard": {
+        "coordinator": "Koordinator",
+        "instagram": "Instagram"
+      }
+    }
+  }
+}

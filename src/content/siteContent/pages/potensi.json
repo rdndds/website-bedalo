@@ -1,0 +1,65 @@
+{
+  "potensiPage": {
+    "hero": {
+      "title": "Potensi",
+      "highlight": "Dusun Bedalo",
+      "description": "Temukan keindahan wisata alam dan dukung ekonomi lokal melalui produk-produk UMKM khas Dusun Bedalo.",
+      "stats": [
+        { "icon": "🏖️", "label": "Destinasi Wisata" },
+        { "icon": "🛍️", "label": "UMKM" }
+      ]
+    },
+    "wisataTags": [
+      "Paling Populer",
+      "Tersembunyi",
+      "Favorit Lokal",
+      "Pemandangan Terbaik"
+    ],
+    "wisataSection": {
+      "title": "Destinasi Wisata",
+      "subtitle": "Dusun Bedalo memiliki 4 pantai eksotis yang masih alami dan sepi. Nikmati keindahan pesisir selatan Gunungkidul yang memukau.",
+      "ctaLabel": "Jelajahi Destinasi",
+      "emptyState": "Belum ada data wisata."
+    },
+    "wisataCard": {
+      "ticketLabel": "Tiket",
+      "hoursLabel": "Jam Buka",
+      "locationLabel": "Lokasi",
+      "locationValue": "Bedalo",
+      "facilitiesTitle": "Fasilitas",
+      "mapsLabel": "Maps",
+      "whatsAppLabel": "WhatsApp"
+    },
+    "umkmSection": {
+      "title": "UMKM & Produk Lokal",
+      "subtitle": "Dukung ekonomi lokal dengan membeli produk-produk khas Dusun Bedalo. Dari makanan tradisional hingga kerajinan tangan yang unik.",
+      "emptyState": "Belum ada data UMKM."
+    },
+    "additionalSections": {
+      "potensiEkonomiTitle": "Potensi Ekonomi",
+      "budayaTradisiTitle": "Budaya & Tradisi"
+    },
+    "detailPages": {
+      "backLabel": "← Kembali ke Potensi Dusun",
+      "shareLabel": "Bagikan:",
+      "related": {
+        "wisata": "Wisata Lainnya",
+        "umkm": "UMKM Lainnya"
+      },
+      "wisata": {
+        "badgeClosed": "⚠️ Tutup Sementara",
+        "locationLabel": "Lokasi",
+        "ticketLabel": "Tiket Masuk",
+        "hoursLabel": "Jam Buka",
+        "facilitiesTitle": "Fasilitas",
+        "galleryTitle": "Galeri"
+      },
+      "umkm": {
+        "addressLabel": "Alamat",
+        "hoursLabel": "Jam Operasional",
+        "productsTitle": "Produk",
+        "galleryTitle": "Galeri Produk"
+      }
+    }
+  }
+}

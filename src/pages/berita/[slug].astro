@@ -8,6 +8,7 @@ import SchemaBreadcrumb from '../../components/common/SchemaBreadcrumb.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { formatDate } from '../../lib/utils';
 import { kategoriBeritaColors } from '../../data/constants';
+import { uiStrings } from '../../data/uiStrings';
 
 export async function getStaticPaths() {
   const beritaEntries = await getCollection('berita');
@@ -93,7 +94,9 @@ const otherBerita = allBerita
       </div>
 
       <div class="mb-10" data-aos="fade-up">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Bagikan:</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          {uiStrings.common.share}
+        </h3>
         <ShareButtons title={title} />
       </div>
 

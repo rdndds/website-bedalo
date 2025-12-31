@@ -291,12 +291,261 @@ const agendaCollection = defineCollection({
 const siteContentCollection = defineCollection({
   type: 'data',
   schema: z.object({
+    // For globals/page-meta.json
+    pageMeta: z
+      .array(
+        z.object({
+          id: z.string(),
+          path: z.string(),
+          title: z.string().optional(),
+          titleTemplate: z.string().optional(),
+          description: z.string().optional(),
+          descriptionTemplate: z.string().optional(),
+        })
+      )
+      .optional(),
+    // For globals/ui-strings.json
+    uiStrings: z
+      .object({
+        aria: z
+          .object({
+            headerNav: z.string(),
+            mainContent: z.string(),
+            footer: z.string().optional(),
+            mobileMenuToggle: z.string(),
+            mobileMenuClose: z.string(),
+          })
+          .optional(),
+        common: z
+          .object({
+            all: z.string(),
+            category: z.string(),
+            archive: z.string(),
+            back: z.string().optional(),
+            share: z.string().optional(),
+            openMapsShort: z.string().optional(),
+            contactViaWhatsApp: z.string().optional(),
+            previous: z.string(),
+            next: z.string(),
+            close: z.string().optional(),
+            skipToContent: z.string().optional(),
+            readMore: z.string(),
+            loadMore: z.string(),
+            featured: z.string(),
+            photo: z.string(),
+            video: z.string(),
+          })
+          .optional(),
+        share: z
+          .object({
+            whatsapp: z.string(),
+            facebook: z.string(),
+            copyLink: z.string(),
+            copiedToast: z.string(),
+          })
+          .optional(),
+        footer: z
+          .object({
+            locationTitle: z.string(),
+            navigationTitle: z.string(),
+            infoTitle: z.string(),
+            openMaps: z.string(),
+            officialDescription: z.string(),
+            builtByPrefix: z.string(),
+            builtByName: z.string().optional(),
+            address: z
+              .object({
+                dusun: z.string(),
+                kalurahan: z.string(),
+                kapanewon: z.string(),
+                kabupaten: z.string(),
+                kodePos: z.string(),
+              })
+              .optional(),
+          })
+          .optional(),
+        pages: z
+          .object({
+            galeri: z
+              .object({
+                titleHighlight: z.string(),
+                titleSuffix: z.string(),
+                description: z.string(),
+                tabPhoto: z.string(),
+                tabVideo: z.string(),
+                status: z.object({
+                  prefix: z.string(),
+                  typePhoto: z.string(),
+                  typeVideo: z.string(),
+                  categoryPrefix: z.string(),
+                }),
+                emptyPhoto: z.string().optional(),
+                emptyVideo: z.string().optional(),
+                noResults: z.string(),
+              })
+              .optional(),
+            berita: z
+              .object({
+                titleHighlight: z.string(),
+                titleSuffix: z.string(),
+                description: z.string(),
+                latestTitle: z.string(),
+                loading: z.string(),
+                countSuffix: z.string().optional(),
+                empty: z.object({
+                  noResults: z.string(),
+                  noPosts: z.string().optional(),
+                  reset: z.string(),
+                  clearFilter: z.string(),
+                }),
+                byAuthorPrefix: z.string(),
+                defaultAuthor: z.string(),
+              })
+              .optional(),
+          })
+          .optional(),
+        home: z
+          .object({
+            highlights: z
+              .object({
+                titlePrefix: z.string(),
+                titleHighlight: z.string(),
+                titleSuffix: z.string(),
+                moreLabel: z.string(),
+              })
+              .optional(),
+            wisata: z
+              .object({
+                explore: z.string(),
+                viewAll: z.string(),
+                carouselPrevious: z.string(),
+                carouselNext: z.string(),
+              })
+              .optional(),
+            umkm: z
+              .object({
+                viewDetail: z.string(),
+                viewAll: z.string(),
+              })
+              .optional(),
+            berita: z
+              .object({
+                badgeLatest: z.string(),
+                viewAll: z.string(),
+              })
+              .optional(),
+            galeri: z
+              .object({
+                viewAll: z.string(),
+              })
+              .optional(),
+            location: z
+              .object({
+                mapTitle: z.string(),
+                addressLabel: z.string(),
+                contactTitle: z.string(),
+                quickContactLabel: z.string(),
+                whatsAppLabel: z.string(),
+                distanceToPrefix: z.string().optional(),
+              })
+              .optional(),
+          })
+          .optional(),
+        kkn: z
+          .object({
+            hero: z
+              .object({
+                themeLabel: z.string(),
+                viewPrograms: z.string(),
+                viewGallery: z.string(),
+                imageAltTemplate: z.string().optional(),
+              })
+              .optional(),
+            impact: z
+              .object({
+                titlePrefix: z.string(),
+                subtitle: z.string(),
+              })
+              .optional(),
+            gallery: z
+              .object({
+                titlePrefix: z.string(),
+                subtitleTemplate: z.string().optional(),
+              })
+              .optional(),
+            videos: z
+              .object({
+                titlePrefix: z.string(),
+                subtitleTemplate: z.string().optional(),
+                iframeTitleTemplate: z.string(),
+              })
+              .optional(),
+            socials: z
+              .object({
+                titlePrefix: z.string(),
+                subtitleTemplate: z.string().optional(),
+                instagramLabelTemplate: z.string(),
+                tiktokLabelTemplate: z.string().optional(),
+                youtubeLabelTemplate: z.string().optional(),
+                shortVideoLabel: z.string(),
+                documentationLabel: z.string(),
+                blogLabel: z.string(),
+                photosLabel: z.string(),
+                otherLinksLabel: z.string(),
+              })
+              .optional(),
+            members: z
+              .object({
+                titlePrefix: z.string(),
+                subtitleTemplate: z.string().optional(),
+                filterAll: z.string(),
+                empty: z.string(),
+                emptyDivision: z.string(),
+              })
+              .optional(),
+            notes: z
+              .object({
+                titlePrefix: z.string(),
+                titleHighlight: z.string(),
+                subtitleTemplate: z.string().optional(),
+                typeLabels: z.record(z.string()).optional(),
+              })
+              .optional(),
+            programs: z
+              .object({
+                titlePrefix: z.string(),
+                impactLabel: z.string(),
+                empty: z.string(),
+                noMatch: z.string(),
+                subtitle: z.string(),
+                allStatus: z.string(),
+                categoryLabels: z.record(z.string()).optional(),
+                statusLabels: z.record(z.string()).optional(),
+              })
+              .optional(),
+            timeline: z
+              .object({
+                titlePrefix: z.string(),
+                subtitle: z.string(),
+              })
+              .optional(),
+            memberCard: z
+              .object({
+                coordinator: z.string(),
+                instagram: z.string(),
+              })
+              .optional(),
+          })
+          .optional(),
+      })
+      .optional(),
     // For hero.json
     hero: z
       .object({
         title: z.string(),
         highlight: z.string(),
         description: z.string(),
+        imageAlt: z.string().optional(),
         primaryButton: z.object({ label: z.string(), href: z.string() }),
         secondaryButton: z.object({ label: z.string(), href: z.string() }),
       })
@@ -482,6 +731,80 @@ const siteContentCollection = defineCollection({
             z.object({ href: z.string(), icon: z.string(), label: z.string() })
           ),
           beachFacts: z.array(z.string()).optional(),
+        }),
+      })
+      .optional(),
+    // For pages/agenda.json
+    agendaPage: z
+      .object({
+        hero: z.object({
+          titleHighlight: z.string(),
+          titleSuffix: z.string(),
+          description: z.string(),
+        }),
+        agendaRutin: z.object({
+          title: z.string(),
+          subtitle: z.string(),
+        }),
+        beritaTerbaru: z.object({
+          title: z.string(),
+          viewAll: z.string(),
+          empty: z.string(),
+        }),
+      })
+      .optional(),
+    // For pages/potensi.json
+    potensiPage: z
+      .object({
+        hero: z.object({
+          title: z.string(),
+          highlight: z.string(),
+          description: z.string(),
+          stats: z.array(z.object({ icon: z.string(), label: z.string() })),
+        }),
+        wisataTags: z.array(z.string()),
+        wisataSection: z.object({
+          title: z.string(),
+          subtitle: z.string(),
+          ctaLabel: z.string(),
+          emptyState: z.string(),
+        }),
+        wisataCard: z.object({
+          ticketLabel: z.string(),
+          hoursLabel: z.string(),
+          locationLabel: z.string(),
+          locationValue: z.string(),
+          facilitiesTitle: z.string(),
+          mapsLabel: z.string(),
+          whatsAppLabel: z.string(),
+        }),
+        umkmSection: z.object({
+          title: z.string(),
+          subtitle: z.string(),
+          emptyState: z.string(),
+        }),
+        additionalSections: z.object({
+          potensiEkonomiTitle: z.string(),
+          budayaTradisiTitle: z.string(),
+        }),
+        detailPages: z.object({
+          backLabel: z.string(),
+          shareLabel: z.string(),
+          related: z.object({ wisata: z.string(), umkm: z.string() }),
+          wisata: z.object({
+            badgeClosed: z.string(),
+            locationLabel: z.string(),
+            ticketLabel: z.string(),
+            hoursLabel: z.string(),
+            facilitiesTitle: z.string(),
+            galleryTitle: z.string(),
+          }),
+          umkm: z.object({
+            addressLabel: z.string(),
+            hoursLabel: z.string(),
+            productsTitle: z.string(),
+            galleryTitle: z.string(),
+          }),
         }),
       })
       .optional(),

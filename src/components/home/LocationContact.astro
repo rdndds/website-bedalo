@@ -2,12 +2,17 @@
 import { siteConfig } from '../../data/siteConfig';
 import { getEntry } from 'astro:content';
 import Button from '../common/Button.astro';
+import { uiStrings } from '../../data/uiStrings';
 
 const lokasiData = await getEntry('profil', 'lokasi');
 const lokasi = lokasiData?.data?.lokasi;
 
 const sectionData = await getEntry('siteContent', 'section-titles');
 const sectionTitles = sectionData?.data?.sectionTitles;
+
+if (!sectionTitles?.location) {
+  throw new Error('Missing siteContent entry: section-titles.location');
+}
 
 const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
 ---
@@ -21,7 +26,7 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
       allowfullscreen
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
-      title="Lokasi Dusun Bedalo"
+      title={uiStrings.home.location.mapTitle}
     >
     </iframe>
     <div
@@ -34,13 +39,10 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
     <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
       <div data-aos="fade-right">
         <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-          {sectionTitles?.location?.title || 'Kunjungi Kami'}
+          {sectionTitles.location.title}
         </h2>
         <p class="text-blue-100 mb-8 text-lg">
-          {
-            sectionTitles?.location?.subtitle ||
-              'Dusun Bedalo terletak di pesisir selatan Gunungkidul, berbatasan langsung dengan Samudra Hindia.'
-          }
+          {sectionTitles.location.subtitle}
         </p>
 
         <div class="flex flex-wrap gap-3 mb-8">
@@ -52,7 +54,7 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
                   <strong>
                     {d.jarak} {d.satuan}
                   </strong>{' '}
-                  ke {d.nama}
+                  {uiStrings.home.location.distanceToPrefix} {d.nama}
                 </span>
               </div>
             ))
@@ -87,7 +89,7 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
               >
               </path>
             </svg>
-            Buka di Google Maps
+            {uiStrings.footer.openMaps}
           </Button>
           <Button
             href="/kontak"
@@ -109,7 +111,7 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
               >
               </path>
             </svg>
-            Hubungi Kami
+            {uiStrings.home.location.contactTitle}
           </Button>
         </div>
       </div>
@@ -122,22 +124,30 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
         <div class="glass-card p-6 md:p-8 rounded-3xl max-w-md">
           <h3 class="text-white font-bold text-xl mb-6 flex items-center gap-2">
             <span class="text-2xl">📍</span>
-            Alamat Lengkap
+            {uiStrings.home.location.addressLabel}
           </h3>
 
           <address class="not-italic text-blue-100 space-y-2 mb-6">
             <p class="font-semibold text-white text-lg">
-              Dusun {siteConfig.address.dusun}
+              {uiStrings.footer.address.dusun} {siteConfig.address.dusun}
             </p>
-            <p>Kalurahan {siteConfig.address.kalurahan}</p>
-            <p>Kapanewon {siteConfig.address.kapanewon}</p>
-            <p>Kabupaten {siteConfig.address.kabupaten}</p>
+            <p>
+              {uiStrings.footer.address.kalurahan} {siteConfig.address.kalurahan}
+            </p>
+            <p>
+              {uiStrings.footer.address.kapanewon} {siteConfig.address.kapanewon}
+            </p>
+            <p>
+              {uiStrings.footer.address.kabupaten} {siteConfig.address.kabupaten}
+            </p>
             <p>{siteConfig.address.provinsi}</p>
             <p class="text-accent font-medium">{siteConfig.address.kodePos}</p>
           </address>
 
-          <div class="pt-4 border-t border-white/20">
-            <p class="text-blue-100 text-sm mb-3">Kontak Cepat:</p>
+        <div class="pt-4 border-t border-white/20">
+            <p class="text-blue-100 text-sm mb-3">
+              {uiStrings.home.location.quickContactLabel}
+            </p>
             <div class="flex flex-wrap gap-3">
               <a
                 href="https://wa.me/6281234567890"
@@ -151,7 +161,7 @@ const distances = lokasi?.jarakFasilitas?.slice(0, 3) || [];
                   >
                   </path>
                 </svg>
-                WhatsApp
+                {uiStrings.home.location.whatsAppLabel}
               </a>
             </div>
           </div>

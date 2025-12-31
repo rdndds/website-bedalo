@@ -1,6 +1,7 @@
 ---
 import ProgramCard from './ProgramCard.astro';
 import type { CollectionEntry } from 'astro:content';
+import { uiStrings } from '../../data/uiStrings';
 
 interface Props {
   programs: CollectionEntry<'kknProgram'>[];
@@ -10,22 +11,45 @@ interface Props {
 const { programs, kode } = Astro.props;
 
 const kategoriList = [
-  { id: 'semua', label: 'Semua', icon: '📋' },
-  { id: 'pendidikan', label: 'Pendidikan', icon: '📚' },
-  { id: 'kesehatan', label: 'Kesehatan', icon: '🏥' },
-  { id: 'ekonomi', label: 'Ekonomi', icon: '💰' },
-  { id: 'lingkungan', label: 'Lingkungan', icon: '🌿' },
-  { id: 'keagamaan', label: 'Keagamaan', icon: '🕌' },
-  { id: 'pariwisata', label: 'Pariwisata', icon: '🏖️' },
-  { id: 'lainnya', label: 'Lainnya', icon: '📁' },
+  { id: 'semua', label: uiStrings.kkn.programs.categoryLabels.semua, icon: '📋' },
+  {
+    id: 'pendidikan',
+    label: uiStrings.kkn.programs.categoryLabels.pendidikan,
+    icon: '📚',
+  },
+  {
+    id: 'kesehatan',
+    label: uiStrings.kkn.programs.categoryLabels.kesehatan,
+    icon: '🏥',
+  },
+  { id: 'ekonomi', label: uiStrings.kkn.programs.categoryLabels.ekonomi, icon: '💰' },
+  {
+    id: 'lingkungan',
+    label: uiStrings.kkn.programs.categoryLabels.lingkungan,
+    icon: '🌿',
+  },
+  {
+    id: 'keagamaan',
+    label: uiStrings.kkn.programs.categoryLabels.keagamaan,
+    icon: '🕌',
+  },
+  {
+    id: 'pariwisata',
+    label: uiStrings.kkn.programs.categoryLabels.pariwisata,
+    icon: '🏖️',
+  },
+  { id: 'lainnya', label: uiStrings.kkn.programs.categoryLabels.lainnya, icon: '📁' },
 ];
 
 const statusList = [
-  { id: 'semua', label: 'Semua Status' },
-  { id: 'selesai', label: 'Selesai' },
-  { id: 'berjalan', label: 'Berjalan' },
-  { id: 'lanjutan', label: 'Lanjutan' },
-  { id: 'rekomendasi', label: 'Rekomendasi' },
+  { id: 'semua', label: uiStrings.kkn.programs.allStatus },
+  { id: 'selesai', label: uiStrings.kkn.programs.statusLabels.selesai },
+  { id: 'berjalan', label: uiStrings.kkn.programs.statusLabels.berjalan },
+  { id: 'lanjutan', label: uiStrings.kkn.programs.statusLabels.lanjutan },
+  {
+    id: 'rekomendasi',
+    label: uiStrings.kkn.programs.statusLabels.rekomendasi,
+  },
 ];
 
 const sortedPrograms = programs.sort((a, b) => {
@@ -42,10 +66,11 @@ const sortedPrograms = programs.sort((a, b) => {
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-8" data-aos="fade-up">
       <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-        Program Kerja <span class="gradient-text">KKN {kode}</span>
+        {uiStrings.kkn.programs.titlePrefix}{' '}
+        <span class="gradient-text">KKN {kode}</span>
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Daftar program kerja yang dilaksanakan selama periode KKN
+        {uiStrings.kkn.programs.subtitle}
       </p>
     </div>
 
@@ -111,7 +136,7 @@ const sortedPrograms = programs.sort((a, b) => {
       ) : (
         <div class="bg-white rounded-2xl p-16 shadow-lg text-center">
           <div class="text-7xl mb-4">📋</div>
-          <p class="text-gray-500 text-lg">Belum ada program kerja.</p>
+          <p class="text-gray-500 text-lg">{uiStrings.kkn.programs.empty}</p>
         </div>
       )
     }
@@ -122,7 +147,7 @@ const sortedPrograms = programs.sort((a, b) => {
     >
       <div class="text-7xl mb-4">🔍</div>
       <p class="text-gray-500 text-lg">
-        Tidak ada program yang cocok dengan filter.
+        {uiStrings.kkn.programs.noMatch}
       </p>
     </div>
   </div>

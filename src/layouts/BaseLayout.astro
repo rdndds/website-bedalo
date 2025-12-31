@@ -6,6 +6,9 @@ import SEO from '../components/common/SEO.astro';
 import SchemaOrg from '../components/common/SchemaOrg.astro';
 import SkipLink from '../components/common/SkipLink.astro';
 import Toast from '../components/common/Toast.astro';
+import { getEntry } from 'astro:content';
+import { siteConfig } from '../data/siteConfig';
+import { uiStrings } from '../data/uiStrings';
 import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
@@ -15,13 +18,58 @@ import 'aos/dist/aos.css';
 import '../styles/global.css';
 
 interface Props {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   image?: string;
   type?: 'website' | 'article';
+  metaId?: string;
+  metaVars?: Record<string, string | number>;
 }
 
-const { title, description, image, type } = Astro.props;
+type PageMeta = {
+  id: string;
+  path: string;
+  title?: string;
+  titleTemplate?: string;
+  description?: string;
+  descriptionTemplate?: string;
+};
+
+const { title, description, image, type, metaId, metaVars } = Astro.props;
+const pageMetaEntry = await getEntry('siteContent', 'globals/page-meta');
+const pageMetaList: PageMeta[] = pageMetaEntry?.data?.pageMeta || [];
+
+const applyTemplate = (
+  template: string,
+  vars?: Record<string, string | number>
+) => template.replace(/\{(\w+)\}/g, (_, key) => String(vars?.[key] ?? ''));
+
+const normalizePath = (path: string) =>
+  path !== '/' ? path.replace(/\/+$/, '') : '/';
+
+const getMetaById = (id: string) => pageMetaList.find((m) => m.id === id);
+const getMetaByPath = (path: string) =>
+  pageMetaList.find((m) => normalizePath(m.path) === normalizePath(path));
+
+const resolvedMeta = metaId ? getMetaById(metaId) : getMetaByPath(Astro.url.pathname);
+
+const resolvedTitle =
+  title ||
+  (resolvedMeta?.titleTemplate
+    ? metaVars?.page === 1 && resolvedMeta.title
+      ? resolvedMeta.title
+      : applyTemplate(resolvedMeta.titleTemplate, metaVars)
+    : resolvedMeta?.title) ||
+  siteConfig?.name ||
+  'Website';
+
+const resolvedDescription =
+  description ||
+  (resolvedMeta?.descriptionTemplate
+    ? applyTemplate(resolvedMeta.descriptionTemplate, metaVars)
+    : resolvedMeta?.description) ||
+  siteConfig?.description ||
+  '';
 ---
 
 <!doctype html>
@@ -32,7 +80,12 @@ const { title, description, image, type } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="dns-prefetch" href="https://maps.google.com" />
     <link rel="dns-prefetch" href="https://www.google.com" />
-    <SEO title={title} description={description} image={image} type={type} />
+    <SEO
+      title={resolvedTitle}
+      description={resolvedDescription}
+      image={image}
+      type={type}
+    />
     <SchemaOrg />
     <ClientRouter />
   </head>
@@ -42,7 +95,7 @@ const { title, description, image, type } = Astro.props;
     <main
       id="main-content"
       role="main"
-      aria-label="Konten utama"
+      aria-label={uiStrings.aria.mainContent}
       class="flex-1 pt-16"
     >
       <slot />

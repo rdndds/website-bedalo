@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 lighthouse-reports/
 scripts/
+
+.code/

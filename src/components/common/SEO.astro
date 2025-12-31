@@ -6,13 +6,15 @@ interface Props {
   type?: 'website' | 'article';
 }
 
+import { siteConfig } from '../../data/siteConfig';
+
 const {
   title,
   description,
   image = '/images/og-default.jpg',
   type = 'website',
 } = Astro.props;
-const siteTitle = 'Dusun Bedalo';
+const siteTitle = siteConfig.name;
 const fullTitle = title === 'Beranda' ? siteTitle : `${title} | ${siteTitle}`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---

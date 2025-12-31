@@ -5,25 +5,32 @@ import Button from '../common/Button.astro';
 import { kategoriBeritaColors } from '../../data/constants';
 import { formatDate } from '../../lib/utils';
 
+interface Props {
+  title: string;
+  viewAll: string;
+  empty: string;
+}
+
 const allBerita = await getCollection('berita');
 const sortedBerita = allBerita.sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
 const latestBerita = sortedBerita.slice(0, 4);
+const { title, viewAll, empty } = Astro.props as Props;
 ---
 
 <div>
   <div class="flex items-center justify-between mb-8" data-aos="fade-up">
     <div>
       <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
-        Berita Terbaru
+        {title}
       </h2>
       <div
         class="w-20 h-1 bg-gradient-to-r from-primary to-accent rounded-full"
       >
       </div>
     </div>
-    <Button href="/berita" variant="outline" size="sm"> Lihat Semua → </Button>
+    <Button href="/berita" variant="outline" size="sm"> {viewAll} </Button>
   </div>
 
   {
@@ -74,7 +81,7 @@ const latestBerita = sortedBerita.slice(0, 4);
     ) : (
       <div class="bg-white rounded-2xl p-12 shadow-lg text-center">
         <div class="text-6xl mb-4">📰</div>
-        <p class="text-gray-500 text-lg">Belum ada berita.</p>
+        <p class="text-gray-500 text-lg">{empty}</p>
       </div>
     )
   }

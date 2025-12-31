@@ -3,17 +3,23 @@ import { getEntry } from 'astro:content';
 
 const data = await getEntry('siteContent', 'highlights');
 const highlights = data?.data?.highlights || [];
+
+const sectionData = await getEntry('siteContent', 'section-titles');
+const sectionTitles = sectionData?.data?.sectionTitles;
+
+if (!sectionTitles?.highlights) {
+  throw new Error('Missing siteContent entry: section-titles.highlights');
+}
 ---
 
 <section class="py-16 lg:py-24">
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-12" data-aos="fade-up">
       <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-        Kenapa Harus ke Bedalo?
+        {sectionTitles.highlights.title}
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Temukan keindahan alam, kearifan lokal, dan pengalaman otentik pedesaan
-        pesisir Gunungkidul.
+        {sectionTitles.highlights.subtitle}
       </p>
     </div>
 

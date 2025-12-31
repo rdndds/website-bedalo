@@ -1,4 +1,7 @@
 ---
+import { siteConfig } from '../../data/siteConfig';
+import { uiStrings } from '../../data/uiStrings';
+
 interface Impact {
   title: string;
   description: string;
@@ -21,10 +24,11 @@ const icons = ['🎯', '💡', '🌟', '🏆', '📈', '🔧', '🌱', '🤝'];
       <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-            Dampak & Hasil <span class="gradient-text">KKN {kode}</span>
+            {uiStrings.kkn.impact.titlePrefix}{' '}
+            <span class="gradient-text">KKN {kode}</span>
           </h2>
           <p class="text-gray-600 max-w-2xl mx-auto">
-            Kontribusi nyata untuk kemajuan Dusun Bedalo
+            {uiStrings.kkn.impact.subtitle} {siteConfig.name}
           </p>
         </div>
 

@@ -1,6 +1,8 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import { siteConfig } from '../../data/siteConfig';
+import { uiStrings } from '../../data/uiStrings';
 
 interface Props {
   kode: string;
@@ -21,6 +23,18 @@ const {
   periodeSelesai,
   heroImage,
 } = Astro.props;
+
+const applyTemplate = (
+  template: string,
+  vars: Record<string, string | number>
+) => template.replace(/\{(\w+)\}/g, (_, key) => String(vars[key] ?? ''));
+
+const heroImageAlt = uiStrings.kkn.hero.imageAltTemplate
+  ? applyTemplate(uiStrings.kkn.hero.imageAltTemplate, {
+      kode,
+      siteName: siteConfig.name,
+    })
+  : '';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -53,7 +67,7 @@ function formatDate(dateStr: string): string {
           <span
             class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700"
           >
-            Dusun Bedalo
+            {siteConfig.name}
           </span>
         </h1>
 
@@ -77,7 +91,9 @@ function formatDate(dateStr: string): string {
         <div
           class="bg-white rounded-xl p-4 shadow-md border-l-4 border-primary mb-8"
         >
-          <p class="text-sm text-gray-500 mb-1">Tema KKN</p>
+          <p class="text-sm text-gray-500 mb-1">
+            {uiStrings.kkn.hero.themeLabel}
+          </p>
           <p class="text-gray-800 font-medium">{tema}</p>
         </div>
 
@@ -87,14 +103,14 @@ function formatDate(dateStr: string): string {
             class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-xl shadow-md hover:bg-primary-hover hover:-translate-y-0.5 hover:shadow-lg transition-all"
           >
             <span>📋</span>
-            <span>Lihat Program Kerja</span>
+            <span>{uiStrings.kkn.hero.viewPrograms}</span>
           </a>
           <a
             href="#galeri"
             class="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-700 font-semibold rounded-xl shadow-md hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-lg transition-all border border-gray-200"
           >
             <span>📷</span>
-            <span>Lihat Galeri</span>
+            <span>{uiStrings.kkn.hero.viewGallery}</span>
           </a>
         </div>
       </div>
@@ -105,7 +121,7 @@ function formatDate(dateStr: string): string {
             <div class="relative rounded-2xl overflow-hidden shadow-2xl">
               <Image
                 src={heroImage}
-                alt={`Hero KKN ${kode} Dusun Bedalo`}
+                alt={heroImageAlt}
                 width={800}
                 height={600}
                 class="w-full h-auto object-cover"

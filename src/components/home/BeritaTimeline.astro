@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import SectionTitle from '../common/SectionTitle.astro';
 import Button from '../common/Button.astro';
 import { kategoriBeritaTimelineColors } from '../../data/constants';
+import { uiStrings } from '../../data/uiStrings';
 
 const allBerita = await getCollection('berita');
 const sortedBerita = allBerita
@@ -12,6 +13,10 @@ const sortedBerita = allBerita
 
 const sectionData = await getEntry('siteContent', 'section-titles');
 const sectionTitles = sectionData?.data?.sectionTitles;
+
+if (!sectionTitles?.berita) {
+  throw new Error('Missing siteContent entry: section-titles.berita');
+}
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('id-ID', {
@@ -30,9 +35,8 @@ const otherBerita = sortedBerita.slice(1);
 <section class="py-16 lg:py-24 bg-secondary">
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <SectionTitle
-      title={sectionTitles?.berita?.title || 'Berita & Kegiatan'}
-      subtitle={sectionTitles?.berita?.subtitle ||
-        'Kabar terbaru dari Dusun Bedalo'}
+      title={sectionTitles.berita.title}
+      subtitle={sectionTitles.berita.subtitle}
       center={true}
     />
 
@@ -56,7 +60,7 @@ const otherBerita = sortedBerita.slice(1);
                   />
                   <div class="absolute top-4 left-4">
                     <span class="bg-accent text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
-                      TERBARU
+                      {uiStrings.home.berita.badgeLatest}
                     </span>
                   </div>
                 </div>
@@ -78,7 +82,7 @@ const otherBerita = sortedBerita.slice(1);
                     {featuredBerita.data.excerpt}
                   </p>
                   <span class="inline-flex items-center gap-2 text-primary font-semibold group-hover:gap-3 transition-all">
-                    Baca Selengkapnya
+                    {uiStrings.common.readMore}
                     <svg
                       class="w-5 h-5"
                       fill="none"
@@ -157,7 +161,7 @@ const otherBerita = sortedBerita.slice(1);
         variant="outline"
         class="gap-2 border-0 shadow-none bg-transparent"
       >
-        Lihat Semua Berita
+        {uiStrings.home.berita.viewAll}
         <svg
           class="w-5 h-5"
           fill="none"

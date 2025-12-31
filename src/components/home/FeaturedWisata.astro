@@ -3,6 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import SectionTitle from '../common/SectionTitle.astro';
 import Button from '../common/Button.astro';
+import { uiStrings } from '../../data/uiStrings';
 
 const allWisata = await getCollection('wisata');
 const sortedWisata = allWisata.sort((a, b) => a.data.order - b.data.order);
@@ -14,14 +15,17 @@ const duplicatedWisata = Array(3)
 
 const sectionData = await getEntry('siteContent', 'section-titles');
 const sectionTitles = sectionData?.data?.sectionTitles;
+
+if (!sectionTitles?.wisata) {
+  throw new Error('Missing siteContent entry: section-titles.wisata');
+}
 ---
 
 <section class="py-16 lg:py-24 bg-secondary">
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
     <SectionTitle
-      title={sectionTitles?.wisata?.title || 'Destinasi Wisata'}
-      subtitle={sectionTitles?.wisata?.subtitle ||
-        'Empat pantai eksotis dengan pesona alam yang memukau menanti untuk dijelajahi'}
+      title={sectionTitles.wisata.title}
+      subtitle={sectionTitles.wisata.subtitle}
       center={true}
     />
   </div>
@@ -30,7 +34,7 @@ const sectionTitles = sectionData?.data?.sectionTitles;
     <div class="flex justify-end gap-3 mb-4">
       <button
         class="wisata-prev w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-        aria-label="Previous"
+        aria-label={uiStrings.home.wisata.carouselPrevious}
       >
         <svg
           class="w-5 h-5"
@@ -49,7 +53,7 @@ const sectionTitles = sectionData?.data?.sectionTitles;
       </button>
       <button
         class="wisata-next w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-        aria-label="Next"
+        aria-label={uiStrings.home.wisata.carouselNext}
       >
         <svg
           class="w-5 h-5"
@@ -115,7 +119,7 @@ const sectionTitles = sectionData?.data?.sectionTitles;
                             </span>
                           </div>
                           <span class="inline-flex items-center gap-1 text-accent font-medium text-sm group-hover:gap-2 transition-all">
-                            Jelajahi
+                            {uiStrings.home.wisata.explore}
                             <svg
                               class="w-4 h-4"
                               fill="none"
@@ -149,7 +153,7 @@ const sectionTitles = sectionData?.data?.sectionTitles;
       variant="outline"
       class="gap-2 border-0 shadow-none bg-transparent"
     >
-      Lihat Semua Destinasi
+      {uiStrings.home.wisata.viewAll}
       <svg
         class="w-5 h-5"
         fill="none"

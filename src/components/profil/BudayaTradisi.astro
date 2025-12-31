@@ -2,12 +2,17 @@
 import { getEntry } from 'astro:content';
 import SectionTitle from '../common/SectionTitle.astro';
 
+interface Props {
+  title: string;
+}
+
 const data = await getEntry('profil', 'budaya-tradisi');
 const budayaTradisi = data?.data?.budayaTradisi || [];
+const { title } = Astro.props as Props;
 ---
 
 <div class="mb-12">
-  <SectionTitle title="Budaya & Tradisi" />
+  <SectionTitle title={title} />
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
     {
       budayaTradisi.map((item, index) => (

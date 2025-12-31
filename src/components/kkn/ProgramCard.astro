@@ -1,4 +1,6 @@
 ---
+import { uiStrings } from '../../data/uiStrings';
+
 interface Props {
   title: string;
   kategori: string;
@@ -23,10 +25,22 @@ const kategoriConfig: Record<string, { icon: string; color: string }> = {
 };
 
 const statusConfig: Record<string, { label: string; color: string }> = {
-  selesai: { label: 'Selesai', color: 'bg-green-500 text-white' },
-  berjalan: { label: 'Berjalan', color: 'bg-blue-500 text-white' },
-  lanjutan: { label: 'Lanjutan', color: 'bg-orange-500 text-white' },
-  rekomendasi: { label: 'Rekomendasi', color: 'bg-purple-500 text-white' },
+  selesai: {
+    label: uiStrings.kkn.programs.statusLabels.selesai,
+    color: 'bg-green-500 text-white',
+  },
+  berjalan: {
+    label: uiStrings.kkn.programs.statusLabels.berjalan,
+    color: 'bg-blue-500 text-white',
+  },
+  lanjutan: {
+    label: uiStrings.kkn.programs.statusLabels.lanjutan,
+    color: 'bg-orange-500 text-white',
+  },
+  rekomendasi: {
+    label: uiStrings.kkn.programs.statusLabels.rekomendasi,
+    color: 'bg-purple-500 text-white',
+  },
 };
 
 const katConfig = kategoriConfig[kategori] || kategoriConfig.lainnya;
@@ -84,7 +98,9 @@ function formatDate(dateStr: string): string {
     {
       impact && (
         <div class="mt-4 pt-4 border-t border-gray-100">
-          <p class="text-xs text-gray-500 mb-1">Dampak:</p>
+          <p class="text-xs text-gray-500 mb-1">
+            {uiStrings.kkn.programs.impactLabel}
+          </p>
           <p class="text-sm text-gray-700 line-clamp-2">{impact}</p>
         </div>
       )

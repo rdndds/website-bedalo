@@ -1,4 +1,6 @@
 ---
+import { uiStrings } from '../../data/uiStrings';
+
 interface Socials {
   instagram?: string;
   tiktok?: string;
@@ -12,6 +14,27 @@ interface Props {
 }
 
 const { socials, kode } = Astro.props;
+
+const applyTemplate = (
+  template: string,
+  vars: Record<string, string | number>
+) => template.replace(/\{(\w+)\}/g, (_, key) => String(vars[key] ?? ''));
+
+const socialsSubtitle = uiStrings.kkn.socials.subtitleTemplate
+  ? applyTemplate(uiStrings.kkn.socials.subtitleTemplate, { kode })
+  : '';
+
+const instagramLabel = applyTemplate(uiStrings.kkn.socials.instagramLabelTemplate, {
+  kode,
+});
+const tiktokLabel = uiStrings.kkn.socials.tiktokLabelTemplate
+  ? applyTemplate(uiStrings.kkn.socials.tiktokLabelTemplate, { kode })
+  : '';
+const youtubeLabel = uiStrings.kkn.socials.youtubeLabelTemplate
+  ? applyTemplate(uiStrings.kkn.socials.youtubeLabelTemplate, { kode })
+  : '';
+
+const iframeTitle = applyTemplate(uiStrings.kkn.videos.iframeTitleTemplate, { kode });
 
 function getYouTubeEmbedUrl(url: string): string | null {
   const regExp =
@@ -47,10 +70,11 @@ const youtubeEmbedUrl = socials?.youtube
         <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-8" data-aos="fade-up">
             <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-              Media Sosial <span class="gradient-text">KKN {kode}</span>
+              {uiStrings.kkn.socials.titlePrefix}{' '}
+              <span class="gradient-text">KKN {kode}</span>
             </h2>
             <p class="text-gray-600 max-w-2xl mx-auto">
-              Ikuti perjalanan dan kegiatan KKN {kode} di media sosial
+              {socialsSubtitle}
             </p>
           </div>
 
@@ -74,9 +98,11 @@ const youtubeEmbedUrl = socials?.youtube
                   </div>
                   <div class="flex-1">
                     <p class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      Instagram KKN {kode}
+                      {instagramLabel}
                     </p>
-                    <p class="text-sm text-gray-500">Foto & story kegiatan</p>
+                    <p class="text-sm text-gray-500">
+                      {uiStrings.kkn.socials.photosLabel}
+                    </p>
                   </div>
                   <span class="text-gray-400 group-hover:text-primary transition-colors">
                     →
@@ -102,9 +128,11 @@ const youtubeEmbedUrl = socials?.youtube
                   </div>
                   <div class="flex-1">
                     <p class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      TikTok KKN {kode}
+                      {tiktokLabel}
                     </p>
-                    <p class="text-sm text-gray-500">Video pendek kegiatan</p>
+                    <p class="text-sm text-gray-500">
+                      {uiStrings.kkn.socials.shortVideoLabel}
+                    </p>
                   </div>
                   <span class="text-gray-400 group-hover:text-primary transition-colors">
                     →
@@ -130,9 +158,11 @@ const youtubeEmbedUrl = socials?.youtube
                   </div>
                   <div class="flex-1">
                     <p class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      YouTube KKN {kode}
+                      {youtubeLabel}
                     </p>
-                    <p class="text-sm text-gray-500">Video dokumentasi</p>
+                    <p class="text-sm text-gray-500">
+                      {uiStrings.kkn.socials.documentationLabel}
+                    </p>
                   </div>
                   <span class="text-gray-400 group-hover:text-primary transition-colors">
                     →
@@ -152,9 +182,11 @@ const youtubeEmbedUrl = socials?.youtube
                   </div>
                   <div class="flex-1">
                     <p class="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                      Link Lainnya
+                      {uiStrings.kkn.socials.otherLinksLabel}
                     </p>
-                    <p class="text-sm text-gray-500">Blog atau website</p>
+                    <p class="text-sm text-gray-500">
+                      {uiStrings.kkn.socials.blogLabel}
+                    </p>
                   </div>
                   <span class="text-gray-400 group-hover:text-primary transition-colors">
                     →
@@ -170,7 +202,7 @@ const youtubeEmbedUrl = socials?.youtube
               >
                 <iframe
                   src={youtubeEmbedUrl}
-                  title={`Video KKN ${kode}`}
+                  title={iframeTitle}
                   class="w-full h-full border-0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowfullscreen

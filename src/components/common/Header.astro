@@ -1,5 +1,7 @@
 ---
 import { mainNavItems } from '../../data/navigation';
+import { siteConfig } from '../../data/siteConfig';
+import { uiStrings } from '../../data/uiStrings';
 
 const currentPath = Astro.url.pathname;
 ---
@@ -10,13 +12,13 @@ const currentPath = Astro.url.pathname;
 >
   <nav
     class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8"
-    aria-label="Menu utama"
+    aria-label={uiStrings.aria.headerNav}
   >
     <div class="flex justify-between h-16">
       <div class="flex items-center">
         <a href="/" class="flex items-center gap-2">
           <span class="font-bold text-xl text-primary sm:block">
-            Dusun Bedalo
+            {siteConfig.name}
           </span>
         </a>
       </div>
@@ -45,7 +47,7 @@ const currentPath = Astro.url.pathname;
           id="mobile-menu-btn"
           type="button"
           class="p-2 rounded-lg text-gray-700 hover:bg-gray-200 transition-colors"
-          aria-label="Toggle menu"
+          aria-label={uiStrings.aria.mobileMenuToggle}
         >
           <svg
             id="icon-hamburger"
@@ -93,6 +95,7 @@ const currentPath = Astro.url.pathname;
       <button
         id="menu-close-btn"
         class="p-2 rounded-lg text-gray-500 hover:bg-gray-200 transition-colors"
+        aria-label={uiStrings.aria.mobileMenuClose}
       >
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
           <path

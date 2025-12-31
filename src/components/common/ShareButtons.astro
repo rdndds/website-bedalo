@@ -1,4 +1,6 @@
 ---
+import { uiStrings } from '../../data/uiStrings';
+
 interface Props {
   title: string;
   url?: string;
@@ -22,7 +24,7 @@ const shareUrl = url || Astro.url.href;
       >
       </path>
     </svg>
-    <span>WhatsApp</span>
+    <span>{uiStrings.share.whatsapp}</span>
   </button>
 
   <button
@@ -36,7 +38,7 @@ const shareUrl = url || Astro.url.href;
       >
       </path>
     </svg>
-    <span>Facebook</span>
+    <span>{uiStrings.share.facebook}</span>
   </button>
 
   <button
@@ -53,7 +55,7 @@ const shareUrl = url || Astro.url.href;
       >
       </path>
     </svg>
-    <span>Salin Link</span>
+    <span>{uiStrings.share.copyLink}</span>
   </button>
 </div>
 
@@ -119,7 +121,7 @@ const shareUrl = url || Astro.url.href;
               if (!copied) fallbackCopyText(url);
               if (window.toast) {
                 window.toast.show({
-                  message: 'Link berhasil disalin!',
+                  message: uiStrings.share.copiedToast,
                   type: 'success',
                 });
               }

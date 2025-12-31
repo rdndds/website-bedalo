@@ -9,8 +9,9 @@ import RelatedContent from '../../../components/common/RelatedContent.astro';
 import SchemaLocalBusiness from '../../../components/common/SchemaLocalBusiness.astro';
 import SchemaBreadcrumb from '../../../components/common/SchemaBreadcrumb.astro';
 import { LightGallery } from 'astro-lightgallery';
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { umkmKategoriIcons } from '../../../data/constants';
+import { uiStrings } from '../../../data/uiStrings';
 
 export async function getStaticPaths() {
   const umkmEntries = await getCollection('umkm');
@@ -40,6 +41,14 @@ const {
   jamOperasional,
   galeri,
 } = entry.data;
+
+const potensiEntry = await getEntry('siteContent', 'pages/potensi');
+
+if (!potensiEntry?.data?.potensiPage) {
+  throw new Error('Missing siteContent entry: pages/potensi');
+}
+
+const detailCopy = potensiEntry.data.potensiPage.detailPages;
 
 const relatedUmkm = allUmkm
   .filter((u) => u.slug !== entry.slug && u.data.kategori === kategori)
@@ -123,7 +132,9 @@ const relatedUmkm = allUmkm
             >
               <span class="text-2xl">📍</span>
             </div>
-            <span class="font-semibold text-gray-900">Alamat</span>
+            <span class="font-semibold text-gray-900">
+              {detailCopy.umkm.addressLabel}
+            </span>
           </div>
           <p class="text-gray-600">{alamat}</p>
         </div>
@@ -138,7 +149,9 @@ const relatedUmkm = allUmkm
             >
               <span class="text-2xl">🕐</span>
             </div>
-            <span class="font-semibold text-gray-900">Jam Operasional</span>
+            <span class="font-semibold text-gray-900">
+              {detailCopy.umkm.hoursLabel}
+            </span>
           </div>
           <p class="text-gray-600">{jamOperasional}</p>
         </div>
@@ -148,7 +161,7 @@ const relatedUmkm = allUmkm
         <h2
           class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
         >
-          <span class="text-2xl">🛍️</span> Produk
+          <span class="text-2xl">🛍️</span> {detailCopy.umkm.productsTitle}
         </h2>
         <div class="flex flex-wrap gap-3">
           {
@@ -174,7 +187,7 @@ const relatedUmkm = allUmkm
         galeri && galeri.length > 0 && (
           <div class="mb-10" data-aos="fade-up">
             <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span class="text-2xl">📷</span> Galeri Produk
+              <span class="text-2xl">📷</span> {detailCopy.umkm.galleryTitle}
             </h2>
             <LightGallery
               options={{ thumbnail: true }}
@@ -211,15 +224,21 @@ const relatedUmkm = allUmkm
       </div>
 
       <div class="mb-10" data-aos="fade-up">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Bagikan:</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          {uiStrings.common.share}
+        </h3>
         <ShareButtons title={nama} />
       </div>
 
-      <RelatedContent items={relatedUmkm} type="umkm" title="UMKM Lainnya" />
+      <RelatedContent
+        items={relatedUmkm}
+        type="umkm"
+        title={detailCopy.related.umkm}
+      />
 
       <div class="mt-10">
         <Button href="/potensi" variant="outline">
-          ← Kembali ke Potensi Dusun
+          {detailCopy.backLabel}
         </Button>
       </div>
     </div>

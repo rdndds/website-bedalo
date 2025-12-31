@@ -1,4 +1,6 @@
 ---
+import { uiStrings } from '../../data/uiStrings';
+
 interface Note {
   type: 'lanjutan' | 'saran' | 'peringatan';
   text: string;
@@ -10,6 +12,15 @@ interface Props {
 }
 
 const { notes, kode } = Astro.props;
+
+const applyTemplate = (
+  template: string,
+  vars: Record<string, string | number>
+) => template.replace(/\{(\w+)\}/g, (_, key) => String(vars[key] ?? ''));
+
+const subtitle = uiStrings.kkn.notes.subtitleTemplate
+  ? applyTemplate(uiStrings.kkn.notes.subtitleTemplate, { kode })
+  : '';
 
 const typeConfig: Record<
   string,
@@ -23,21 +34,21 @@ const typeConfig: Record<
 > = {
   lanjutan: {
     icon: '🔄',
-    label: 'Program Lanjutan',
+    label: uiStrings.kkn.notes.typeLabels.lanjutan,
     bgColor: 'bg-green-50',
     borderColor: 'border-green-500',
     textColor: 'text-green-700',
   },
   saran: {
     icon: '💡',
-    label: 'Saran',
+    label: uiStrings.kkn.notes.typeLabels.saran,
     bgColor: 'bg-blue-50',
     borderColor: 'border-blue-500',
     textColor: 'text-blue-700',
   },
   peringatan: {
     icon: '⚠️',
-    label: 'Peringatan',
+    label: uiStrings.kkn.notes.typeLabels.peringatan,
     bgColor: 'bg-orange-50',
     borderColor: 'border-orange-500',
     textColor: 'text-orange-700',
@@ -51,11 +62,11 @@ const typeConfig: Record<
       <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8" data-aos="fade-up">
           <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-            Catatan untuk <span class="gradient-text">KKN Berikutnya</span>
+            {uiStrings.kkn.notes.titlePrefix}{' '}
+            <span class="gradient-text">{uiStrings.kkn.notes.titleHighlight}</span>
           </h2>
           <p class="text-gray-600 max-w-2xl mx-auto">
-            Rekomendasi dan catatan penting dari KKN {kode} untuk periode
-            selanjutnya
+            {subtitle}
           </p>
         </div>
 

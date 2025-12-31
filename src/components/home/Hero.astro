@@ -6,15 +6,18 @@ import heroImage from '../../assets/images/pantai-ngedan.jpg';
 
 const data = await getEntry('siteContent', 'hero');
 const hero = data?.data?.hero;
+
+if (!hero) {
+  throw new Error('Missing siteContent entry: hero');
+}
 ---
 
 {
-  hero && (
-    <section class="relative h-screen flex items-center justify-center overflow-hidden -mt-16">
+  <section class="relative h-screen flex items-center justify-center overflow-hidden -mt-16">
       <div class="absolute inset-0">
         <Image
           src={heroImage}
-          alt="Pantai Ngedan Dusun Bedalo"
+          alt={hero.imageAlt}
           class="w-full h-full object-cover"
           loading="eager"
         />
@@ -43,20 +46,19 @@ const hero = data?.data?.hero;
             data-aos="fade-up"
             data-aos-delay="200"
           >
-            <Button href={hero.primaryButton?.href || '#'} size="lg">
-              {hero.primaryButton?.label || 'Jelajahi'}
+            <Button href={hero.primaryButton.href} size="lg">
+              {hero.primaryButton.label}
             </Button>
             <Button
-              href={hero.secondaryButton?.href || '#'}
+              href={hero.secondaryButton.href}
               variant="outline"
               size="lg"
               class="border-white text-white hover:bg-white/20 hover:border-white/80 backdrop-blur-sm"
             >
-              {hero.secondaryButton?.label || 'Kontak'}
+              {hero.secondaryButton.label}
             </Button>
           </div>
         </div>
       </div>
     </section>
-  )
 }

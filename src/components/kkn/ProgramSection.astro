@@ -2,6 +2,7 @@
 import { Image, getImage } from 'astro:assets';
 import { LightGallery } from 'astro-lightgallery';
 import type { CollectionEntry } from 'astro:content';
+import { uiStrings } from '../../data/uiStrings';
 
 interface Props {
   programs: CollectionEntry<'kknProgram'>[];
@@ -63,22 +64,22 @@ const statusConfig: Record<
   { label: string; bgColor: string; textColor: string }
 > = {
   selesai: {
-    label: 'Selesai',
+    label: uiStrings.kkn.programs.statusLabels.selesai,
     bgColor: 'bg-green-100',
     textColor: 'text-green-700',
   },
   berjalan: {
-    label: 'Berjalan',
+    label: uiStrings.kkn.programs.statusLabels.berjalan,
     bgColor: 'bg-blue-100',
     textColor: 'text-blue-700',
   },
   lanjutan: {
-    label: 'Lanjutan',
+    label: uiStrings.kkn.programs.statusLabels.lanjutan,
     bgColor: 'bg-orange-100',
     textColor: 'text-orange-700',
   },
   rekomendasi: {
-    label: 'Rekomendasi',
+    label: uiStrings.kkn.programs.statusLabels.rekomendasi,
     bgColor: 'bg-purple-100',
     textColor: 'text-purple-700',
   },
@@ -111,10 +112,11 @@ const programsWithGalleries = await Promise.all(
   <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-10" data-aos="fade-up">
       <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">
-        Program Kerja <span class="gradient-text">KKN {kode}</span>
+        {uiStrings.kkn.programs.titlePrefix}{' '}
+        <span class="gradient-text">KKN {kode}</span>
       </h2>
       <p class="text-gray-600 max-w-2xl mx-auto">
-        Daftar program kerja yang dilaksanakan selama periode KKN
+        {uiStrings.kkn.programs.subtitle}
       </p>
     </div>
 
@@ -203,7 +205,9 @@ const programsWithGalleries = await Promise.all(
                           {program.data.impact && (
                             <div class="bg-gray-50 rounded-lg p-3 mb-3">
                               <p class="text-sm text-gray-700">
-                                <span class="font-medium">Dampak:</span>{' '}
+                                <span class="font-medium">
+                                  {uiStrings.kkn.programs.impactLabel}
+                                </span>{' '}
                                 {program.data.impact}
                               </p>
                             </div>
@@ -301,7 +305,7 @@ const programsWithGalleries = await Promise.all(
       ) : (
         <div class="bg-white rounded-2xl p-16 shadow-lg text-center max-w-2xl mx-auto">
           <div class="text-7xl mb-4">📋</div>
-          <p class="text-gray-500 text-lg">Belum ada program kerja.</p>
+          <p class="text-gray-500 text-lg">{uiStrings.kkn.programs.empty}</p>
         </div>
       )
     }
